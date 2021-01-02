@@ -3,6 +3,7 @@ package ru.mrak.web.rest;
 import ru.mrak.LibFourApp;
 import ru.mrak.domain.Book;
 import ru.mrak.domain.Dictionary;
+import ru.mrak.domain.User;
 import ru.mrak.repository.BookRepository;
 import ru.mrak.service.BookService;
 import ru.mrak.service.dto.BookDTO;
@@ -646,6 +647,26 @@ public class BookResourceIT {
 
         // Get all the bookList where dictionary equals to dictionaryId + 1
         defaultBookShouldNotBeFound("dictionaryId.equals=" + (dictionaryId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllBooksByLoadedUserIsEqualToSomething() throws Exception {
+        // Initialize the database
+        bookRepository.saveAndFlush(book);
+        User loadedUser = UserResourceIT.createEntity(em);
+        em.persist(loadedUser);
+        em.flush();
+        book.setLoadedUser(loadedUser);
+        bookRepository.saveAndFlush(book);
+        Long loadedUserId = loadedUser.getId();
+
+        // Get all the bookList where loadedUser equals to loadedUserId
+        defaultBookShouldBeFound("loadedUserId.equals=" + loadedUserId);
+
+        // Get all the bookList where loadedUser equals to loadedUserId + 1
+        defaultBookShouldNotBeFound("loadedUserId.equals=" + (loadedUserId + 1));
     }
 
     /**

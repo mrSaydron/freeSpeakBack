@@ -6,6 +6,8 @@ export interface IBook {
   text?: string;
   publicBook?: boolean;
   dictionaryId?: number;
+  loadedUserLogin?: string;
+  loadedUserId?: number;
 }
 
 export class Book implements IBook {
@@ -16,7 +18,9 @@ export class Book implements IBook {
     public source?: string,
     public text?: string,
     public publicBook?: boolean,
-    public dictionaryId?: number
+    public dictionaryId?: number,
+    public loadedUserLogin?: string,
+    public loadedUserId?: number
   ) {
     this.publicBook = this.publicBook || false;
   }

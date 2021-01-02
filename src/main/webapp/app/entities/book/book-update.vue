@@ -56,6 +56,13 @@
                             <option v-bind:value="dictionaryOption.id" v-for="dictionaryOption in dictionaries" :key="dictionaryOption.id">{{dictionaryOption.id}}</option>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label class="form-control-label" v-text="$t('libFourApp.book.loadedUser')" for="book-loadedUser">Loaded User</label>
+                        <select class="form-control" id="book-loadedUser" name="loadedUser" v-model="book.loadedUserId">
+                            <option v-bind:value="null"></option>
+                            <option v-bind:value="userOption.id" v-for="userOption in users" :key="userOption.id">{{userOption.login}}</option>
+                        </select>
+                    </div>
                 </div>
                 <div>
                     <button type="button" id="cancel-save" class="btn btn-secondary" v-on:click="previousState()">

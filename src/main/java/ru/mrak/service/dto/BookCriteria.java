@@ -38,6 +38,8 @@ public class BookCriteria implements Serializable, Criteria {
 
     private LongFilter dictionaryId;
 
+    private LongFilter loadedUserId;
+
     public BookCriteria() {
     }
 
@@ -49,6 +51,7 @@ public class BookCriteria implements Serializable, Criteria {
         this.text = other.text == null ? null : other.text.copy();
         this.publicBook = other.publicBook == null ? null : other.publicBook.copy();
         this.dictionaryId = other.dictionaryId == null ? null : other.dictionaryId.copy();
+        this.loadedUserId = other.loadedUserId == null ? null : other.loadedUserId.copy();
     }
 
     @Override
@@ -112,6 +115,14 @@ public class BookCriteria implements Serializable, Criteria {
         this.dictionaryId = dictionaryId;
     }
 
+    public LongFilter getLoadedUserId() {
+        return loadedUserId;
+    }
+
+    public void setLoadedUserId(LongFilter loadedUserId) {
+        this.loadedUserId = loadedUserId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -129,7 +140,8 @@ public class BookCriteria implements Serializable, Criteria {
             Objects.equals(source, that.source) &&
             Objects.equals(text, that.text) &&
             Objects.equals(publicBook, that.publicBook) &&
-            Objects.equals(dictionaryId, that.dictionaryId);
+            Objects.equals(dictionaryId, that.dictionaryId) &&
+            Objects.equals(loadedUserId, that.loadedUserId);
     }
 
     @Override
@@ -141,7 +153,8 @@ public class BookCriteria implements Serializable, Criteria {
         source,
         text,
         publicBook,
-        dictionaryId
+        dictionaryId,
+        loadedUserId
         );
     }
 
@@ -156,6 +169,7 @@ public class BookCriteria implements Serializable, Criteria {
                 (text != null ? "text=" + text + ", " : "") +
                 (publicBook != null ? "publicBook=" + publicBook + ", " : "") +
                 (dictionaryId != null ? "dictionaryId=" + dictionaryId + ", " : "") +
+                (loadedUserId != null ? "loadedUserId=" + loadedUserId + ", " : "") +
             "}";
     }
 

@@ -25,6 +25,10 @@ public class BookDTO implements Serializable {
 
 
     private Long dictionaryId;
+
+    private Long loadedUserId;
+
+    private String loadedUserLogin;
     
     public Long getId() {
         return id;
@@ -82,6 +86,22 @@ public class BookDTO implements Serializable {
         this.dictionaryId = dictionaryId;
     }
 
+    public Long getLoadedUserId() {
+        return loadedUserId;
+    }
+
+    public void setLoadedUserId(Long userId) {
+        this.loadedUserId = userId;
+    }
+
+    public String getLoadedUserLogin() {
+        return loadedUserLogin;
+    }
+
+    public void setLoadedUserLogin(String userLogin) {
+        this.loadedUserLogin = userLogin;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -110,6 +130,8 @@ public class BookDTO implements Serializable {
             ", text='" + getText() + "'" +
             ", publicBook='" + isPublicBook() + "'" +
             ", dictionaryId=" + getDictionaryId() +
+            ", loadedUserId=" + getLoadedUserId() +
+            ", loadedUserLogin='" + getLoadedUserLogin() + "'" +
             "}";
     }
 }

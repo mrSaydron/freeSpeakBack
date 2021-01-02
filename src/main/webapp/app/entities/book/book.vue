@@ -31,6 +31,7 @@
                     <th v-on:click="changeOrder('text')"><span v-text="$t('libFourApp.book.text')">Text</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'text'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('publicBook')"><span v-text="$t('libFourApp.book.publicBook')">Public Book</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'publicBook'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('dictionaryId')"><span v-text="$t('libFourApp.book.dictionary')">Dictionary</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'dictionaryId'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('loadedUserLogin')"><span v-text="$t('libFourApp.book.loadedUser')">Loaded User</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'loadedUserLogin'"></jhi-sort-indicator></th>
                     <th></th>
                 </tr>
                 </thead>
@@ -49,6 +50,9 @@
                         <div v-if="book.dictionaryId">
                             <router-link :to="{name: 'DictionaryView', params: {dictionaryId: book.dictionaryId}}">{{book.dictionaryId}}</router-link>
                         </div>
+                    </td>
+                    <td>
+                        {{book.loadedUserLogin}}
                     </td>
                     <td class="text-right">
                         <div class="btn-group">

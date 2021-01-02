@@ -5,6 +5,8 @@ import { numeric, required, minLength, maxLength, minValue, maxValue } from 'vue
 import DictionaryService from '../dictionary/dictionary.service';
 import { IDictionary } from '@/shared/model/dictionary.model';
 
+import UserService from '@/admin/user-management/user-management.service';
+
 import AlertService from '@/shared/alert/alert.service';
 import { IBook, Book } from '@/shared/model/book.model';
 import BookService from './book.service';
@@ -36,6 +38,10 @@ export default class BookUpdate extends Vue {
   @Inject('dictionaryService') private dictionaryService: () => DictionaryService;
 
   public dictionaries: IDictionary[] = [];
+
+  @Inject('userService') private userService: () => UserService;
+
+  public users: Array<any> = [];
   public isSaving = false;
   public currentLanguage = '';
 
@@ -98,6 +104,11 @@ export default class BookUpdate extends Vue {
       .retrieve()
       .then(res => {
         this.dictionaries = res.data;
+      });
+    this.userService()
+      .retrieve()
+      .then(res => {
+        this.users = res.data;
       });
   }
 }

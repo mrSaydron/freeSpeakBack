@@ -1,5 +1,6 @@
 package ru.mrak.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -43,6 +44,10 @@ public class Book implements Serializable {
     @OneToOne
     @JoinColumn(unique = true)
     private Dictionary dictionary;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = "books", allowSetters = true)
+    private User loadedUser;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -129,6 +134,19 @@ public class Book implements Serializable {
 
     public void setDictionary(Dictionary dictionary) {
         this.dictionary = dictionary;
+    }
+
+    public User getLoadedUser() {
+        return loadedUser;
+    }
+
+    public Book loadedUser(User user) {
+        this.loadedUser = user;
+        return this;
+    }
+
+    public void setLoadedUser(User user) {
+        this.loadedUser = user;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

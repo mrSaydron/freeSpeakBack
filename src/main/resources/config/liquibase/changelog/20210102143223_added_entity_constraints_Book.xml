@@ -14,5 +14,11 @@
                                  referencedColumnNames="id"
                                  referencedTableName="dictionary"/>
 
+        <addForeignKeyConstraint baseColumnNames="loaded_user_id"
+                                 baseTableName="book"
+                                 constraintName="fk_book_loaded_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+
     </changeSet>
 </databaseChangeLog>

@@ -21,7 +21,8 @@
       "source": "Source",
       "text": "Text",
       "publicBook": "Public Book",
-      "dictionary": "Dictionary"
+      "dictionary": "Dictionary",
+      "loadedUser": "Loaded User"
     }
   }
 }

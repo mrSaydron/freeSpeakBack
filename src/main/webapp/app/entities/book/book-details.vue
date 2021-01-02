@@ -42,6 +42,12 @@
                             <router-link :to="{name: 'DictionaryView', params: {dictionaryId: book.dictionaryId}}">{{book.dictionaryId}}</router-link>
                         </div>
                     </dd>
+                    <dt>
+                        <span v-text="$t('libFourApp.book.loadedUser')">Loaded User</span>
+                    </dt>
+                    <dd>
+                        {{book.loadedUserLogin}}
+                    </dd>
                 </dl>
                 <button type="submit"
                         v-on:click.prevent="previousState()"

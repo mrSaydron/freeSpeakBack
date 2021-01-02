@@ -34,6 +34,9 @@
             <column name="dictionary_id" type="bigint">
                 <constraints unique="true" nullable="true" uniqueConstraintName="ux_book_dictionary_id" />
             </column>
+            <column name="loaded_user_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
     </changeSet>

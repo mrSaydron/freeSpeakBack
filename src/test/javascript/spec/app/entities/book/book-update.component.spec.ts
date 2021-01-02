@@ -11,6 +11,8 @@ import BookService from '@/entities/book/book.service';
 
 import DictionaryService from '@/entities/dictionary/dictionary.service';
 
+import UserService from '@/admin/user-management/user-management.service';
+
 const localVue = createLocalVue();
 
 config.initVueApp(localVue);
@@ -39,6 +41,8 @@ describe('Component Tests', () => {
           bookService: () => bookServiceStub,
 
           dictionaryService: () => new DictionaryService(),
+
+          userService: () => new UserService(),
         },
       });
       comp = wrapper.vm;

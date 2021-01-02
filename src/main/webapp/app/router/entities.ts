@@ -153,5 +153,30 @@ export default [
     component: DictionaryHasWordDetails,
     meta: { authorities: [Authority.USER] },
   },
+
+  {
+    path: '/book',
+    name: 'Book',
+    component: Book,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/book/new',
+    name: 'BookCreate',
+    component: BookUpdate,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/book/:bookId/edit',
+    name: 'BookEdit',
+    component: BookUpdate,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/book/:bookId/view',
+    name: 'BookView',
+    component: BookDetails,
+    meta: { authorities: [Authority.USER] },
+  },
   // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here
 ];

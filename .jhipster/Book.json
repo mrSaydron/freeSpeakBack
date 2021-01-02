@@ -10,6 +10,14 @@
       "ownerSide": true,
       "useJPADerivedIdentifier": false,
       "otherEntityRelationshipName": "book"
+    },
+    {
+      "relationshipName": "loadedUser",
+      "otherEntityName": "user",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "login",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "book"
     }
   ],
   "fields": [

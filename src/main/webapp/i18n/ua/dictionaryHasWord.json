@@ -1,0 +1,24 @@
+{
+  "libFourApp": {
+    "dictionaryHasWord": {
+      "home": {
+        "title": "Dictionary Has Words",
+        "createLabel": "Створити новий Dictionary Has Word",
+        "createOrEditLabel": "Створити чи редагувати Dictionary Has Word",
+        "notFound": "No Dictionary Has Words found"
+      },
+      "created": "Новий Dictionary Has Word створений з ідентифікатором {{ param }}",
+      "updated": "Dictionary Has Word оновлений з ідентифікатором {{ param }}",
+      "deleted": "Dictionary Has Word видалений з ідентифікатором {{ param }}",
+      "delete": {
+        "question": "Ви впевнені, що хочете видалити Dictionary Has Word {{ id }}?"
+      },
+      "detail": {
+        "title": "Dictionary Has Word"
+      },
+      "count": "Count",
+      "dictionary": "Dictionary",
+      "word": "Word"
+    }
+  }
+}

@@ -10,6 +10,7 @@
         "book": "Book",
         "dictionary": "Dictionary",
         "word": "Word",
+        "dictionaryHasWord": "Dictionary Has Word",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {

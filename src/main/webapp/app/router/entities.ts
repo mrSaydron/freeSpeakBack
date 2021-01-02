@@ -20,6 +20,12 @@ const Word = () => import('@/entities/word/word.vue');
 const WordUpdate = () => import('@/entities/word/word-update.vue');
 // prettier-ignore
 const WordDetails = () => import('@/entities/word/word-details.vue');
+// prettier-ignore
+const DictionaryHasWord = () => import('@/entities/dictionary-has-word/dictionary-has-word.vue');
+// prettier-ignore
+const DictionaryHasWordUpdate = () => import('@/entities/dictionary-has-word/dictionary-has-word-update.vue');
+// prettier-ignore
+const DictionaryHasWordDetails = () => import('@/entities/dictionary-has-word/dictionary-has-word-details.vue');
 // jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
 
 export default [
@@ -120,6 +126,31 @@ export default [
     path: '/word/:wordId/view',
     name: 'WordView',
     component: WordDetails,
+    meta: { authorities: [Authority.USER] },
+  },
+
+  {
+    path: '/dictionary-has-word',
+    name: 'DictionaryHasWord',
+    component: DictionaryHasWord,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/dictionary-has-word/new',
+    name: 'DictionaryHasWordCreate',
+    component: DictionaryHasWordUpdate,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/dictionary-has-word/:dictionaryHasWordId/edit',
+    name: 'DictionaryHasWordEdit',
+    component: DictionaryHasWordUpdate,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/dictionary-has-word/:dictionaryHasWordId/view',
+    name: 'DictionaryHasWordView',
+    component: DictionaryHasWordDetails,
     meta: { authorities: [Authority.USER] },
   },
   // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here

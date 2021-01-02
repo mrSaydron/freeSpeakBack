@@ -30,6 +30,7 @@
                     <th v-on:click="changeOrder('source')"><span v-text="$t('libFourApp.book.source')">Source</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'source'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('text')"><span v-text="$t('libFourApp.book.text')">Text</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'text'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('publicBook')"><span v-text="$t('libFourApp.book.publicBook')">Public Book</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'publicBook'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('dictionaryId')"><span v-text="$t('libFourApp.book.dictionary')">Dictionary</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'dictionaryId'"></jhi-sort-indicator></th>
                     <th></th>
                 </tr>
                 </thead>
@@ -44,6 +45,11 @@
                     <td>{{book.source}}</td>
                     <td>{{book.text}}</td>
                     <td>{{book.publicBook}}</td>
+                    <td>
+                        <div v-if="book.dictionaryId">
+                            <router-link :to="{name: 'DictionaryView', params: {dictionaryId: book.dictionaryId}}">{{book.dictionaryId}}</router-link>
+                        </div>
+                    </td>
                     <td class="text-right">
                         <div class="btn-group">
                             <router-link :to="{name: 'BookView', params: {bookId: book.id}}" tag="button" class="btn btn-info btn-sm details">

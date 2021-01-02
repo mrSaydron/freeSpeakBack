@@ -9,6 +9,8 @@ import BookUpdateComponent from '@/entities/book/book-update.vue';
 import BookClass from '@/entities/book/book-update.component';
 import BookService from '@/entities/book/book.service';
 
+import DictionaryService from '@/entities/dictionary/dictionary.service';
+
 const localVue = createLocalVue();
 
 config.initVueApp(localVue);
@@ -35,6 +37,8 @@ describe('Component Tests', () => {
         provide: {
           alertService: () => new AlertService(store),
           bookService: () => bookServiceStub,
+
+          dictionaryService: () => new DictionaryService(),
         },
       });
       comp = wrapper.vm;

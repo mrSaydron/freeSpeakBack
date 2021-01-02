@@ -9,10 +9,14 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link Book} and its DTO {@link BookDTO}.
  */
-@Mapper(componentModel = "spring", uses = {})
+@Mapper(componentModel = "spring", uses = {DictionaryMapper.class})
 public interface BookMapper extends EntityMapper<BookDTO, Book> {
 
+    @Mapping(source = "dictionary.id", target = "dictionaryId")
+    BookDTO toDto(Book book);
 
+    @Mapping(source = "dictionaryId", target = "dictionary")
+    Book toEntity(BookDTO bookDTO);
 
     default Book fromId(Long id) {
         if (id == null) {

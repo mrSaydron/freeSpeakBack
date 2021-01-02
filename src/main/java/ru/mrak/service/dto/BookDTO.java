@@ -23,6 +23,8 @@ public class BookDTO implements Serializable {
     @NotNull
     private Boolean publicBook;
 
+
+    private Long dictionaryId;
     
     public Long getId() {
         return id;
@@ -72,6 +74,14 @@ public class BookDTO implements Serializable {
         this.publicBook = publicBook;
     }
 
+    public Long getDictionaryId() {
+        return dictionaryId;
+    }
+
+    public void setDictionaryId(Long dictionaryId) {
+        this.dictionaryId = dictionaryId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -99,6 +109,7 @@ public class BookDTO implements Serializable {
             ", source='" + getSource() + "'" +
             ", text='" + getText() + "'" +
             ", publicBook='" + isPublicBook() + "'" +
+            ", dictionaryId=" + getDictionaryId() +
             "}";
     }
 }

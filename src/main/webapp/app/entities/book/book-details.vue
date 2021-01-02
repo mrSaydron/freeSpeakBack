@@ -34,6 +34,14 @@
                     <dd>
                         <span>{{book.publicBook}}</span>
                     </dd>
+                    <dt>
+                        <span v-text="$t('libFourApp.book.dictionary')">Dictionary</span>
+                    </dt>
+                    <dd>
+                        <div v-if="book.dictionaryId">
+                            <router-link :to="{name: 'DictionaryView', params: {dictionaryId: book.dictionaryId}}">{{book.dictionaryId}}</router-link>
+                        </div>
+                    </dd>
                 </dl>
                 <button type="submit"
                         v-on:click.prevent="previousState()"

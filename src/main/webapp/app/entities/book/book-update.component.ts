@@ -2,6 +2,9 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 
 import { numeric, required, minLength, maxLength, minValue, maxValue } from 'vuelidate/lib/validators';
 
+import DictionaryService from '../dictionary/dictionary.service';
+import { IDictionary } from '@/shared/model/dictionary.model';
+
 import AlertService from '@/shared/alert/alert.service';
 import { IBook, Book } from '@/shared/model/book.model';
 import BookService from './book.service';
@@ -29,6 +32,10 @@ export default class BookUpdate extends Vue {
   @Inject('alertService') private alertService: () => AlertService;
   @Inject('bookService') private bookService: () => BookService;
   public book: IBook = new Book();
+
+  @Inject('dictionaryService') private dictionaryService: () => DictionaryService;
+
+  public dictionaries: IDictionary[] = [];
   public isSaving = false;
   public currentLanguage = '';
 
@@ -37,6 +44,7 @@ export default class BookUpdate extends Vue {
       if (to.params.bookId) {
         vm.retrieveBook(to.params.bookId);
       }
+      vm.initRelationships();
     });
   }
 
@@ -85,5 +93,11 @@ export default class BookUpdate extends Vue {
     this.$router.go(-1);
   }
 
-  public initRelationships(): void {}
+  public initRelationships(): void {
+    this.dictionaryService()
+      .retrieve()
+      .then(res => {
+        this.dictionaries = res.data;
+      });
+  }
 }

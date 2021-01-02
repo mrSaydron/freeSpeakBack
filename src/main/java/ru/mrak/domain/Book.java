@@ -40,6 +40,10 @@ public class Book implements Serializable {
     @Column(name = "public_book", nullable = false)
     private Boolean publicBook;
 
+    @OneToOne
+    @JoinColumn(unique = true)
+    private Dictionary dictionary;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
@@ -112,6 +116,19 @@ public class Book implements Serializable {
 
     public void setPublicBook(Boolean publicBook) {
         this.publicBook = publicBook;
+    }
+
+    public Dictionary getDictionary() {
+        return dictionary;
+    }
+
+    public Book dictionary(Dictionary dictionary) {
+        this.dictionary = dictionary;
+        return this;
+    }
+
+    public void setDictionary(Dictionary dictionary) {
+        this.dictionary = dictionary;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

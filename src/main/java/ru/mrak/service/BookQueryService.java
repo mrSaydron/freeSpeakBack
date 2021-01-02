@@ -106,6 +106,10 @@ public class BookQueryService extends QueryService<Book> {
             if (criteria.getPublicBook() != null) {
                 specification = specification.and(buildSpecification(criteria.getPublicBook(), Book_.publicBook));
             }
+            if (criteria.getDictionaryId() != null) {
+                specification = specification.and(buildSpecification(criteria.getDictionaryId(),
+                    root -> root.join(Book_.dictionary, JoinType.LEFT).get(Dictionary_.id)));
+            }
         }
         return specification;
     }

@@ -20,7 +20,8 @@
       "author": "Author",
       "source": "Source",
       "text": "Text",
-      "publicBook": "Public Book"
+      "publicBook": "Public Book",
+      "dictionary": "Dictionary"
     }
   }
 }

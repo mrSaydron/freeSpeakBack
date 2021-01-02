@@ -5,6 +5,7 @@ export interface IBook {
   source?: string;
   text?: string;
   publicBook?: boolean;
+  dictionaryId?: number;
 }
 
 export class Book implements IBook {
@@ -14,7 +15,8 @@ export class Book implements IBook {
     public author?: string,
     public source?: string,
     public text?: string,
-    public publicBook?: boolean
+    public publicBook?: boolean,
+    public dictionaryId?: number
   ) {
     this.publicBook = this.publicBook || false;
   }

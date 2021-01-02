@@ -49,6 +49,13 @@
                             </small>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="form-control-label" v-text="$t('libFourApp.book.dictionary')" for="book-dictionary">Dictionary</label>
+                        <select class="form-control" id="book-dictionary" name="dictionary" v-model="book.dictionaryId">
+                            <option v-bind:value="null"></option>
+                            <option v-bind:value="dictionaryOption.id" v-for="dictionaryOption in dictionaries" :key="dictionaryOption.id">{{dictionaryOption.id}}</option>
+                        </select>
+                    </div>
                 </div>
                 <div>
                     <button type="button" id="cancel-save" class="btn btn-secondary" v-on:click="previousState()">

@@ -36,6 +36,8 @@ public class BookCriteria implements Serializable, Criteria {
 
     private BooleanFilter publicBook;
 
+    private LongFilter dictionaryId;
+
     public BookCriteria() {
     }
 
@@ -46,6 +48,7 @@ public class BookCriteria implements Serializable, Criteria {
         this.source = other.source == null ? null : other.source.copy();
         this.text = other.text == null ? null : other.text.copy();
         this.publicBook = other.publicBook == null ? null : other.publicBook.copy();
+        this.dictionaryId = other.dictionaryId == null ? null : other.dictionaryId.copy();
     }
 
     @Override
@@ -101,6 +104,14 @@ public class BookCriteria implements Serializable, Criteria {
         this.publicBook = publicBook;
     }
 
+    public LongFilter getDictionaryId() {
+        return dictionaryId;
+    }
+
+    public void setDictionaryId(LongFilter dictionaryId) {
+        this.dictionaryId = dictionaryId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -117,7 +128,8 @@ public class BookCriteria implements Serializable, Criteria {
             Objects.equals(author, that.author) &&
             Objects.equals(source, that.source) &&
             Objects.equals(text, that.text) &&
-            Objects.equals(publicBook, that.publicBook);
+            Objects.equals(publicBook, that.publicBook) &&
+            Objects.equals(dictionaryId, that.dictionaryId);
     }
 
     @Override
@@ -128,7 +140,8 @@ public class BookCriteria implements Serializable, Criteria {
         author,
         source,
         text,
-        publicBook
+        publicBook,
+        dictionaryId
         );
     }
 
@@ -142,6 +155,7 @@ public class BookCriteria implements Serializable, Criteria {
                 (source != null ? "source=" + source + ", " : "") +
                 (text != null ? "text=" + text + ", " : "") +
                 (publicBook != null ? "publicBook=" + publicBook + ", " : "") +
+                (dictionaryId != null ? "dictionaryId=" + dictionaryId + ", " : "") +
             "}";
     }
 

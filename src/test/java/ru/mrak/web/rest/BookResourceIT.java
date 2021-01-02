@@ -2,6 +2,7 @@ package ru.mrak.web.rest;
 
 import ru.mrak.LibFourApp;
 import ru.mrak.domain.Book;
+import ru.mrak.domain.Dictionary;
 import ru.mrak.repository.BookRepository;
 import ru.mrak.service.BookService;
 import ru.mrak.service.dto.BookDTO;
@@ -627,6 +628,26 @@ public class BookResourceIT {
         // Get all the bookList where publicBook is null
         defaultBookShouldNotBeFound("publicBook.specified=false");
     }
+
+    @Test
+    @Transactional
+    public void getAllBooksByDictionaryIsEqualToSomething() throws Exception {
+        // Initialize the database
+        bookRepository.saveAndFlush(book);
+        Dictionary dictionary = DictionaryResourceIT.createEntity(em);
+        em.persist(dictionary);
+        em.flush();
+        book.setDictionary(dictionary);
+        bookRepository.saveAndFlush(book);
+        Long dictionaryId = dictionary.getId();
+
+        // Get all the bookList where dictionary equals to dictionaryId
+        defaultBookShouldBeFound("dictionaryId.equals=" + dictionaryId);
+
+        // Get all the bookList where dictionary equals to dictionaryId + 1
+        defaultBookShouldNotBeFound("dictionaryId.equals=" + (dictionaryId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */

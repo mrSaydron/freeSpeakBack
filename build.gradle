@@ -141,9 +141,9 @@ liquibase {
     activities {
         main {
             driver "org.mariadb.jdbc.Driver"
-            url "jdbc:mariadb://localhost:3306/lib_four"
-            username ""
-            password ""
+            url "jdbc:mariadb://localhost:3360/lib_four"
+            username "admin"
+            password "123"
             changeLogFile "src/main/resources/config/liquibase/master.xml"
             defaultSchemaName ""
             logLevel "debug"
@@ -151,9 +151,9 @@ liquibase {
         }
         diffLog {
             driver "org.mariadb.jdbc.Driver"
-            url "jdbc:mariadb://localhost:3306/lib_four"
-            username ""
-            password ""
+            url "jdbc:mariadb://localhost:3360/lib_four"
+            username "admin"
+            password "123"
             changeLogFile project.ext.diffChangelogFile
             referenceUrl "hibernate:spring:ru.mrak.domain?dialect=org.hibernate.dialect.MariaDB103Dialect&hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy"
             defaultSchemaName ""

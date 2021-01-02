@@ -40,6 +40,10 @@
                         <font-awesome-icon icon="asterisk" />
                         <span v-text="$t('global.menu.entities.dictionary')">Dictionary</span>
                     </b-dropdown-item>
+                    <b-dropdown-item to="/word">
+                        <font-awesome-icon icon="asterisk" />
+                        <span v-text="$t('global.menu.entities.word')">Word</span>
+                    </b-dropdown-item>
                     <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
                 </b-nav-item-dropdown>
                 <b-nav-item-dropdown

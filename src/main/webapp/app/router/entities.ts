@@ -14,6 +14,12 @@ const Dictionary = () => import('@/entities/dictionary/dictionary.vue');
 const DictionaryUpdate = () => import('@/entities/dictionary/dictionary-update.vue');
 // prettier-ignore
 const DictionaryDetails = () => import('@/entities/dictionary/dictionary-details.vue');
+// prettier-ignore
+const Word = () => import('@/entities/word/word.vue');
+// prettier-ignore
+const WordUpdate = () => import('@/entities/word/word-update.vue');
+// prettier-ignore
+const WordDetails = () => import('@/entities/word/word-details.vue');
 // jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
 
 export default [
@@ -89,6 +95,31 @@ export default [
     path: '/book/:bookId/view',
     name: 'BookView',
     component: BookDetails,
+    meta: { authorities: [Authority.USER] },
+  },
+
+  {
+    path: '/word',
+    name: 'Word',
+    component: Word,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/word/new',
+    name: 'WordCreate',
+    component: WordUpdate,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/word/:wordId/edit',
+    name: 'WordEdit',
+    component: WordUpdate,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/word/:wordId/view',
+    name: 'WordView',
+    component: WordDetails,
     meta: { authorities: [Authority.USER] },
   },
   // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here

@@ -31,6 +31,7 @@ import ConfigurationService from '@/admin/configuration/configuration.service';
 
 import BookService from '@/entities/book/book.service';
 import DictionaryService from '@/entities/dictionary/dictionary.service';
+import WordService from '@/entities/word/word.service';
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
 /* tslint:enable */
@@ -95,6 +96,7 @@ new Vue({
     translationService: () => translationService,
     bookService: () => new BookService(),
     dictionaryService: () => new DictionaryService(),
+    wordService: () => new WordService(),
     // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
     accountService: () => accountService,
   },

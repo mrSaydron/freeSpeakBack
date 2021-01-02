@@ -1,0 +1,23 @@
+{
+  "libFourApp": {
+    "dictionary": {
+      "home": {
+        "title": "Dictionaries",
+        "createLabel": "Создать новый Dictionary",
+        "createOrEditLabel": "Создать или отредактировать Dictionary",
+        "notFound": "No Dictionaries found"
+      },
+      "created": "Новый Dictionary создан с идентификатором {{ param }}",
+      "updated": "Dictionary обновлен с идентификатором {{ param }}",
+      "deleted": "Dictionary удален с идентификатором {{ param }}",
+      "delete": {
+        "question": "Вы уверены что хотите удалить Dictionary {{ id }}?"
+      },
+      "detail": {
+        "title": "Dictionary"
+      },
+      "baseLanguage": "Base Language",
+      "targerLanguage": "Targer Language"
+    }
+  }
+}

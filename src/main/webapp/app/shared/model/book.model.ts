@@ -1,3 +1,5 @@
+import { IUser } from '@/shared/model/user.model';
+
 export interface IBook {
   id?: number;
   title?: string;
@@ -8,6 +10,7 @@ export interface IBook {
   dictionaryId?: number;
   loadedUserLogin?: string;
   loadedUserId?: number;
+  users?: IUser[];
 }
 
 export class Book implements IBook {
@@ -20,7 +23,8 @@ export class Book implements IBook {
     public publicBook?: boolean,
     public dictionaryId?: number,
     public loadedUserLogin?: string,
-    public loadedUserId?: number
+    public loadedUserId?: number,
+    public users?: IUser[]
   ) {
     this.publicBook = this.publicBook || false;
   }

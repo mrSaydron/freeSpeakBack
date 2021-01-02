@@ -18,6 +18,14 @@
       "otherEntityField": "login",
       "ownerSide": true,
       "otherEntityRelationshipName": "book"
+    },
+    {
+      "relationshipName": "user",
+      "otherEntityName": "user",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "login",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "book"
     }
   ],
   "fields": [

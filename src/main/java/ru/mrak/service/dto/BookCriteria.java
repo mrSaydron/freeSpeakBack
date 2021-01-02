@@ -40,6 +40,8 @@ public class BookCriteria implements Serializable, Criteria {
 
     private LongFilter loadedUserId;
 
+    private LongFilter userId;
+
     public BookCriteria() {
     }
 
@@ -52,6 +54,7 @@ public class BookCriteria implements Serializable, Criteria {
         this.publicBook = other.publicBook == null ? null : other.publicBook.copy();
         this.dictionaryId = other.dictionaryId == null ? null : other.dictionaryId.copy();
         this.loadedUserId = other.loadedUserId == null ? null : other.loadedUserId.copy();
+        this.userId = other.userId == null ? null : other.userId.copy();
     }
 
     @Override
@@ -123,6 +126,14 @@ public class BookCriteria implements Serializable, Criteria {
         this.loadedUserId = loadedUserId;
     }
 
+    public LongFilter getUserId() {
+        return userId;
+    }
+
+    public void setUserId(LongFilter userId) {
+        this.userId = userId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -141,7 +152,8 @@ public class BookCriteria implements Serializable, Criteria {
             Objects.equals(text, that.text) &&
             Objects.equals(publicBook, that.publicBook) &&
             Objects.equals(dictionaryId, that.dictionaryId) &&
-            Objects.equals(loadedUserId, that.loadedUserId);
+            Objects.equals(loadedUserId, that.loadedUserId) &&
+            Objects.equals(userId, that.userId);
     }
 
     @Override
@@ -154,7 +166,8 @@ public class BookCriteria implements Serializable, Criteria {
         text,
         publicBook,
         dictionaryId,
-        loadedUserId
+        loadedUserId,
+        userId
         );
     }
 
@@ -170,6 +183,7 @@ public class BookCriteria implements Serializable, Criteria {
                 (publicBook != null ? "publicBook=" + publicBook + ", " : "") +
                 (dictionaryId != null ? "dictionaryId=" + dictionaryId + ", " : "") +
                 (loadedUserId != null ? "loadedUserId=" + loadedUserId + ", " : "") +
+                (userId != null ? "userId=" + userId + ", " : "") +
             "}";
     }
 

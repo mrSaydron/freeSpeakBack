@@ -13,6 +13,8 @@ import DictionaryService from '@/entities/dictionary/dictionary.service';
 
 import UserService from '@/admin/user-management/user-management.service';
 
+import UserService from '@/admin/user-management/user-management.service';
+
 const localVue = createLocalVue();
 
 config.initVueApp(localVue);

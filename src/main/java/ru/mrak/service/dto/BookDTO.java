@@ -2,6 +2,8 @@ package ru.mrak.service.dto;
 
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A DTO for the {@link ru.mrak.domain.Book} entity.
@@ -29,6 +31,7 @@ public class BookDTO implements Serializable {
     private Long loadedUserId;
 
     private String loadedUserLogin;
+    private Set<UserDTO> users = new HashSet<>();
     
     public Long getId() {
         return id;
@@ -102,6 +105,14 @@ public class BookDTO implements Serializable {
         this.loadedUserLogin = userLogin;
     }
 
+    public Set<UserDTO> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<UserDTO> users) {
+        this.users = users;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -132,6 +143,7 @@ public class BookDTO implements Serializable {
             ", dictionaryId=" + getDictionaryId() +
             ", loadedUserId=" + getLoadedUserId() +
             ", loadedUserLogin='" + getLoadedUserLogin() + "'" +
+            ", users='" + getUsers() + "'" +
             "}";
     }
 }

@@ -60,6 +60,15 @@ public class BookService {
 
 
     /**
+     * Get all the books with eager load of many-to-many relationships.
+     *
+     * @return the list of entities.
+     */
+    public Page<BookDTO> findAllWithEagerRelationships(Pageable pageable) {
+        return bookRepository.findAllWithEagerRelationships(pageable).map(bookMapper::toDto);
+    }
+
+    /**
      * Get one book by id.
      *
      * @param id the id of the entity.
@@ -68,7 +77,7 @@ public class BookService {
     @Transactional(readOnly = true)
     public Optional<BookDTO> findOne(Long id) {
         log.debug("Request to get Book : {}", id);
-        return bookRepository.findById(id)
+        return bookRepository.findOneWithEagerRelationships(id)
             .map(bookMapper::toDto);
     }
 

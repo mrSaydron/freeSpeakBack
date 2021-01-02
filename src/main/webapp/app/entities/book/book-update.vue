@@ -63,6 +63,12 @@
                             <option v-bind:value="userOption.id" v-for="userOption in users" :key="userOption.id">{{userOption.login}}</option>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label v-text="$t('libFourApp.book.user')" for="book-user">User</label>
+                        <select class="form-control" id="book-user" multiple name="user" v-model="book.users">
+                            <option v-bind:value="getSelected(book.users, userOption)" v-for="userOption in users" :key="userOption.id">{{userOption.login}}</option>
+                        </select>
+                    </div>
                 </div>
                 <div>
                     <button type="button" id="cancel-save" class="btn btn-secondary" v-on:click="previousState()">

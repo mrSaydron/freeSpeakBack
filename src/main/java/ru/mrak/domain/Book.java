@@ -8,6 +8,8 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A Book.
@@ -48,6 +50,13 @@ public class Book implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties(value = "books", allowSetters = true)
     private User loadedUser;
+
+    @ManyToMany
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JoinTable(name = "book_user",
+               joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
+               inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+    private Set<User> users = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -147,6 +156,29 @@ public class Book implements Serializable {
 
     public void setLoadedUser(User user) {
         this.loadedUser = user;
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public Book users(Set<User> users) {
+        this.users = users;
+        return this;
+    }
+
+    public Book addUser(User user) {
+        this.users.add(user);
+        return this;
+    }
+
+    public Book removeUser(User user) {
+        this.users.remove(user);
+        return this;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

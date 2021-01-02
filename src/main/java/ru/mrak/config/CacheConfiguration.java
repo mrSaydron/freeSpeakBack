@@ -52,6 +52,7 @@ public class CacheConfiguration {
             createCache(cm, ru.mrak.domain.Dictionary.class.getName());
             createCache(cm, ru.mrak.domain.Word.class.getName());
             createCache(cm, ru.mrak.domain.DictionaryHasWord.class.getName());
+            createCache(cm, ru.mrak.domain.Book.class.getName() + ".users");
             // jhipster-needle-ehcache-add-entry
         };
     }

@@ -7,6 +7,8 @@ import { IDictionary } from '@/shared/model/dictionary.model';
 
 import UserService from '@/admin/user-management/user-management.service';
 
+import UserService from '@/admin/user-management/user-management.service';
+
 import AlertService from '@/shared/alert/alert.service';
 import { IBook, Book } from '@/shared/model/book.model';
 import BookService from './book.service';
@@ -62,6 +64,7 @@ export default class BookUpdate extends Vue {
         this.currentLanguage = this.$store.getters.currentLanguage;
       }
     );
+    this.book.users = [];
   }
 
   public save(): void {
@@ -110,5 +113,21 @@ export default class BookUpdate extends Vue {
       .then(res => {
         this.users = res.data;
       });
+    this.userService()
+      .retrieve()
+      .then(res => {
+        this.users = res.data;
+      });
+  }
+
+  public getSelected(selectedVals, option): any {
+    if (selectedVals) {
+      for (let i = 0; i < selectedVals.length; i++) {
+        if (option.id === selectedVals[i].id) {
+          return selectedVals[i];
+        }
+      }
+    }
+    return option;
   }
 }

@@ -114,6 +114,10 @@ public class BookQueryService extends QueryService<Book> {
                 specification = specification.and(buildSpecification(criteria.getLoadedUserId(),
                     root -> root.join(Book_.loadedUser, JoinType.LEFT).get(User_.id)));
             }
+            if (criteria.getUserId() != null) {
+                specification = specification.and(buildSpecification(criteria.getUserId(),
+                    root -> root.join(Book_.users, JoinType.LEFT).get(User_.id)));
+            }
         }
         return specification;
     }

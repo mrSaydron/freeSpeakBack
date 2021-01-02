@@ -19,6 +19,7 @@ public interface BookMapper extends EntityMapper<BookDTO, Book> {
 
     @Mapping(source = "dictionaryId", target = "dictionary")
     @Mapping(source = "loadedUserId", target = "loadedUser")
+    @Mapping(target = "removeUser", ignore = true)
     Book toEntity(BookDTO bookDTO);
 
     default Book fromId(Long id) {

@@ -48,6 +48,14 @@
                     <dd>
                         {{book.loadedUserLogin}}
                     </dd>
+                    <dt>
+                        <span v-text="$t('libFourApp.book.user')">User</span>
+                    </dt>
+                    <dd>
+                        <span v-for="(user, i) in book.users" :key="user.id">{{i > 0 ? ', ' : ''}}
+                            {{user.login}}
+                        </span>
+                    </dd>
                 </dl>
                 <button type="submit"
                         v-on:click.prevent="previousState()"

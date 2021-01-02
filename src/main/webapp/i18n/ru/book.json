@@ -22,7 +22,8 @@
       "text": "Text",
       "publicBook": "Public Book",
       "dictionary": "Dictionary",
-      "loadedUser": "Loaded User"
+      "loadedUser": "Loaded User",
+      "user": "User"
     }
   }
 }

@@ -55,6 +55,7 @@ public class CacheConfiguration {
             createCache(cm, ru.mrak.domain.Book.class.getName() + ".users");
             createCache(cm, ru.mrak.domain.Chat.class.getName());
             createCache(cm, ru.mrak.domain.Chat.class.getName() + ".users");
+            createCache(cm, ru.mrak.domain.Message.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

@@ -19,10 +19,12 @@
     <include file="config/liquibase/changelog/20210102144443_added_entity_Word.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210102145701_added_entity_DictionaryHasWord.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210103054223_added_entity_Chat.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210103055434_added_entity_Message.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20210102143223_added_entity_constraints_Book.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210102145701_added_entity_constraints_DictionaryHasWord.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210103054223_added_entity_constraints_Chat.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210103055434_added_entity_constraints_Message.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

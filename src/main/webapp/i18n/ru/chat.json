@@ -1,0 +1,24 @@
+{
+  "libFourApp": {
+    "chat": {
+      "home": {
+        "title": "Chats",
+        "createLabel": "Создать новый Chat",
+        "createOrEditLabel": "Создать или отредактировать Chat",
+        "notFound": "No Chats found"
+      },
+      "created": "Новый Chat создан с идентификатором {{ param }}",
+      "updated": "Chat обновлен с идентификатором {{ param }}",
+      "deleted": "Chat удален с идентификатором {{ param }}",
+      "delete": {
+        "question": "Вы уверены что хотите удалить Chat {{ id }}?"
+      },
+      "detail": {
+        "title": "Chat"
+      },
+      "chatType": "Chat Type",
+      "title": "Title",
+      "user": "User"
+    }
+  }
+}

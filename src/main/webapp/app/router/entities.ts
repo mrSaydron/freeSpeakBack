@@ -26,6 +26,12 @@ const DictionaryHasWord = () => import('@/entities/dictionary-has-word/dictionar
 const DictionaryHasWordUpdate = () => import('@/entities/dictionary-has-word/dictionary-has-word-update.vue');
 // prettier-ignore
 const DictionaryHasWordDetails = () => import('@/entities/dictionary-has-word/dictionary-has-word-details.vue');
+// prettier-ignore
+const Chat = () => import('@/entities/chat/chat.vue');
+// prettier-ignore
+const ChatUpdate = () => import('@/entities/chat/chat-update.vue');
+// prettier-ignore
+const ChatDetails = () => import('@/entities/chat/chat-details.vue');
 // jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
 
 export default [
@@ -201,6 +207,31 @@ export default [
     path: '/book/:bookId/view',
     name: 'BookView',
     component: BookDetails,
+    meta: { authorities: [Authority.USER] },
+  },
+
+  {
+    path: '/chat',
+    name: 'Chat',
+    component: Chat,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/chat/new',
+    name: 'ChatCreate',
+    component: ChatUpdate,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/chat/:chatId/edit',
+    name: 'ChatEdit',
+    component: ChatUpdate,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/chat/:chatId/view',
+    name: 'ChatView',
+    component: ChatDetails,
     meta: { authorities: [Authority.USER] },
   },
   // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here

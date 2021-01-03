@@ -11,6 +11,7 @@
         "dictionary": "Dictionary",
         "word": "Word",
         "dictionaryHasWord": "Dictionary Has Word",
+        "chat": "Chat",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {

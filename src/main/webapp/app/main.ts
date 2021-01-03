@@ -33,6 +33,7 @@ import BookService from '@/entities/book/book.service';
 import DictionaryService from '@/entities/dictionary/dictionary.service';
 import WordService from '@/entities/word/word.service';
 import DictionaryHasWordService from '@/entities/dictionary-has-word/dictionary-has-word.service';
+import ChatService from '@/entities/chat/chat.service';
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
 /* tslint:enable */
@@ -99,6 +100,7 @@ new Vue({
     dictionaryService: () => new DictionaryService(),
     wordService: () => new WordService(),
     dictionaryHasWordService: () => new DictionaryHasWordService(),
+    chatService: () => new ChatService(),
     // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
     accountService: () => accountService,
   },

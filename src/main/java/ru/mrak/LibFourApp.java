@@ -1,5 +1,6 @@
 package ru.mrak;
 
+import org.springframework.context.ConfigurableApplicationContext;
 import ru.mrak.config.ApplicationProperties;
 
 import io.github.jhipster.config.DefaultProfileUtil;
@@ -13,6 +14,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.env.Environment;
+import ru.mrak.service.TokenizerService;
 
 import javax.annotation.PostConstruct;
 import java.net.InetAddress;
@@ -60,8 +62,12 @@ public class LibFourApp {
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(LibFourApp.class);
         DefaultProfileUtil.addDefaultProfile(app);
-        Environment env = app.run(args).getEnvironment();
+        ConfigurableApplicationContext applicationContext = app.run(args);
+        Environment env = applicationContext.getEnvironment();
         logApplicationStartup(env);
+
+//        TokenizerService tokenizerService = applicationContext.getBean(TokenizerService.class);
+//        tokenizerService.test();
     }
 
     private static void logApplicationStartup(Environment env) {

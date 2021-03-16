@@ -6,13 +6,13 @@ import ru.mrak.service.dto.WordDTO;
 
 import org.mapstruct.*;
 
+import java.util.List;
+
 /**
  * Mapper for the entity {@link Word} and its DTO {@link WordDTO}.
  */
 @Mapper(componentModel = "spring", uses = {})
 public interface WordMapper extends EntityMapper<WordDTO, Word> {
-
-
 
     default Word fromId(Long id) {
         if (id == null) {

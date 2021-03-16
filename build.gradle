@@ -276,6 +276,17 @@ dependencies {
     testRuntimeOnly "com.tngtech.archunit:archunit-junit5-engine:${archunit_junit5_version}"
     testImplementation "com.h2database:h2"
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
+
+    compileOnly 'org.projectlombok:lombok:1.18.16'
+    annotationProcessor 'org.projectlombok:lombok:1.18.16'
+    testCompileOnly 'org.projectlombok:lombok:1.18.16'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.16'
+
+    implementation 'edu.stanford.nlp:stanford-corenlp:4.2.0'
+    implementation 'edu.stanford.nlp:stanford-corenlp:4.2.0:models'
+//    implementation 'edu.stanford.nlp:stanford-corenlp:4.2.0:models-english'
+    implementation 'edu.stanford.nlp:stanford-corenlp:4.2.0:javadoc'
+    implementation 'edu.stanford.nlp:stanford-corenlp:4.2.0:sources'
 }
 
 if (project.hasProperty("gae")) {

@@ -27,4 +27,5 @@
     <include file="config/liquibase/changelog/20210103055434_added_entity_constraints_Message.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
+    <include file="config/liquibase/changelog/20210114000000_change_field_type_in_book.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

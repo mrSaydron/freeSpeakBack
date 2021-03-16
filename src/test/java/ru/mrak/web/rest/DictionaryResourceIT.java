@@ -62,9 +62,9 @@ public class DictionaryResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Dictionary createEntity(EntityManager em) {
-        Dictionary dictionary = new Dictionary()
-            .baseLanguage(DEFAULT_BASE_LANGUAGE)
-            .targerLanguage(DEFAULT_TARGER_LANGUAGE);
+        Dictionary dictionary = new Dictionary();
+        dictionary.setBaseLanguage(DEFAULT_BASE_LANGUAGE);
+        dictionary.setTargerLanguage(DEFAULT_TARGER_LANGUAGE);
         return dictionary;
     }
     /**
@@ -74,9 +74,9 @@ public class DictionaryResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Dictionary createUpdatedEntity(EntityManager em) {
-        Dictionary dictionary = new Dictionary()
-            .baseLanguage(UPDATED_BASE_LANGUAGE)
-            .targerLanguage(UPDATED_TARGER_LANGUAGE);
+        Dictionary dictionary = new Dictionary();
+        dictionary.setBaseLanguage(UPDATED_BASE_LANGUAGE);
+        dictionary.setTargerLanguage(UPDATED_TARGER_LANGUAGE);
         return dictionary;
     }
 
@@ -139,7 +139,7 @@ public class DictionaryResourceIT {
             .andExpect(jsonPath("$.[*].baseLanguage").value(hasItem(DEFAULT_BASE_LANGUAGE)))
             .andExpect(jsonPath("$.[*].targerLanguage").value(hasItem(DEFAULT_TARGER_LANGUAGE)));
     }
-    
+
     @Test
     @Transactional
     public void getDictionary() throws Exception {
@@ -174,9 +174,8 @@ public class DictionaryResourceIT {
         Dictionary updatedDictionary = dictionaryRepository.findById(dictionary.getId()).get();
         // Disconnect from session so that the updates on updatedDictionary are not directly saved in db
         em.detach(updatedDictionary);
-        updatedDictionary
-            .baseLanguage(UPDATED_BASE_LANGUAGE)
-            .targerLanguage(UPDATED_TARGER_LANGUAGE);
+        updatedDictionary.setBaseLanguage(UPDATED_BASE_LANGUAGE);
+        updatedDictionary.setTargerLanguage(UPDATED_TARGER_LANGUAGE);
         DictionaryDTO dictionaryDTO = dictionaryMapper.toDto(updatedDictionary);
 
         restDictionaryMockMvc.perform(put("/api/dictionaries")

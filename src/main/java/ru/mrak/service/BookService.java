@@ -1,6 +1,9 @@
 package ru.mrak.service;
 
+import lombok.RequiredArgsConstructor;
 import ru.mrak.domain.Book;
+import ru.mrak.domain.Dictionary;
+import ru.mrak.domain.User;
 import ru.mrak.repository.BookRepository;
 import ru.mrak.service.dto.BookDTO;
 import ru.mrak.service.mapper.BookMapper;
@@ -12,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.Optional;
 
 /**
@@ -19,18 +23,17 @@ import java.util.Optional;
  */
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class BookService {
 
     private final Logger log = LoggerFactory.getLogger(BookService.class);
 
+    private final UserService userService;
+    private final DictionaryService dictionaryService;
+
     private final BookRepository bookRepository;
 
     private final BookMapper bookMapper;
-
-    public BookService(BookRepository bookRepository, BookMapper bookMapper) {
-        this.bookRepository = bookRepository;
-        this.bookMapper = bookMapper;
-    }
 
     /**
      * Save a book.
@@ -41,6 +44,18 @@ public class BookService {
     public BookDTO save(BookDTO bookDTO) {
         log.debug("Request to save Book : {}", bookDTO);
         Book book = bookMapper.toEntity(bookDTO);
+        User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
+        if (book.getLoadedUser() == null) {
+            book.setLoadedUser(user);
+        }
+        if (book.getUsers() == null) {
+            book.setUsers(new HashSet<>());
+        }
+        book.getUsers().add(user);
+
+        Dictionary dictionary = dictionaryService.createByText(book.getText(), "eng", "ru");
+        book.setDictionary(dictionary);
+
         book = bookRepository.save(book);
         return bookMapper.toDto(book);
     }

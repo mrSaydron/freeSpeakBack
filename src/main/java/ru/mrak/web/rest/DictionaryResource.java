@@ -21,7 +21,7 @@ import java.util.Optional;
  * REST controller for managing {@link ru.mrak.domain.Dictionary}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/dictionary")
 public class DictionaryResource {
 
     private final Logger log = LoggerFactory.getLogger(DictionaryResource.class);
@@ -44,7 +44,7 @@ public class DictionaryResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new dictionaryDTO, or with status {@code 400 (Bad Request)} if the dictionary has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/dictionaries")
+    @PostMapping()
     public ResponseEntity<DictionaryDTO> createDictionary(@RequestBody DictionaryDTO dictionaryDTO) throws URISyntaxException {
         log.debug("REST request to save Dictionary : {}", dictionaryDTO);
         if (dictionaryDTO.getId() != null) {
@@ -65,7 +65,7 @@ public class DictionaryResource {
      * or with status {@code 500 (Internal Server Error)} if the dictionaryDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/dictionaries")
+    @PutMapping()
     public ResponseEntity<DictionaryDTO> updateDictionary(@RequestBody DictionaryDTO dictionaryDTO) throws URISyntaxException {
         log.debug("REST request to update Dictionary : {}", dictionaryDTO);
         if (dictionaryDTO.getId() == null) {
@@ -78,23 +78,12 @@ public class DictionaryResource {
     }
 
     /**
-     * {@code GET  /dictionaries} : get all the dictionaries.
-     *
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of dictionaries in body.
-     */
-    @GetMapping("/dictionaries")
-    public List<DictionaryDTO> getAllDictionaries() {
-        log.debug("REST request to get all Dictionaries");
-        return dictionaryService.findAll();
-    }
-
-    /**
      * {@code GET  /dictionaries/:id} : get the "id" dictionary.
      *
      * @param id the id of the dictionaryDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the dictionaryDTO, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/dictionaries/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<DictionaryDTO> getDictionary(@PathVariable Long id) {
         log.debug("REST request to get Dictionary : {}", id);
         Optional<DictionaryDTO> dictionaryDTO = dictionaryService.findOne(id);
@@ -107,7 +96,7 @@ public class DictionaryResource {
      * @param id the id of the dictionaryDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/dictionaries/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteDictionary(@PathVariable Long id) {
         log.debug("REST request to delete Dictionary : {}", id);
         dictionaryService.delete(id);

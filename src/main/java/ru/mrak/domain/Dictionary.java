@@ -6,6 +6,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * A Dictionary.
@@ -27,7 +28,13 @@ public class Dictionary implements Serializable {
     @Column(name = "targer_language")
     private String targerLanguage;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here
+    @OneToMany(mappedBy = "dictionary", fetch = FetchType.LAZY)
+    private List<DictionaryHasWord> dictionaryWords;
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
     public Long getId() {
         return id;
     }
@@ -40,11 +47,6 @@ public class Dictionary implements Serializable {
         return baseLanguage;
     }
 
-    public Dictionary baseLanguage(String baseLanguage) {
-        this.baseLanguage = baseLanguage;
-        return this;
-    }
-
     public void setBaseLanguage(String baseLanguage) {
         this.baseLanguage = baseLanguage;
     }
@@ -53,15 +55,17 @@ public class Dictionary implements Serializable {
         return targerLanguage;
     }
 
-    public Dictionary targerLanguage(String targerLanguage) {
-        this.targerLanguage = targerLanguage;
-        return this;
-    }
-
     public void setTargerLanguage(String targerLanguage) {
         this.targerLanguage = targerLanguage;
     }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+
+    public List<DictionaryHasWord> getDictionaryWords() {
+        return dictionaryWords;
+    }
+
+    public void setDictionaryWords(List<DictionaryHasWord> dictionaryWords) {
+        this.dictionaryWords = dictionaryWords;
+    }
 
     @Override
     public boolean equals(Object o) {

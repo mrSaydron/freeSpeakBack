@@ -10,6 +10,8 @@ import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Criteria class for the {@link ru.mrak.domain.Book} entity. This class is used
@@ -25,22 +27,15 @@ public class BookCriteria implements Serializable, Criteria {
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
-
     private StringFilter title;
-
     private StringFilter author;
-
     private StringFilter source;
-
     private StringFilter text;
-
     private BooleanFilter publicBook;
-
     private LongFilter dictionaryId;
-
     private LongFilter loadedUserId;
-
     private LongFilter userId;
+    private StringFilter common;// Строка для поиска по названию и автору
 
     public BookCriteria() {
     }
@@ -57,9 +52,8 @@ public class BookCriteria implements Serializable, Criteria {
         this.userId = other.userId == null ? null : other.userId.copy();
     }
 
-    @Override
-    public BookCriteria copy() {
-        return new BookCriteria(this);
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
 
     public LongFilter getId() {
@@ -134,6 +128,18 @@ public class BookCriteria implements Serializable, Criteria {
         this.userId = userId;
     }
 
+    public StringFilter getCommon() {
+        return common;
+    }
+
+    public void setCommon(StringFilter common) {
+        this.common = common;
+    }
+
+    @Override
+    public BookCriteria copy() {
+        return new BookCriteria(this);
+    }
 
     @Override
     public boolean equals(Object o) {

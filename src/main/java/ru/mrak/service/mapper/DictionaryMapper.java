@@ -9,10 +9,10 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link Dictionary} and its DTO {@link DictionaryDTO}.
  */
-@Mapper(componentModel = "spring", uses = {})
+@Mapper(componentModel = "spring", uses = {DictionaryHasWordMapper.class})
 public interface DictionaryMapper extends EntityMapper<DictionaryDTO, Dictionary> {
 
-
+    DictionaryDTO toDto(Dictionary dictionary);
 
     default Dictionary fromId(Long id) {
         if (id == null) {

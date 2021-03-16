@@ -33,13 +33,16 @@ public class BookQueryService extends QueryService<Book> {
 
     private final Logger log = LoggerFactory.getLogger(BookQueryService.class);
 
+    private final UserService userService;
+
     private final BookRepository bookRepository;
 
     private final BookMapper bookMapper;
 
-    public BookQueryService(BookRepository bookRepository, BookMapper bookMapper) {
+    public BookQueryService(BookRepository bookRepository, BookMapper bookMapper, UserService userService) {
         this.bookRepository = bookRepository;
         this.bookMapper = bookMapper;
+        this.userService = userService;
     }
 
     /**
@@ -86,7 +89,14 @@ public class BookQueryService extends QueryService<Book> {
      * @return the matching {@link Specification} of the entity.
      */
     protected Specification<Book> createSpecification(BookCriteria criteria) {
-        Specification<Book> specification = Specification.where(null);
+
+        Specification<Book> startPredicate = (root, query, builder) -> builder.isTrue(root.get(Book_.PUBLIC_BOOK));
+        if (userService.getUserWithAuthorities().isPresent()) {
+            User user = userService.getUserWithAuthorities().get();
+            startPredicate = startPredicate.or((root, query, builder) -> builder.equal(root.join(Book_.users, JoinType.LEFT).get(User_.ID), user.getId()));
+        }
+        Specification<Book> specification = Specification.where(startPredicate);
+
         if (criteria != null) {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), Book_.id));
@@ -117,6 +127,13 @@ public class BookQueryService extends QueryService<Book> {
             if (criteria.getUserId() != null) {
                 specification = specification.and(buildSpecification(criteria.getUserId(),
                     root -> root.join(Book_.users, JoinType.LEFT).get(User_.id)));
+            }
+            if (criteria.getCommon() != null) {
+                Specification<Book> commonSpecification =
+                    Specification.where(buildStringSpecification(criteria.getCommon(), Book_.author))
+                    .or(buildStringSpecification(criteria.getCommon(), Book_.title));
+
+                specification = specification.and(commonSpecification);
             }
         }
         return specification;

@@ -6,16 +6,23 @@ import java.io.Serializable;
  * A DTO for the {@link ru.mrak.domain.DictionaryHasWord} entity.
  */
 public class DictionaryHasWordDTO implements Serializable {
-    
+
     private Long id;
-
     private Integer count;
+    private WordDTO word;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof DictionaryHasWordDTO)) {
+            return false;
+        }
 
-    private Long dictionaryId;
+        return id != null && id.equals(((DictionaryHasWordDTO) o).id);
+    }
 
-    private Long wordId;
-    
     public Long getId() {
         return id;
     }
@@ -32,32 +39,12 @@ public class DictionaryHasWordDTO implements Serializable {
         this.count = count;
     }
 
-    public Long getDictionaryId() {
-        return dictionaryId;
+    public WordDTO getWord() {
+        return word;
     }
 
-    public void setDictionaryId(Long dictionaryId) {
-        this.dictionaryId = dictionaryId;
-    }
-
-    public Long getWordId() {
-        return wordId;
-    }
-
-    public void setWordId(Long wordId) {
-        this.wordId = wordId;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof DictionaryHasWordDTO)) {
-            return false;
-        }
-
-        return id != null && id.equals(((DictionaryHasWordDTO) o).id);
+    public void setWord(WordDTO word) {
+        this.word = word;
     }
 
     @Override
@@ -71,8 +58,6 @@ public class DictionaryHasWordDTO implements Serializable {
         return "DictionaryHasWordDTO{" +
             "id=" + getId() +
             ", count=" + getCount() +
-            ", dictionaryId=" + getDictionaryId() +
-            ", wordId=" + getWordId() +
             "}";
     }
 }

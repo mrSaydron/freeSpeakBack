@@ -1,23 +1,21 @@
 package ru.mrak.service.dto;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
  * A DTO for the {@link ru.mrak.domain.Word} entity.
  */
 public class WordDTO implements Serializable {
-    
+
     private Long id;
 
     @NotNull
     private String word;
 
     private String translate;
-
     private String partOfSpeech;
 
-    
     public Long getId() {
         return id;
     }

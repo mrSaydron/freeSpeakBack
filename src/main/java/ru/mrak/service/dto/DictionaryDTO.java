@@ -1,19 +1,24 @@
 package ru.mrak.service.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * A DTO for the {@link ru.mrak.domain.Dictionary} entity.
  */
 public class DictionaryDTO implements Serializable {
-    
+
     private Long id;
 
     private String baseLanguage;
 
     private String targerLanguage;
 
-    
+    private List<DictionaryHasWordDTO> dictionaryWords;
+
     public Long getId() {
         return id;
     }
@@ -36,6 +41,14 @@ public class DictionaryDTO implements Serializable {
 
     public void setTargerLanguage(String targerLanguage) {
         this.targerLanguage = targerLanguage;
+    }
+
+    public List<DictionaryHasWordDTO> getDictionaryWords() {
+        return dictionaryWords;
+    }
+
+    public void setDictionaryWords(List<DictionaryHasWordDTO> dictionaryWords) {
+        this.dictionaryWords = dictionaryWords;
     }
 
     @Override

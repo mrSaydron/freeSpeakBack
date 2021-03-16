@@ -40,7 +40,7 @@ public class Book implements Serializable {
     private String text;
 
     @NotNull
-    @Column(name = "public_book", nullable = false)
+    @Column(name = "public_book", nullable = false, length = 16_777_214)
     private Boolean publicBook;
 
     @OneToOne

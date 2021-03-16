@@ -1,5 +1,6 @@
 package ru.mrak.service;
 
+import edu.stanford.nlp.ling.CoreLabel;
 import ru.mrak.domain.Word;
 import ru.mrak.repository.WordRepository;
 import ru.mrak.service.dto.WordDTO;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  * Service Implementation for managing {@link Word}.
@@ -80,5 +82,20 @@ public class WordService {
     public void delete(Long id) {
         log.debug("Request to delete Word : {}", id);
         wordRepository.deleteById(id);
+    }
+
+    /**
+     * Создается слово из токена
+     * @param token - токен
+     * @return - созданное слово
+     */
+    public Word create(CoreLabel token) {
+        Word word = new Word();
+        word.setWord(token.lemma());
+        word.setPartOfSpeech(token.tag());
+
+        wordRepository.save(word);
+
+        return word;
     }
 }

@@ -30,7 +30,7 @@ import java.util.Optional;
  * REST controller for managing {@link ru.mrak.domain.Book}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/book")
 public class BookResource {
 
     private final Logger log = LoggerFactory.getLogger(BookResource.class);
@@ -56,7 +56,7 @@ public class BookResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new bookDTO, or with status {@code 400 (Bad Request)} if the book has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/books")
+    @PostMapping
     public ResponseEntity<BookDTO> createBook(@Valid @RequestBody BookDTO bookDTO) throws URISyntaxException {
         log.debug("REST request to save Book : {}", bookDTO);
         if (bookDTO.getId() != null) {
@@ -77,7 +77,7 @@ public class BookResource {
      * or with status {@code 500 (Internal Server Error)} if the bookDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/books")
+    @PutMapping
     public ResponseEntity<BookDTO> updateBook(@Valid @RequestBody BookDTO bookDTO) throws URISyntaxException {
         log.debug("REST request to update Book : {}", bookDTO);
         if (bookDTO.getId() == null) {
@@ -96,7 +96,7 @@ public class BookResource {
      * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of books in body.
      */
-    @GetMapping("/books")
+    @GetMapping
     public ResponseEntity<List<BookDTO>> getAllBooks(BookCriteria criteria, Pageable pageable) {
         log.debug("REST request to get Books by criteria: {}", criteria);
         Page<BookDTO> page = bookQueryService.findByCriteria(criteria, pageable);
@@ -110,7 +110,7 @@ public class BookResource {
      * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
      */
-    @GetMapping("/books/count")
+    @GetMapping("/count")
     public ResponseEntity<Long> countBooks(BookCriteria criteria) {
         log.debug("REST request to count Books by criteria: {}", criteria);
         return ResponseEntity.ok().body(bookQueryService.countByCriteria(criteria));
@@ -122,7 +122,7 @@ public class BookResource {
      * @param id the id of the bookDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the bookDTO, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/books/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<BookDTO> getBook(@PathVariable Long id) {
         log.debug("REST request to get Book : {}", id);
         Optional<BookDTO> bookDTO = bookService.findOne(id);
@@ -135,7 +135,7 @@ public class BookResource {
      * @param id the id of the bookDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/books/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
         log.debug("REST request to delete Book : {}", id);
         bookService.delete(id);

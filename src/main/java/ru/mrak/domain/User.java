@@ -15,9 +15,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A user.
@@ -93,6 +91,8 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @BatchSize(size = 20)
     private Set<Authority> authorities = new HashSet<>();
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private Collection<BookUser> bookUserList = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -197,6 +197,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     public void setAuthorities(Set<Authority> authorities) {
         this.authorities = authorities;
+    }
+
+    public Collection<BookUser> getBookUserList() {
+        return bookUserList;
+    }
+
+    public void setBookUserList(Collection<BookUser> bookUserList) {
+        this.bookUserList = bookUserList;
     }
 
     @Override

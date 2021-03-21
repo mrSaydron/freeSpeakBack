@@ -110,10 +110,12 @@ public class DictionaryService {
 
         try {
             List<CoreLabel> tokens = tokenizerService.getTokens(text);
-            List<DictionaryHasWord> dictionaryHasWords = tokens.stream()
+            Map<TokenLight, Long> tokenCountMap = tokens.stream()
                 .filter(token -> TagEnum.filterTags.contains(TagEnum.byTag.get(token.tag())))
                 .map(TokenLight::new)
-                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+            List<DictionaryHasWord> dictionaryHasWords = tokenCountMap
                 .entrySet()
                 .stream()
                 .map(entry -> {
@@ -143,10 +145,10 @@ public class DictionaryService {
         return dictionary;
     }
 
-    private static class TokenLight {
-        String lemma;
-        String tag;
-        CoreLabel token;
+    public static class TokenLight {
+        public String lemma;
+        public String tag;
+        public CoreLabel token;
 
         public TokenLight(CoreLabel token) {
             this.token = token;

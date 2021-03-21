@@ -141,4 +141,15 @@ public class BookResource {
         bookService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
+
+    /**
+     * Оповещает о том что пользователь открыл книгу
+     *
+     * @param id идентификатор книги
+     */
+    @PutMapping("/open/{id}")
+    public void openBook(@PathVariable Long id) {
+        log.debug("REST request to open Book: {}", id);
+        bookService.updateLastOpenDate(id);
+    }
 }

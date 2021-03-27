@@ -130,9 +130,5 @@ public class BookService {
 
         bookUser.setLastOpenDate(LocalDateTime.now());
         bookUserRepository.save(bookUser);
-
-        User user1 = userRepository.findById(user.getId()).get();
-        Collection<BookUser> bookUserList = user1.getBookUserList();
-        System.out.println(bookUserList);
     }
 }

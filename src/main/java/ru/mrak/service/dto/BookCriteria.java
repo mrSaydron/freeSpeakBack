@@ -4,10 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
-import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
 import lombok.Getter;
@@ -22,6 +19,8 @@ import lombok.Setter;
  * As Spring is unable to properly convert the types, unless specific {@link Filter} class are used, we need to use
  * fix type specific filters.
  */
+@Getter
+@Setter
 public class BookCriteria implements Serializable, Criteria {
 
     private static final long serialVersionUID = 1L;
@@ -35,7 +34,8 @@ public class BookCriteria implements Serializable, Criteria {
     private LongFilter dictionaryId;
     private LongFilter loadedUserId;
     private LongFilter userId;
-    private StringFilter common;// Строка для поиска по названию и автору
+    private StringFilter titleAuthor; // Строка для поиска по названию и автору
+    private BooleanFilter orPublicBook; // Поиск по книгам пользователя или публичным книгам
 
     public BookCriteria() {
     }
@@ -50,90 +50,8 @@ public class BookCriteria implements Serializable, Criteria {
         this.dictionaryId = other.dictionaryId == null ? null : other.dictionaryId.copy();
         this.loadedUserId = other.loadedUserId == null ? null : other.loadedUserId.copy();
         this.userId = other.userId == null ? null : other.userId.copy();
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
-    public LongFilter getId() {
-        return id;
-    }
-
-    public void setId(LongFilter id) {
-        this.id = id;
-    }
-
-    public StringFilter getTitle() {
-        return title;
-    }
-
-    public void setTitle(StringFilter title) {
-        this.title = title;
-    }
-
-    public StringFilter getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(StringFilter author) {
-        this.author = author;
-    }
-
-    public StringFilter getSource() {
-        return source;
-    }
-
-    public void setSource(StringFilter source) {
-        this.source = source;
-    }
-
-    public StringFilter getText() {
-        return text;
-    }
-
-    public void setText(StringFilter text) {
-        this.text = text;
-    }
-
-    public BooleanFilter getPublicBook() {
-        return publicBook;
-    }
-
-    public void setPublicBook(BooleanFilter publicBook) {
-        this.publicBook = publicBook;
-    }
-
-    public LongFilter getDictionaryId() {
-        return dictionaryId;
-    }
-
-    public void setDictionaryId(LongFilter dictionaryId) {
-        this.dictionaryId = dictionaryId;
-    }
-
-    public LongFilter getLoadedUserId() {
-        return loadedUserId;
-    }
-
-    public void setLoadedUserId(LongFilter loadedUserId) {
-        this.loadedUserId = loadedUserId;
-    }
-
-    public LongFilter getUserId() {
-        return userId;
-    }
-
-    public void setUserId(LongFilter userId) {
-        this.userId = userId;
-    }
-
-    public StringFilter getCommon() {
-        return common;
-    }
-
-    public void setCommon(StringFilter common) {
-        this.common = common;
+        this.titleAuthor = other.titleAuthor == null ? null : other.titleAuthor.copy();
+        this.orPublicBook = other.orPublicBook == null ? null : other.orPublicBook.copy();
     }
 
     @Override
@@ -151,29 +69,33 @@ public class BookCriteria implements Serializable, Criteria {
         }
         final BookCriteria that = (BookCriteria) o;
         return
-            Objects.equals(id, that.id) &&
-            Objects.equals(title, that.title) &&
-            Objects.equals(author, that.author) &&
-            Objects.equals(source, that.source) &&
-            Objects.equals(text, that.text) &&
-            Objects.equals(publicBook, that.publicBook) &&
-            Objects.equals(dictionaryId, that.dictionaryId) &&
-            Objects.equals(loadedUserId, that.loadedUserId) &&
-            Objects.equals(userId, that.userId);
+                Objects.equals(id, that.id) &&
+                Objects.equals(title, that.title) &&
+                Objects.equals(author, that.author) &&
+                Objects.equals(source, that.source) &&
+                Objects.equals(text, that.text) &&
+                Objects.equals(publicBook, that.publicBook) &&
+                Objects.equals(dictionaryId, that.dictionaryId) &&
+                Objects.equals(loadedUserId, that.loadedUserId) &&
+                Objects.equals(userId, that.userId) &&
+                Objects.equals(titleAuthor, that.titleAuthor) &&
+                Objects.equals(orPublicBook, that.orPublicBook);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(
-        id,
-        title,
-        author,
-        source,
-        text,
-        publicBook,
-        dictionaryId,
-        loadedUserId,
-        userId
+            id,
+            title,
+            author,
+            source,
+            text,
+            publicBook,
+            dictionaryId,
+            loadedUserId,
+            userId,
+            titleAuthor,
+            orPublicBook
         );
     }
 
@@ -190,6 +112,8 @@ public class BookCriteria implements Serializable, Criteria {
                 (dictionaryId != null ? "dictionaryId=" + dictionaryId + ", " : "") +
                 (loadedUserId != null ? "loadedUserId=" + loadedUserId + ", " : "") +
                 (userId != null ? "userId=" + userId + ", " : "") +
+                (titleAuthor != null ? "titleAuthor=" + titleAuthor + ", " : "") +
+                (orPublicBook != null ? "orPublicBook=" + orPublicBook + ", " : "") +
             "}";
     }
 

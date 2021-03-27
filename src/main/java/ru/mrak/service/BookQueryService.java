@@ -90,10 +90,16 @@ public class BookQueryService extends QueryService<Book> {
      */
     protected Specification<Book> createSpecification(BookCriteria criteria) {
 
-        Specification<Book> startPredicate = (root, query, builder) -> builder.isTrue(root.get(Book_.PUBLIC_BOOK));
+        Specification<Book> startPredicate;
         if (userService.getUserWithAuthorities().isPresent()) {
             User user = userService.getUserWithAuthorities().get();
-            startPredicate = startPredicate.or((root, query, builder) -> builder.equal(root.join(Book_.users, JoinType.LEFT).get(User_.ID), user.getId()));
+
+            startPredicate = (root, query, builder) -> builder.equal(root.join(Book_.users, JoinType.LEFT).get(User_.ID), user.getId());
+            if (criteria != null && criteria.getOrPublicBook() != null && criteria.getOrPublicBook().getEquals()) {
+                startPredicate = startPredicate.or(buildSpecification(criteria.getOrPublicBook(), Book_.publicBook));
+            }
+        } else {
+            throw new RuntimeException("Что то пошло не так");
         }
         Specification<Book> specification = Specification.where(startPredicate);
 
@@ -128,14 +134,15 @@ public class BookQueryService extends QueryService<Book> {
                 specification = specification.and(buildSpecification(criteria.getUserId(),
                     root -> root.join(Book_.users, JoinType.LEFT).get(User_.id)));
             }
-            if (criteria.getCommon() != null) {
+            if (criteria.getTitleAuthor() != null) {
                 Specification<Book> commonSpecification =
-                    Specification.where(buildStringSpecification(criteria.getCommon(), Book_.author))
-                    .or(buildStringSpecification(criteria.getCommon(), Book_.title));
+                    Specification.where(buildStringSpecification(criteria.getTitleAuthor(), Book_.author))
+                    .or(buildStringSpecification(criteria.getTitleAuthor(), Book_.title));
 
                 specification = specification.and(commonSpecification);
             }
         }
+
         return specification;
     }
 }

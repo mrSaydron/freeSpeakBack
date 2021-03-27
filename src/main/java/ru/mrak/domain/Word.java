@@ -32,6 +32,15 @@ public class Word implements Serializable {
     @Column(name = "part_of_speech")
     private String partOfSpeech;
 
+    @Column(name = "total_amount")
+    private Long totalAmount;
+
+    @Column(name = "url_picture")
+    private String url_picture;
+
+    @Column(name = "url_audio")
+    private String url_audio;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
@@ -80,6 +89,30 @@ public class Word implements Serializable {
         this.partOfSpeech = partOfSpeech;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+
+    public Long getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(Long totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public String getUrl_picture() {
+        return url_picture;
+    }
+
+    public void setUrl_picture(String url_picture) {
+        this.url_picture = url_picture;
+    }
+
+    public String getUrl_audio() {
+        return url_audio;
+    }
+
+    public void setUrl_audio(String url_audio) {
+        this.url_audio = url_audio;
+    }
 
     @Override
     public boolean equals(Object o) {

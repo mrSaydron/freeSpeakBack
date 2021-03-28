@@ -36,10 +36,10 @@ public class Word implements Serializable {
     private Long totalAmount;
 
     @Column(name = "url_picture")
-    private String url_picture;
+    private String urlPicture;
 
     @Column(name = "url_audio")
-    private String url_audio;
+    private String urlAudio;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -98,20 +98,24 @@ public class Word implements Serializable {
         this.totalAmount = totalAmount;
     }
 
-    public String getUrl_picture() {
-        return url_picture;
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
 
-    public void setUrl_picture(String url_picture) {
-        this.url_picture = url_picture;
+    public String getUrlPicture() {
+        return urlPicture;
     }
 
-    public String getUrl_audio() {
-        return url_audio;
+    public void setUrlPicture(String urlPicture) {
+        this.urlPicture = urlPicture;
     }
 
-    public void setUrl_audio(String url_audio) {
-        this.url_audio = url_audio;
+    public String getUrlAudio() {
+        return urlAudio;
+    }
+
+    public void setUrlAudio(String urlAudio) {
+        this.urlAudio = urlAudio;
     }
 
     @Override
@@ -134,10 +138,13 @@ public class Word implements Serializable {
     @Override
     public String toString() {
         return "Word{" +
-            "id=" + getId() +
-            ", word='" + getWord() + "'" +
-            ", translate='" + getTranslate() + "'" +
-            ", partOfSpeech='" + getPartOfSpeech() + "'" +
-            "}";
+            "id=" + id +
+            ", word='" + word + '\'' +
+            ", translate='" + translate + '\'' +
+            ", partOfSpeech='" + partOfSpeech + '\'' +
+            ", totalAmount=" + totalAmount +
+            ", urlPicture='" + urlPicture + '\'' +
+            ", urlAudio='" + urlAudio + '\'' +
+            '}';
     }
 }

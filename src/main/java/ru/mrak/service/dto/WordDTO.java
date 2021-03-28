@@ -15,6 +15,9 @@ public class WordDTO implements Serializable {
 
     private String translate;
     private String partOfSpeech;
+    private Long totalAmount;
+    private String urlPicture;
+    private String urlAudio;
 
     public Long getId() {
         return id;
@@ -48,6 +51,30 @@ public class WordDTO implements Serializable {
         this.partOfSpeech = partOfSpeech;
     }
 
+    public Long getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(Long totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public String getUrlPicture() {
+        return urlPicture;
+    }
+
+    public void setUrlPicture(String urlPicture) {
+        this.urlPicture = urlPicture;
+    }
+
+    public String getUrlAudio() {
+        return urlAudio;
+    }
+
+    public void setUrlAudio(String urlAudio) {
+        this.urlAudio = urlAudio;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -69,10 +96,13 @@ public class WordDTO implements Serializable {
     @Override
     public String toString() {
         return "WordDTO{" +
-            "id=" + getId() +
-            ", word='" + getWord() + "'" +
-            ", translate='" + getTranslate() + "'" +
-            ", partOfSpeech='" + getPartOfSpeech() + "'" +
-            "}";
+            "id=" + id +
+            ", word='" + word + '\'' +
+            ", translate='" + translate + '\'' +
+            ", partOfSpeech='" + partOfSpeech + '\'' +
+            ", totalAmount=" + totalAmount +
+            ", urlPicture='" + urlPicture + '\'' +
+            ", urlAudio='" + urlAudio + '\'' +
+            '}';
     }
 }

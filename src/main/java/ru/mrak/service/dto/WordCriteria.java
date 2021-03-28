@@ -10,6 +10,7 @@ import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
+import ru.mrak.web.rest.filter.StringRangeFilter;
 
 /**
  * Criteria class for the {@link ru.mrak.domain.Word} entity. This class is used
@@ -25,21 +26,20 @@ public class WordCriteria implements Serializable, Criteria {
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
-
-    private StringFilter word;
-
-    private StringFilter translate;
-
-    private StringFilter partOfSpeech;
+    private StringFilter wordFilter;
+    private StringFilter partOfSpeechFilter;
+    private StringRangeFilter startWord;
+    private LongFilter startAmount;
 
     public WordCriteria() {
     }
 
     public WordCriteria(WordCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
-        this.word = other.word == null ? null : other.word.copy();
-        this.translate = other.translate == null ? null : other.translate.copy();
-        this.partOfSpeech = other.partOfSpeech == null ? null : other.partOfSpeech.copy();
+        this.wordFilter = other.wordFilter == null ? null : other.wordFilter.copy();
+        this.partOfSpeechFilter = other.partOfSpeechFilter == null ? null : other.partOfSpeechFilter.copy();
+        this.startWord = other.startWord == null ? null : other.startWord.copy();
+        this.startAmount = other.startAmount == null ? null : other.startAmount.copy();
     }
 
     @Override
@@ -55,66 +55,63 @@ public class WordCriteria implements Serializable, Criteria {
         this.id = id;
     }
 
-    public StringFilter getWord() {
-        return word;
+    public StringFilter getWordFilter() {
+        return wordFilter;
     }
 
-    public void setWord(StringFilter word) {
-        this.word = word;
+    public void setWordFilter(StringFilter wordFilter) {
+        this.wordFilter = wordFilter;
     }
 
-    public StringFilter getTranslate() {
-        return translate;
+    public StringFilter getPartOfSpeechFilter() {
+        return partOfSpeechFilter;
     }
 
-    public void setTranslate(StringFilter translate) {
-        this.translate = translate;
+    public void setPartOfSpeechFilter(StringFilter partOfSpeechFilter) {
+        this.partOfSpeechFilter = partOfSpeechFilter;
     }
 
-    public StringFilter getPartOfSpeech() {
-        return partOfSpeech;
+    public StringRangeFilter getStartWord() {
+        return startWord;
     }
 
-    public void setPartOfSpeech(StringFilter partOfSpeech) {
-        this.partOfSpeech = partOfSpeech;
+    public void setStartWord(StringRangeFilter startWord) {
+        this.startWord = startWord;
     }
 
+    public LongFilter getStartAmount() {
+        return startAmount;
+    }
+
+    public void setStartAmount(LongFilter startAmount) {
+        this.startAmount = startAmount;
+    }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        final WordCriteria that = (WordCriteria) o;
-        return
-            Objects.equals(id, that.id) &&
-            Objects.equals(word, that.word) &&
-            Objects.equals(translate, that.translate) &&
-            Objects.equals(partOfSpeech, that.partOfSpeech);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        WordCriteria that = (WordCriteria) o;
+        return Objects.equals(id, that.id) &&
+            Objects.equals(wordFilter, that.wordFilter) &&
+            Objects.equals(partOfSpeechFilter, that.partOfSpeechFilter) &&
+            Objects.equals(startWord, that.startWord) &&
+            Objects.equals(startAmount, that.startAmount);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(
-        id,
-        word,
-        translate,
-        partOfSpeech
-        );
+        return Objects.hash(id, wordFilter, partOfSpeechFilter, startWord, startAmount);
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
         return "WordCriteria{" +
-                (id != null ? "id=" + id + ", " : "") +
-                (word != null ? "word=" + word + ", " : "") +
-                (translate != null ? "translate=" + translate + ", " : "") +
-                (partOfSpeech != null ? "partOfSpeech=" + partOfSpeech + ", " : "") +
-            "}";
+            "id=" + id +
+            ", wordFilter=" + wordFilter +
+            ", partOfSpeechFilter=" + partOfSpeechFilter +
+            ", startWord=" + startWord +
+            ", startAmount=" + startAmount +
+            '}';
     }
-
 }

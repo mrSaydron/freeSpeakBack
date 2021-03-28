@@ -30,7 +30,7 @@ import java.util.Optional;
  * REST controller for managing {@link ru.mrak.domain.Word}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/word")
 public class WordResource {
 
     private final Logger log = LoggerFactory.getLogger(WordResource.class);
@@ -56,7 +56,7 @@ public class WordResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new wordDTO, or with status {@code 400 (Bad Request)} if the word has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/words")
+    @PostMapping
     public ResponseEntity<WordDTO> createWord(@Valid @RequestBody WordDTO wordDTO) throws URISyntaxException {
         log.debug("REST request to save Word : {}", wordDTO);
         if (wordDTO.getId() != null) {
@@ -77,7 +77,7 @@ public class WordResource {
      * or with status {@code 500 (Internal Server Error)} if the wordDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/words")
+    @PutMapping
     public ResponseEntity<WordDTO> updateWord(@Valid @RequestBody WordDTO wordDTO) throws URISyntaxException {
         log.debug("REST request to update Word : {}", wordDTO);
         if (wordDTO.getId() == null) {
@@ -96,7 +96,7 @@ public class WordResource {
      * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of words in body.
      */
-    @GetMapping("/words")
+    @GetMapping
     public ResponseEntity<List<WordDTO>> getAllWords(WordCriteria criteria, Pageable pageable) {
         log.debug("REST request to get Words by criteria: {}", criteria);
         Page<WordDTO> page = wordQueryService.findByCriteria(criteria, pageable);
@@ -110,7 +110,7 @@ public class WordResource {
      * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
      */
-    @GetMapping("/words/count")
+    @GetMapping("/count")
     public ResponseEntity<Long> countWords(WordCriteria criteria) {
         log.debug("REST request to count Words by criteria: {}", criteria);
         return ResponseEntity.ok().body(wordQueryService.countByCriteria(criteria));
@@ -122,7 +122,7 @@ public class WordResource {
      * @param id the id of the wordDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the wordDTO, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/words/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<WordDTO> getWord(@PathVariable Long id) {
         log.debug("REST request to get Word : {}", id);
         Optional<WordDTO> wordDTO = wordService.findOne(id);
@@ -135,7 +135,7 @@ public class WordResource {
      * @param id the id of the wordDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/words/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteWord(@PathVariable Long id) {
         log.debug("REST request to delete Word : {}", id);
         wordService.delete(id);

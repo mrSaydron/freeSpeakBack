@@ -91,15 +91,19 @@ public class WordQueryService extends QueryService<Word> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), Word_.id));
             }
-            if (criteria.getWord() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getWord(), Word_.word));
+            if (criteria.getPartOfSpeechFilter() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getPartOfSpeechFilter(), Word_.partOfSpeech));
             }
-            if (criteria.getTranslate() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getTranslate(), Word_.translate));
+            if (criteria.getWordFilter() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getWordFilter(), Word_.word));
             }
-            if (criteria.getPartOfSpeech() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getPartOfSpeech(), Word_.partOfSpeech));
+            if (criteria.getStartWord() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getStartWord(), Word_.word));
             }
+            if (criteria.getStartAmount() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getStartAmount(), Word_.totalAmount));
+            }
+
         }
         return specification;
     }

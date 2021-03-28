@@ -1,7 +1,7 @@
 package ru.mrak.web.rest;
 
 import ru.mrak.LibFourApp;
-import ru.mrak.domain.DictionaryHasWord;
+import ru.mrak.domain.BookDictionaryHasWord;
 import ru.mrak.repository.DictionaryHasWordRepository;
 import ru.mrak.service.DictionaryHasWordService;
 import ru.mrak.service.dto.DictionaryHasWordDTO;
@@ -50,7 +50,7 @@ public class DictionaryHasWordResourceIT {
     @Autowired
     private MockMvc restDictionaryHasWordMockMvc;
 
-    private DictionaryHasWord dictionaryHasWord;
+    private BookDictionaryHasWord dictionaryHasWord;
 
     /**
      * Create an entity for this test.
@@ -58,8 +58,8 @@ public class DictionaryHasWordResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static DictionaryHasWord createEntity(EntityManager em) {
-        DictionaryHasWord dictionaryHasWord = new DictionaryHasWord()
+    public static BookDictionaryHasWord createEntity(EntityManager em) {
+        BookDictionaryHasWord dictionaryHasWord = new BookDictionaryHasWord()
             .count(DEFAULT_COUNT);
         return dictionaryHasWord;
     }
@@ -69,8 +69,8 @@ public class DictionaryHasWordResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static DictionaryHasWord createUpdatedEntity(EntityManager em) {
-        DictionaryHasWord dictionaryHasWord = new DictionaryHasWord()
+    public static BookDictionaryHasWord createUpdatedEntity(EntityManager em) {
+        BookDictionaryHasWord dictionaryHasWord = new BookDictionaryHasWord()
             .count(UPDATED_COUNT);
         return dictionaryHasWord;
     }
@@ -92,9 +92,9 @@ public class DictionaryHasWordResourceIT {
             .andExpect(status().isCreated());
 
         // Validate the DictionaryHasWord in the database
-        List<DictionaryHasWord> dictionaryHasWordList = dictionaryHasWordRepository.findAll();
+        List<BookDictionaryHasWord> dictionaryHasWordList = dictionaryHasWordRepository.findAll();
         assertThat(dictionaryHasWordList).hasSize(databaseSizeBeforeCreate + 1);
-        DictionaryHasWord testDictionaryHasWord = dictionaryHasWordList.get(dictionaryHasWordList.size() - 1);
+        BookDictionaryHasWord testDictionaryHasWord = dictionaryHasWordList.get(dictionaryHasWordList.size() - 1);
         assertThat(testDictionaryHasWord.getCount()).isEqualTo(DEFAULT_COUNT);
     }
 
@@ -114,7 +114,7 @@ public class DictionaryHasWordResourceIT {
             .andExpect(status().isBadRequest());
 
         // Validate the DictionaryHasWord in the database
-        List<DictionaryHasWord> dictionaryHasWordList = dictionaryHasWordRepository.findAll();
+        List<BookDictionaryHasWord> dictionaryHasWordList = dictionaryHasWordRepository.findAll();
         assertThat(dictionaryHasWordList).hasSize(databaseSizeBeforeCreate);
     }
 
@@ -132,7 +132,7 @@ public class DictionaryHasWordResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(dictionaryHasWord.getId().intValue())))
             .andExpect(jsonPath("$.[*].count").value(hasItem(DEFAULT_COUNT)));
     }
-    
+
     @Test
     @Transactional
     public void getDictionaryHasWord() throws Exception {
@@ -163,7 +163,7 @@ public class DictionaryHasWordResourceIT {
         int databaseSizeBeforeUpdate = dictionaryHasWordRepository.findAll().size();
 
         // Update the dictionaryHasWord
-        DictionaryHasWord updatedDictionaryHasWord = dictionaryHasWordRepository.findById(dictionaryHasWord.getId()).get();
+        BookDictionaryHasWord updatedDictionaryHasWord = dictionaryHasWordRepository.findById(dictionaryHasWord.getId()).get();
         // Disconnect from session so that the updates on updatedDictionaryHasWord are not directly saved in db
         em.detach(updatedDictionaryHasWord);
         updatedDictionaryHasWord
@@ -176,9 +176,9 @@ public class DictionaryHasWordResourceIT {
             .andExpect(status().isOk());
 
         // Validate the DictionaryHasWord in the database
-        List<DictionaryHasWord> dictionaryHasWordList = dictionaryHasWordRepository.findAll();
+        List<BookDictionaryHasWord> dictionaryHasWordList = dictionaryHasWordRepository.findAll();
         assertThat(dictionaryHasWordList).hasSize(databaseSizeBeforeUpdate);
-        DictionaryHasWord testDictionaryHasWord = dictionaryHasWordList.get(dictionaryHasWordList.size() - 1);
+        BookDictionaryHasWord testDictionaryHasWord = dictionaryHasWordList.get(dictionaryHasWordList.size() - 1);
         assertThat(testDictionaryHasWord.getCount()).isEqualTo(UPDATED_COUNT);
     }
 
@@ -197,7 +197,7 @@ public class DictionaryHasWordResourceIT {
             .andExpect(status().isBadRequest());
 
         // Validate the DictionaryHasWord in the database
-        List<DictionaryHasWord> dictionaryHasWordList = dictionaryHasWordRepository.findAll();
+        List<BookDictionaryHasWord> dictionaryHasWordList = dictionaryHasWordRepository.findAll();
         assertThat(dictionaryHasWordList).hasSize(databaseSizeBeforeUpdate);
     }
 
@@ -215,7 +215,7 @@ public class DictionaryHasWordResourceIT {
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item
-        List<DictionaryHasWord> dictionaryHasWordList = dictionaryHasWordRepository.findAll();
+        List<BookDictionaryHasWord> dictionaryHasWordList = dictionaryHasWordRepository.findAll();
         assertThat(dictionaryHasWordList).hasSize(databaseSizeBeforeDelete - 1);
     }
 }

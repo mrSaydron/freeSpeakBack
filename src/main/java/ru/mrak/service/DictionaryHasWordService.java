@@ -1,6 +1,6 @@
 package ru.mrak.service;
 
-import ru.mrak.domain.DictionaryHasWord;
+import ru.mrak.domain.BookDictionaryHasWord;
 import ru.mrak.repository.DictionaryHasWordRepository;
 import ru.mrak.service.dto.DictionaryHasWordDTO;
 import ru.mrak.service.mapper.DictionaryHasWordMapper;
@@ -16,7 +16,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * Service Implementation for managing {@link DictionaryHasWord}.
+ * Service Implementation for managing {@link BookDictionaryHasWord}.
  */
 @Service
 @Transactional
@@ -41,7 +41,7 @@ public class DictionaryHasWordService {
      */
     public DictionaryHasWordDTO save(DictionaryHasWordDTO dictionaryHasWordDTO) {
         log.debug("Request to save DictionaryHasWord : {}", dictionaryHasWordDTO);
-        DictionaryHasWord dictionaryHasWord = dictionaryHasWordMapper.toEntity(dictionaryHasWordDTO);
+        BookDictionaryHasWord dictionaryHasWord = dictionaryHasWordMapper.toEntity(dictionaryHasWordDTO);
         dictionaryHasWord = dictionaryHasWordRepository.save(dictionaryHasWord);
         return dictionaryHasWordMapper.toDto(dictionaryHasWord);
     }

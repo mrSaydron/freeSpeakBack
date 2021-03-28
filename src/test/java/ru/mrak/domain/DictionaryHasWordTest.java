@@ -8,10 +8,10 @@ public class DictionaryHasWordTest {
 
     @Test
     public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(DictionaryHasWord.class);
-        DictionaryHasWord dictionaryHasWord1 = new DictionaryHasWord();
+        TestUtil.equalsVerifier(BookDictionaryHasWord.class);
+        BookDictionaryHasWord dictionaryHasWord1 = new BookDictionaryHasWord();
         dictionaryHasWord1.setId(1L);
-        DictionaryHasWord dictionaryHasWord2 = new DictionaryHasWord();
+        BookDictionaryHasWord dictionaryHasWord2 = new BookDictionaryHasWord();
         dictionaryHasWord2.setId(dictionaryHasWord1.getId());
         assertThat(dictionaryHasWord1).isEqualTo(dictionaryHasWord2);
         dictionaryHasWord2.setId(2L);

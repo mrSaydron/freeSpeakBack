@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import io.github.jhipster.config.cache.PrefixedKeyGenerator;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.*;
+import ru.mrak.domain.BookDictionary;
+import ru.mrak.domain.BookDictionaryHasWord;
 
 @Configuration
 @EnableCaching
@@ -49,9 +51,9 @@ public class CacheConfiguration {
             createCache(cm, ru.mrak.domain.Authority.class.getName());
             createCache(cm, ru.mrak.domain.User.class.getName() + ".authorities");
             createCache(cm, ru.mrak.domain.Book.class.getName());
-            createCache(cm, ru.mrak.domain.Dictionary.class.getName());
+            createCache(cm, BookDictionary.class.getName());
             createCache(cm, ru.mrak.domain.Word.class.getName());
-            createCache(cm, ru.mrak.domain.DictionaryHasWord.class.getName());
+            createCache(cm, BookDictionaryHasWord.class.getName());
             createCache(cm, ru.mrak.domain.Book.class.getName() + ".users");
             createCache(cm, ru.mrak.domain.Chat.class.getName());
             createCache(cm, ru.mrak.domain.Chat.class.getName() + ".users");

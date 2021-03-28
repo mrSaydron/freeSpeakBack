@@ -1,6 +1,6 @@
 package ru.mrak.repository;
 
-import ru.mrak.domain.Dictionary;
+import ru.mrak.domain.BookDictionary;
 
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface DictionaryRepository extends JpaRepository<Dictionary, Long> {
+public interface DictionaryRepository extends JpaRepository<BookDictionary, Long> {
 }

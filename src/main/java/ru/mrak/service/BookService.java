@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
 
@@ -60,7 +59,7 @@ public class BookService {
         }
         book.getUsers().add(user);
 
-        Dictionary dictionary = dictionaryService.createByText(book.getText(), "eng", "ru");
+        BookDictionary dictionary = dictionaryService.createByText(book.getText(), "eng", "ru");
         book.setDictionary(dictionary);
 
         book = bookRepository.save(book);

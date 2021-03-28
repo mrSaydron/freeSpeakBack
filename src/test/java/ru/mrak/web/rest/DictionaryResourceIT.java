@@ -1,10 +1,10 @@
 package ru.mrak.web.rest;
 
 import ru.mrak.LibFourApp;
-import ru.mrak.domain.Dictionary;
+import ru.mrak.domain.BookDictionary;
 import ru.mrak.repository.DictionaryRepository;
 import ru.mrak.service.DictionaryService;
-import ru.mrak.service.dto.DictionaryDTO;
+import ru.mrak.service.dto.BookDictionaryDTO;
 import ru.mrak.service.mapper.DictionaryMapper;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -53,7 +53,7 @@ public class DictionaryResourceIT {
     @Autowired
     private MockMvc restDictionaryMockMvc;
 
-    private Dictionary dictionary;
+    private BookDictionary dictionary;
 
     /**
      * Create an entity for this test.
@@ -61,10 +61,10 @@ public class DictionaryResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Dictionary createEntity(EntityManager em) {
-        Dictionary dictionary = new Dictionary();
+    public static BookDictionary createEntity(EntityManager em) {
+        BookDictionary dictionary = new BookDictionary();
         dictionary.setBaseLanguage(DEFAULT_BASE_LANGUAGE);
-        dictionary.setTargerLanguage(DEFAULT_TARGER_LANGUAGE);
+        dictionary.setTargetLanguage(DEFAULT_TARGER_LANGUAGE);
         return dictionary;
     }
     /**
@@ -73,10 +73,10 @@ public class DictionaryResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Dictionary createUpdatedEntity(EntityManager em) {
-        Dictionary dictionary = new Dictionary();
+    public static BookDictionary createUpdatedEntity(EntityManager em) {
+        BookDictionary dictionary = new BookDictionary();
         dictionary.setBaseLanguage(UPDATED_BASE_LANGUAGE);
-        dictionary.setTargerLanguage(UPDATED_TARGER_LANGUAGE);
+        dictionary.setTargetLanguage(UPDATED_TARGER_LANGUAGE);
         return dictionary;
     }
 
@@ -90,18 +90,18 @@ public class DictionaryResourceIT {
     public void createDictionary() throws Exception {
         int databaseSizeBeforeCreate = dictionaryRepository.findAll().size();
         // Create the Dictionary
-        DictionaryDTO dictionaryDTO = dictionaryMapper.toDto(dictionary);
+        BookDictionaryDTO dictionaryDTO = dictionaryMapper.toDto(dictionary);
         restDictionaryMockMvc.perform(post("/api/dictionaries")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(dictionaryDTO)))
             .andExpect(status().isCreated());
 
         // Validate the Dictionary in the database
-        List<Dictionary> dictionaryList = dictionaryRepository.findAll();
+        List<BookDictionary> dictionaryList = dictionaryRepository.findAll();
         assertThat(dictionaryList).hasSize(databaseSizeBeforeCreate + 1);
-        Dictionary testDictionary = dictionaryList.get(dictionaryList.size() - 1);
+        BookDictionary testDictionary = dictionaryList.get(dictionaryList.size() - 1);
         assertThat(testDictionary.getBaseLanguage()).isEqualTo(DEFAULT_BASE_LANGUAGE);
-        assertThat(testDictionary.getTargerLanguage()).isEqualTo(DEFAULT_TARGER_LANGUAGE);
+        assertThat(testDictionary.getTargetLanguage()).isEqualTo(DEFAULT_TARGER_LANGUAGE);
     }
 
     @Test
@@ -111,7 +111,7 @@ public class DictionaryResourceIT {
 
         // Create the Dictionary with an existing ID
         dictionary.setId(1L);
-        DictionaryDTO dictionaryDTO = dictionaryMapper.toDto(dictionary);
+        BookDictionaryDTO dictionaryDTO = dictionaryMapper.toDto(dictionary);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restDictionaryMockMvc.perform(post("/api/dictionaries")
@@ -120,7 +120,7 @@ public class DictionaryResourceIT {
             .andExpect(status().isBadRequest());
 
         // Validate the Dictionary in the database
-        List<Dictionary> dictionaryList = dictionaryRepository.findAll();
+        List<BookDictionary> dictionaryList = dictionaryRepository.findAll();
         assertThat(dictionaryList).hasSize(databaseSizeBeforeCreate);
     }
 
@@ -171,12 +171,12 @@ public class DictionaryResourceIT {
         int databaseSizeBeforeUpdate = dictionaryRepository.findAll().size();
 
         // Update the dictionary
-        Dictionary updatedDictionary = dictionaryRepository.findById(dictionary.getId()).get();
+        BookDictionary updatedDictionary = dictionaryRepository.findById(dictionary.getId()).get();
         // Disconnect from session so that the updates on updatedDictionary are not directly saved in db
         em.detach(updatedDictionary);
         updatedDictionary.setBaseLanguage(UPDATED_BASE_LANGUAGE);
-        updatedDictionary.setTargerLanguage(UPDATED_TARGER_LANGUAGE);
-        DictionaryDTO dictionaryDTO = dictionaryMapper.toDto(updatedDictionary);
+        updatedDictionary.setTargetLanguage(UPDATED_TARGER_LANGUAGE);
+        BookDictionaryDTO dictionaryDTO = dictionaryMapper.toDto(updatedDictionary);
 
         restDictionaryMockMvc.perform(put("/api/dictionaries")
             .contentType(MediaType.APPLICATION_JSON)
@@ -184,11 +184,11 @@ public class DictionaryResourceIT {
             .andExpect(status().isOk());
 
         // Validate the Dictionary in the database
-        List<Dictionary> dictionaryList = dictionaryRepository.findAll();
+        List<BookDictionary> dictionaryList = dictionaryRepository.findAll();
         assertThat(dictionaryList).hasSize(databaseSizeBeforeUpdate);
-        Dictionary testDictionary = dictionaryList.get(dictionaryList.size() - 1);
+        BookDictionary testDictionary = dictionaryList.get(dictionaryList.size() - 1);
         assertThat(testDictionary.getBaseLanguage()).isEqualTo(UPDATED_BASE_LANGUAGE);
-        assertThat(testDictionary.getTargerLanguage()).isEqualTo(UPDATED_TARGER_LANGUAGE);
+        assertThat(testDictionary.getTargetLanguage()).isEqualTo(UPDATED_TARGER_LANGUAGE);
     }
 
     @Test
@@ -197,7 +197,7 @@ public class DictionaryResourceIT {
         int databaseSizeBeforeUpdate = dictionaryRepository.findAll().size();
 
         // Create the Dictionary
-        DictionaryDTO dictionaryDTO = dictionaryMapper.toDto(dictionary);
+        BookDictionaryDTO dictionaryDTO = dictionaryMapper.toDto(dictionary);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restDictionaryMockMvc.perform(put("/api/dictionaries")
@@ -206,7 +206,7 @@ public class DictionaryResourceIT {
             .andExpect(status().isBadRequest());
 
         // Validate the Dictionary in the database
-        List<Dictionary> dictionaryList = dictionaryRepository.findAll();
+        List<BookDictionary> dictionaryList = dictionaryRepository.findAll();
         assertThat(dictionaryList).hasSize(databaseSizeBeforeUpdate);
     }
 
@@ -224,7 +224,7 @@ public class DictionaryResourceIT {
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item
-        List<Dictionary> dictionaryList = dictionaryRepository.findAll();
+        List<BookDictionary> dictionaryList = dictionaryRepository.findAll();
         assertThat(dictionaryList).hasSize(databaseSizeBeforeDelete - 1);
     }
 }

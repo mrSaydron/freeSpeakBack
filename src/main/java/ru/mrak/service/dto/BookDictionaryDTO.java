@@ -1,21 +1,20 @@
 package ru.mrak.service.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import ru.mrak.domain.BookDictionary;
 
 import java.io.Serializable;
 import java.util.List;
 
 /**
- * A DTO for the {@link ru.mrak.domain.Dictionary} entity.
+ * A DTO for the {@link BookDictionary} entity.
  */
-public class DictionaryDTO implements Serializable {
+public class BookDictionaryDTO implements Serializable {
 
     private Long id;
 
     private String baseLanguage;
 
-    private String targerLanguage;
+    private String targetLanguage;
 
     private List<DictionaryHasWordDTO> dictionaryWords;
 
@@ -35,12 +34,12 @@ public class DictionaryDTO implements Serializable {
         this.baseLanguage = baseLanguage;
     }
 
-    public String getTargerLanguage() {
-        return targerLanguage;
+    public String getTargetLanguage() {
+        return targetLanguage;
     }
 
-    public void setTargerLanguage(String targerLanguage) {
-        this.targerLanguage = targerLanguage;
+    public void setTargetLanguage(String targetLanguage) {
+        this.targetLanguage = targetLanguage;
     }
 
     public List<DictionaryHasWordDTO> getDictionaryWords() {
@@ -56,11 +55,11 @@ public class DictionaryDTO implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof DictionaryDTO)) {
+        if (!(o instanceof BookDictionaryDTO)) {
             return false;
         }
 
-        return id != null && id.equals(((DictionaryDTO) o).id);
+        return id != null && id.equals(((BookDictionaryDTO) o).id);
     }
 
     @Override
@@ -74,7 +73,7 @@ public class DictionaryDTO implements Serializable {
         return "DictionaryDTO{" +
             "id=" + getId() +
             ", baseLanguage='" + getBaseLanguage() + "'" +
-            ", targerLanguage='" + getTargerLanguage() + "'" +
+            ", targetLanguage='" + getTargetLanguage() + "'" +
             "}";
     }
 }

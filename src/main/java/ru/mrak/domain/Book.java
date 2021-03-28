@@ -43,9 +43,8 @@ public class Book implements Serializable {
     @Column(name = "public_book", nullable = false, length = 16_777_214)
     private Boolean publicBook;
 
-    @OneToOne
-    @JoinColumn(unique = true)
-    private Dictionary dictionary;
+    @OneToOne(mappedBy = "book", fetch = FetchType.LAZY)
+    private BookDictionary dictionary;
 
     @ManyToOne
     @JsonIgnoreProperties(value = "books", allowSetters = true)
@@ -132,16 +131,16 @@ public class Book implements Serializable {
         this.publicBook = publicBook;
     }
 
-    public Dictionary getDictionary() {
+    public BookDictionary getDictionary() {
         return dictionary;
     }
 
-    public Book dictionary(Dictionary dictionary) {
+    public Book dictionary(BookDictionary dictionary) {
         this.dictionary = dictionary;
         return this;
     }
 
-    public void setDictionary(Dictionary dictionary) {
+    public void setDictionary(BookDictionary dictionary) {
         this.dictionary = dictionary;
     }
 

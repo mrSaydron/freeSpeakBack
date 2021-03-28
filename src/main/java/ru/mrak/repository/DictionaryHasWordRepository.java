@@ -1,6 +1,6 @@
 package ru.mrak.repository;
 
-import ru.mrak.domain.DictionaryHasWord;
+import ru.mrak.domain.BookDictionaryHasWord;
 
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface DictionaryHasWordRepository extends JpaRepository<DictionaryHasWord, Long> {
+public interface DictionaryHasWordRepository extends JpaRepository<BookDictionaryHasWord, Long> {
 }

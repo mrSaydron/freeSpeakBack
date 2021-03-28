@@ -12,9 +12,9 @@ import java.io.Serializable;
  * A DictionaryHasWord.
  */
 @Entity
-@Table(name = "dictionary_has_word")
+@Table(name = "book_dictionary_has_word")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class DictionaryHasWord implements Serializable {
+public class BookDictionaryHasWord implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -27,7 +27,7 @@ public class DictionaryHasWord implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties(value = "dictionaryHasWords", allowSetters = true)
-    private Dictionary dictionary;
+    private BookDictionary dictionary;
 
     @ManyToOne
     @JsonIgnoreProperties(value = "dictionaryHasWords", allowSetters = true)
@@ -46,7 +46,7 @@ public class DictionaryHasWord implements Serializable {
         return count;
     }
 
-    public DictionaryHasWord count(Integer count) {
+    public BookDictionaryHasWord count(Integer count) {
         this.count = count;
         return this;
     }
@@ -55,16 +55,16 @@ public class DictionaryHasWord implements Serializable {
         this.count = count;
     }
 
-    public Dictionary getDictionary() {
+    public BookDictionary getDictionary() {
         return dictionary;
     }
 
-    public DictionaryHasWord dictionary(Dictionary dictionary) {
+    public BookDictionaryHasWord dictionary(BookDictionary dictionary) {
         this.dictionary = dictionary;
         return this;
     }
 
-    public void setDictionary(Dictionary dictionary) {
+    public void setDictionary(BookDictionary dictionary) {
         this.dictionary = dictionary;
     }
 
@@ -72,7 +72,7 @@ public class DictionaryHasWord implements Serializable {
         return word;
     }
 
-    public DictionaryHasWord word(Word word) {
+    public BookDictionaryHasWord word(Word word) {
         this.word = word;
         return this;
     }
@@ -87,10 +87,10 @@ public class DictionaryHasWord implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof DictionaryHasWord)) {
+        if (!(o instanceof BookDictionaryHasWord)) {
             return false;
         }
-        return id != null && id.equals(((DictionaryHasWord) o).id);
+        return id != null && id.equals(((BookDictionaryHasWord) o).id);
     }
 
     @Override

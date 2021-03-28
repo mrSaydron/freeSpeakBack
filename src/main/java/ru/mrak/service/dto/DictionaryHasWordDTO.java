@@ -1,9 +1,11 @@
 package ru.mrak.service.dto;
 
+import ru.mrak.domain.BookDictionaryHasWord;
+
 import java.io.Serializable;
 
 /**
- * A DTO for the {@link ru.mrak.domain.DictionaryHasWord} entity.
+ * A DTO for the {@link BookDictionaryHasWord} entity.
  */
 public class DictionaryHasWordDTO implements Serializable {
 

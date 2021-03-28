@@ -1,18 +1,15 @@
 package ru.mrak.service;
 
 import edu.stanford.nlp.ling.CoreLabel;
-import edu.stanford.nlp.pipeline.StanfordCoreNLP;
-import jdk.nashorn.internal.ir.annotations.Reference;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import ru.mrak.domain.Dictionary;
-import ru.mrak.domain.DictionaryHasWord;
+import ru.mrak.domain.BookDictionary;
+import ru.mrak.domain.BookDictionaryHasWord;
 import ru.mrak.domain.Word;
 import ru.mrak.domain.enumeration.TagEnum;
 import ru.mrak.repository.DictionaryHasWordRepository;
 import ru.mrak.repository.DictionaryRepository;
 import ru.mrak.repository.WordRepository;
-import ru.mrak.service.dto.DictionaryDTO;
+import ru.mrak.service.dto.BookDictionaryDTO;
 import ru.mrak.service.mapper.DictionaryMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +22,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * Service Implementation for managing {@link Dictionary}.
+ * Service Implementation for managing {@link BookDictionary}.
  */
 @Service
 @Transactional
@@ -49,9 +46,9 @@ public class DictionaryService {
      * @param dictionaryDTO the entity to save.
      * @return the persisted entity.
      */
-    public DictionaryDTO save(DictionaryDTO dictionaryDTO) {
+    public BookDictionaryDTO save(BookDictionaryDTO dictionaryDTO) {
         log.debug("Request to save Dictionary : {}", dictionaryDTO);
-        Dictionary dictionary = dictionaryMapper.toEntity(dictionaryDTO);
+        BookDictionary dictionary = dictionaryMapper.toEntity(dictionaryDTO);
         dictionary = dictionaryRepository.save(dictionary);
         return dictionaryMapper.toDto(dictionary);
     }
@@ -62,7 +59,7 @@ public class DictionaryService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public List<DictionaryDTO> findAll() {
+    public List<BookDictionaryDTO> findAll() {
         log.debug("Request to get all Dictionaries");
         return dictionaryRepository.findAll().stream()
             .map(dictionaryMapper::toDto)
@@ -77,7 +74,7 @@ public class DictionaryService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<DictionaryDTO> findOne(Long id) {
+    public Optional<BookDictionaryDTO> findOne(Long id) {
         log.debug("Request to get Dictionary : {}", id);
         return dictionaryRepository.findById(id)
             .map(dictionaryMapper::toDto);
@@ -100,12 +97,12 @@ public class DictionaryService {
      * @param targerLanguage - целеваой язык
      * @return - словарь
      */
-    public Dictionary createByText(String text, String baseLanguage, String targerLanguage) {
-        Dictionary dictionary = new Dictionary();
+    public BookDictionary createByText(String text, String baseLanguage, String targerLanguage) {
+        BookDictionary dictionary = new BookDictionary();
         dictionary.setBaseLanguage(baseLanguage);
-        dictionary.setTargerLanguage(targerLanguage);
+        dictionary.setTargetLanguage(targerLanguage);
 
-        List<DictionaryHasWord> dictionaryWords = new ArrayList<>();
+        List<BookDictionaryHasWord> dictionaryWords = new ArrayList<>();
         dictionary.setDictionaryWords(dictionaryWords);
 
         try {
@@ -115,7 +112,7 @@ public class DictionaryService {
                 .map(TokenLight::new)
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
-            List<DictionaryHasWord> dictionaryHasWords = tokenCountMap
+            List<BookDictionaryHasWord> dictionaryHasWords = tokenCountMap
                 .entrySet()
                 .stream()
                 .map(entry -> {
@@ -125,7 +122,7 @@ public class DictionaryService {
                     Optional<Word> optionalWord = wordRepository.findByWord(token.lemma());
                     Word word = optionalWord.orElseGet(() -> wordService.create(token));
 
-                    DictionaryHasWord dictionaryWord = new DictionaryHasWord();
+                    BookDictionaryHasWord dictionaryWord = new BookDictionaryHasWord();
                     dictionaryWord.setCount(count.intValue());
                     dictionaryWord.setWord(word);
                     dictionaryWord.setDictionary(dictionary);

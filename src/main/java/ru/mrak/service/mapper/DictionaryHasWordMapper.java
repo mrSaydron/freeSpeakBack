@@ -6,22 +6,19 @@ import ru.mrak.service.dto.DictionaryHasWordDTO;
 
 import org.mapstruct.*;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 /**
- * Mapper for the entity {@link DictionaryHasWord} and its DTO {@link DictionaryHasWordDTO}.
+ * Mapper for the entity {@link BookDictionaryHasWord} and its DTO {@link DictionaryHasWordDTO}.
  */
 @Mapper(componentModel = "spring", uses = {WordMapper.class})
-public interface DictionaryHasWordMapper extends EntityMapper<DictionaryHasWordDTO, DictionaryHasWord> {
+public interface DictionaryHasWordMapper extends EntityMapper<DictionaryHasWordDTO, BookDictionaryHasWord> {
 
-    DictionaryHasWordDTO toDto(DictionaryHasWord dictionaryHasWord);
+    DictionaryHasWordDTO toDto(BookDictionaryHasWord dictionaryHasWord);
 
-    default DictionaryHasWord fromId(Long id) {
+    default BookDictionaryHasWord fromId(Long id) {
         if (id == null) {
             return null;
         }
-        DictionaryHasWord dictionaryHasWord = new DictionaryHasWord();
+        BookDictionaryHasWord dictionaryHasWord = new BookDictionaryHasWord();
         dictionaryHasWord.setId(id);
         return dictionaryHasWord;
     }

@@ -1,8 +1,9 @@
 package ru.mrak.web.rest;
 
+import ru.mrak.domain.BookDictionary;
 import ru.mrak.service.DictionaryService;
+import ru.mrak.service.dto.BookDictionaryDTO;
 import ru.mrak.web.rest.errors.BadRequestAlertException;
-import ru.mrak.service.dto.DictionaryDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -14,11 +15,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
 import java.util.Optional;
 
 /**
- * REST controller for managing {@link ru.mrak.domain.Dictionary}.
+ * REST controller for managing {@link BookDictionary}.
  */
 @RestController
 @RequestMapping("/api/dictionary")
@@ -45,12 +45,12 @@ public class DictionaryResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping()
-    public ResponseEntity<DictionaryDTO> createDictionary(@RequestBody DictionaryDTO dictionaryDTO) throws URISyntaxException {
+    public ResponseEntity<BookDictionaryDTO> createDictionary(@RequestBody BookDictionaryDTO dictionaryDTO) throws URISyntaxException {
         log.debug("REST request to save Dictionary : {}", dictionaryDTO);
         if (dictionaryDTO.getId() != null) {
             throw new BadRequestAlertException("A new dictionary cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        DictionaryDTO result = dictionaryService.save(dictionaryDTO);
+        BookDictionaryDTO result = dictionaryService.save(dictionaryDTO);
         return ResponseEntity.created(new URI("/api/dictionaries/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -66,12 +66,12 @@ public class DictionaryResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping()
-    public ResponseEntity<DictionaryDTO> updateDictionary(@RequestBody DictionaryDTO dictionaryDTO) throws URISyntaxException {
+    public ResponseEntity<BookDictionaryDTO> updateDictionary(@RequestBody BookDictionaryDTO dictionaryDTO) throws URISyntaxException {
         log.debug("REST request to update Dictionary : {}", dictionaryDTO);
         if (dictionaryDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        DictionaryDTO result = dictionaryService.save(dictionaryDTO);
+        BookDictionaryDTO result = dictionaryService.save(dictionaryDTO);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, dictionaryDTO.getId().toString()))
             .body(result);
@@ -84,9 +84,9 @@ public class DictionaryResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the dictionaryDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<DictionaryDTO> getDictionary(@PathVariable Long id) {
+    public ResponseEntity<BookDictionaryDTO> getDictionary(@PathVariable Long id) {
         log.debug("REST request to get Dictionary : {}", id);
-        Optional<DictionaryDTO> dictionaryDTO = dictionaryService.findOne(id);
+        Optional<BookDictionaryDTO> dictionaryDTO = dictionaryService.findOne(id);
         return ResponseUtil.wrapOrNotFound(dictionaryDTO);
     }
 

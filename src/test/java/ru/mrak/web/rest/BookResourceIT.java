@@ -2,13 +2,12 @@ package ru.mrak.web.rest;
 
 import ru.mrak.LibFourApp;
 import ru.mrak.domain.Book;
-import ru.mrak.domain.Dictionary;
+import ru.mrak.domain.BookDictionary;
 import ru.mrak.domain.User;
 import ru.mrak.repository.BookRepository;
 import ru.mrak.service.BookService;
 import ru.mrak.service.dto.BookDTO;
 import ru.mrak.service.mapper.BookMapper;
-import ru.mrak.service.dto.BookCriteria;
 import ru.mrak.service.BookQueryService;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -241,7 +239,7 @@ public class BookResourceIT {
             .andExpect(jsonPath("$.[*].text").value(hasItem(DEFAULT_TEXT)))
             .andExpect(jsonPath("$.[*].publicBook").value(hasItem(DEFAULT_PUBLIC_BOOK.booleanValue())));
     }
-    
+
     @SuppressWarnings({"unchecked"})
     public void getAllBooksWithEagerRelationshipsIsEnabled() throws Exception {
         when(bookServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
@@ -669,7 +667,7 @@ public class BookResourceIT {
     public void getAllBooksByDictionaryIsEqualToSomething() throws Exception {
         // Initialize the database
         bookRepository.saveAndFlush(book);
-        Dictionary dictionary = DictionaryResourceIT.createEntity(em);
+        BookDictionary dictionary = DictionaryResourceIT.createEntity(em);
         em.persist(dictionary);
         em.flush();
         book.setDictionary(dictionary);

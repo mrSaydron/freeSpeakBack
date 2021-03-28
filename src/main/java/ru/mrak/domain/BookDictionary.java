@@ -12,9 +12,9 @@ import java.util.List;
  * A Dictionary.
  */
 @Entity
-@Table(name = "dictionary")
+@Table(name = "book_dictionary")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class Dictionary implements Serializable {
+public class BookDictionary implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -25,11 +25,15 @@ public class Dictionary implements Serializable {
     @Column(name = "base_language")
     private String baseLanguage;
 
-    @Column(name = "targer_language")
-    private String targerLanguage;
+    @Column(name = "target_language")
+    private String targetLanguage;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_id")
+    private Book book;
 
     @OneToMany(mappedBy = "dictionary", fetch = FetchType.LAZY)
-    private List<DictionaryHasWord> dictionaryWords;
+    private List<BookDictionaryHasWord> dictionaryWords;
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -51,19 +55,19 @@ public class Dictionary implements Serializable {
         this.baseLanguage = baseLanguage;
     }
 
-    public String getTargerLanguage() {
-        return targerLanguage;
+    public String getTargetLanguage() {
+        return targetLanguage;
     }
 
-    public void setTargerLanguage(String targerLanguage) {
-        this.targerLanguage = targerLanguage;
+    public void setTargetLanguage(String targetLanguage) {
+        this.targetLanguage = targetLanguage;
     }
 
-    public List<DictionaryHasWord> getDictionaryWords() {
+    public List<BookDictionaryHasWord> getDictionaryWords() {
         return dictionaryWords;
     }
 
-    public void setDictionaryWords(List<DictionaryHasWord> dictionaryWords) {
+    public void setDictionaryWords(List<BookDictionaryHasWord> dictionaryWords) {
         this.dictionaryWords = dictionaryWords;
     }
 
@@ -72,10 +76,10 @@ public class Dictionary implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof Dictionary)) {
+        if (!(o instanceof BookDictionary)) {
             return false;
         }
-        return id != null && id.equals(((Dictionary) o).id);
+        return id != null && id.equals(((BookDictionary) o).id);
     }
 
     @Override
@@ -89,7 +93,7 @@ public class Dictionary implements Serializable {
         return "Dictionary{" +
             "id=" + getId() +
             ", baseLanguage='" + getBaseLanguage() + "'" +
-            ", targerLanguage='" + getTargerLanguage() + "'" +
+            ", targetLanguage='" + getTargetLanguage() + "'" +
             "}";
     }
 }

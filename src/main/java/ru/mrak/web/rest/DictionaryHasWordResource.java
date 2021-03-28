@@ -1,5 +1,6 @@
 package ru.mrak.web.rest;
 
+import ru.mrak.domain.BookDictionaryHasWord;
 import ru.mrak.service.DictionaryHasWordService;
 import ru.mrak.web.rest.errors.BadRequestAlertException;
 import ru.mrak.service.dto.DictionaryHasWordDTO;
@@ -18,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * REST controller for managing {@link ru.mrak.domain.DictionaryHasWord}.
+ * REST controller for managing {@link BookDictionaryHasWord}.
  */
 @RestController
 @RequestMapping("/api")

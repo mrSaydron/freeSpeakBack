@@ -3,12 +3,8 @@ package ru.mrak.service.dto;
 import java.io.Serializable;
 import java.util.Objects;
 import io.github.jhipster.service.Criteria;
-import ru.mrak.domain.enumeration.chatTypeEnum;
-import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
+import ru.mrak.domain.enumeration.ChatTypeEnum;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
-import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
 
@@ -25,7 +21,7 @@ public class ChatCriteria implements Serializable, Criteria {
     /**
      * Class for filtering chatTypeEnum
      */
-    public static class chatTypeEnumFilter extends Filter<chatTypeEnum> {
+    public static class chatTypeEnumFilter extends Filter<ChatTypeEnum> {
 
         public chatTypeEnumFilter() {
         }

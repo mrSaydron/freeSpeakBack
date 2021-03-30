@@ -3,6 +3,6 @@ package ru.mrak.domain.enumeration;
 /**
  * The chatTypeEnum enumeration.
  */
-public enum chatTypeEnum {
+public enum ChatTypeEnum {
     SUPPORT, COMMON
 }

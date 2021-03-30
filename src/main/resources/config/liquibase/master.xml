@@ -32,4 +32,5 @@
     <include file="config/liquibase/changelog/20210327000000_T-25_add_field_to_word.sql" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210327154900_T-25_add_tables.sql" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210328193200_T-23_change_table_name.sql" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210328230900_T-26_add_service_data_table.sql" relativeToChangelogFile="false"/>
 </databaseChangeLog>

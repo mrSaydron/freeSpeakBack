@@ -1,7 +1,10 @@
 package ru.mrak.service.mapper;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.mrak.domain.*;
+import ru.mrak.domain.enumeration.ServiceDataKeysEnum;
+import ru.mrak.service.ServiceDataService;
 import ru.mrak.service.dto.WordDTO;
 
 import org.mapstruct.*;
@@ -12,9 +15,21 @@ import java.util.List;
  * Mapper for the entity {@link Word} and its DTO {@link WordDTO}.
  */
 @Mapper(componentModel = "spring", uses = {})
-public interface WordMapper extends EntityMapper<WordDTO, Word> {
+public abstract class WordMapper implements EntityMapper<WordDTO, Word> {
 
-    default Word fromId(Long id) {
+    @Autowired
+    ServiceDataService serviceDataService;
+
+    @AfterMapping
+    void frequencyCalc(Word entity,
+                       @MappingTarget WordDTO dto) {
+        if (dto.getTotalAmount() != null) {
+            Long totalWords = Long.valueOf(serviceDataService.getByKey(ServiceDataKeysEnum.totalWords).getValue());
+            dto.setFrequency(dto.getTotalAmount() / 1.0 / totalWords);
+        }
+    }
+
+    Word fromId(Long id) {
         if (id == null) {
             return null;
         }

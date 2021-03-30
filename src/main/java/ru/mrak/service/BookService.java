@@ -1,19 +1,17 @@
 package ru.mrak.service;
 
 import lombok.RequiredArgsConstructor;
-import ru.mrak.domain.*;
-import ru.mrak.repository.BookRepository;
-import ru.mrak.repository.BookUserRepository;
-import ru.mrak.repository.UserRepository;
-import ru.mrak.service.dto.BookDTO;
-import ru.mrak.service.mapper.BookMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.mrak.domain.*;
+import ru.mrak.repository.BookRepository;
+import ru.mrak.repository.BookUserRepository;
+import ru.mrak.service.dto.BookDTO;
+import ru.mrak.service.mapper.BookMapper;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
@@ -34,10 +32,10 @@ public class BookService {
 
     private final UserService userService;
     private final DictionaryService dictionaryService;
+    private final WordService wordService;
 
     private final BookRepository bookRepository;
     private final BookUserRepository bookUserRepository;
-    private final UserRepository userRepository;
 
     private final EntityManager entityManager;
 
@@ -63,6 +61,11 @@ public class BookService {
         book.setDictionary(dictionary);
 
         book = bookRepository.save(book);
+
+        if (book.getPublicBook()) {
+            wordService.updateTotalAmount(book);
+        }
+
         return bookMapper.toDto(book);
     }
 

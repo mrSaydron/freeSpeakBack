@@ -1,5 +1,6 @@
 package ru.mrak.web.rest;
 
+import ru.mrak.service.ServiceDataService;
 import ru.mrak.service.WordService;
 import ru.mrak.web.rest.errors.BadRequestAlertException;
 import ru.mrak.service.dto.WordDTO;
@@ -41,12 +42,15 @@ public class WordResource {
     private String applicationName;
 
     private final WordService wordService;
-
     private final WordQueryService wordQueryService;
+    private final ServiceDataService serviceDataService;
 
-    public WordResource(WordService wordService, WordQueryService wordQueryService) {
+    public WordResource(WordService wordService,
+                        WordQueryService wordQueryService,
+                        ServiceDataService serviceDataService) {
         this.wordService = wordService;
         this.wordQueryService = wordQueryService;
+        this.serviceDataService = serviceDataService;
     }
 
     /**
@@ -140,5 +144,16 @@ public class WordResource {
         log.debug("REST request to delete Word : {}", id);
         wordService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
+
+    /**
+     * Пересчитывает частоту слов по всем публичным книгам
+     */
+    @PutMapping("/update-words-total-amount")
+    public ResponseEntity<Void> updateWordsTotalAmount() {
+        log.debug("REST update words total amount");
+        wordService.updateTotalAmount();
+        return ResponseEntity.ok().build();
+
     }
 }

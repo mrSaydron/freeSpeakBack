@@ -3,11 +3,11 @@ package ru.mrak.web.rest;
 import ru.mrak.LibFourApp;
 import ru.mrak.domain.Chat;
 import ru.mrak.domain.User;
+import ru.mrak.domain.enumeration.ChatTypeEnum;
 import ru.mrak.repository.ChatRepository;
 import ru.mrak.service.ChatService;
 import ru.mrak.service.dto.ChatDTO;
 import ru.mrak.service.mapper.ChatMapper;
-import ru.mrak.service.dto.ChatCriteria;
 import ru.mrak.service.ChatQueryService;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -34,7 +33,6 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import ru.mrak.domain.enumeration.chatTypeEnum;
 /**
  * Integration tests for the {@link ChatResource} REST controller.
  */
@@ -44,8 +42,8 @@ import ru.mrak.domain.enumeration.chatTypeEnum;
 @WithMockUser
 public class ChatResourceIT {
 
-    private static final chatTypeEnum DEFAULT_CHAT_TYPE = chatTypeEnum.SUPPORT;
-    private static final chatTypeEnum UPDATED_CHAT_TYPE = chatTypeEnum.COMMON;
+    private static final ChatTypeEnum DEFAULT_CHAT_TYPE = ChatTypeEnum.SUPPORT;
+    private static final ChatTypeEnum UPDATED_CHAT_TYPE = ChatTypeEnum.COMMON;
 
     private static final String DEFAULT_TITLE = "AAAAAAAAAA";
     private static final String UPDATED_TITLE = "BBBBBBBBBB";
@@ -180,7 +178,7 @@ public class ChatResourceIT {
             .andExpect(jsonPath("$.[*].chatType").value(hasItem(DEFAULT_CHAT_TYPE.toString())))
             .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)));
     }
-    
+
     @SuppressWarnings({"unchecked"})
     public void getAllChatsWithEagerRelationshipsIsEnabled() throws Exception {
         when(chatServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));

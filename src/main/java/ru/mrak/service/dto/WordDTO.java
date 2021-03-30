@@ -18,6 +18,7 @@ public class WordDTO implements Serializable {
     private Long totalAmount;
     private String urlPicture;
     private String urlAudio;
+    private Double frequency;
 
     public Long getId() {
         return id;
@@ -75,6 +76,14 @@ public class WordDTO implements Serializable {
         this.urlAudio = urlAudio;
     }
 
+    public Double getFrequency() {
+        return frequency;
+    }
+
+    public void setFrequency(Double frequency) {
+        this.frequency = frequency;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -92,7 +101,6 @@ public class WordDTO implements Serializable {
         return 31;
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
         return "WordDTO{" +
@@ -103,6 +111,7 @@ public class WordDTO implements Serializable {
             ", totalAmount=" + totalAmount +
             ", urlPicture='" + urlPicture + '\'' +
             ", urlAudio='" + urlAudio + '\'' +
+            ", frequency=" + frequency +
             '}';
     }
 }

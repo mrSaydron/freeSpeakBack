@@ -1,7 +1,12 @@
 package ru.mrak.service;
 
 import edu.stanford.nlp.ling.CoreLabel;
+import lombok.RequiredArgsConstructor;
+import ru.mrak.domain.Book;
+import ru.mrak.domain.ServiceData;
 import ru.mrak.domain.Word;
+import ru.mrak.domain.enumeration.ServiceDataKeysEnum;
+import ru.mrak.repository.ServiceDataRepository;
 import ru.mrak.repository.WordRepository;
 import ru.mrak.service.dto.WordDTO;
 import ru.mrak.service.mapper.WordMapper;
@@ -14,25 +19,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-import java.util.function.Supplier;
 
 /**
  * Service Implementation for managing {@link Word}.
  */
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class WordService {
 
     private final Logger log = LoggerFactory.getLogger(WordService.class);
 
+    private final ServiceDataService serviceDataService;
+
     private final WordRepository wordRepository;
 
     private final WordMapper wordMapper;
-
-    public WordService(WordRepository wordRepository, WordMapper wordMapper) {
-        this.wordRepository = wordRepository;
-        this.wordMapper = wordMapper;
-    }
 
     /**
      * Save a word.
@@ -97,5 +99,24 @@ public class WordService {
         wordRepository.save(word);
 
         return word;
+    }
+
+    /**
+     * Обновляет количество слов (частоту) по всем публичным книгам
+     */
+    public void updateTotalAmount() {
+        wordRepository.updateTotalAmount();
+        Long wordsCount = wordRepository.getWordsCount();
+        serviceDataService.save(ServiceDataKeysEnum.totalWords, wordsCount.toString());
+    }
+
+    /**
+     * Обновляет количество слов (частоту) по книге
+     */
+    public void updateTotalAmount(Book book) {
+        wordRepository.updateTotalAmountByBookId(book.getId());
+        long wordsCount = wordRepository.getWordsCountByBook(book.getId());
+        wordsCount += Long.parseLong(serviceDataService.getByKey(ServiceDataKeysEnum.totalWords).getValue());
+        serviceDataService.save(ServiceDataKeysEnum.totalWords, String.valueOf(wordsCount));
     }
 }

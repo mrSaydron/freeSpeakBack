@@ -144,6 +144,10 @@ public class Book implements Serializable {
         this.dictionary = dictionary;
     }
 
+    public Boolean getPublicBook() {
+        return publicBook;
+    }
+
     public User getLoadedUser() {
         return loadedUser;
     }

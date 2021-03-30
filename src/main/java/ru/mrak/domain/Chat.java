@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import ru.mrak.domain.enumeration.chatTypeEnum;
+import ru.mrak.domain.enumeration.ChatTypeEnum;
 
 /**
  * A Chat.
@@ -29,7 +29,7 @@ public class Chat implements Serializable {
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "chat_type", nullable = false)
-    private chatTypeEnum chatType;
+    private ChatTypeEnum chatType;
 
     @Column(name = "title")
     private String title;
@@ -50,16 +50,16 @@ public class Chat implements Serializable {
         this.id = id;
     }
 
-    public chatTypeEnum getChatType() {
+    public ChatTypeEnum getChatType() {
         return chatType;
     }
 
-    public Chat chatType(chatTypeEnum chatType) {
+    public Chat chatType(ChatTypeEnum chatType) {
         this.chatType = chatType;
         return this;
     }
 
-    public void setChatType(chatTypeEnum chatType) {
+    public void setChatType(ChatTypeEnum chatType) {
         this.chatType = chatType;
     }
 

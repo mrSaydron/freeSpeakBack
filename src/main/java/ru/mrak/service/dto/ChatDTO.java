@@ -4,22 +4,22 @@ import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import ru.mrak.domain.enumeration.chatTypeEnum;
+import ru.mrak.domain.enumeration.ChatTypeEnum;
 
 /**
  * A DTO for the {@link ru.mrak.domain.Chat} entity.
  */
 public class ChatDTO implements Serializable {
-    
+
     private Long id;
 
     @NotNull
-    private chatTypeEnum chatType;
+    private ChatTypeEnum chatType;
 
     private String title;
 
     private Set<UserDTO> users = new HashSet<>();
-    
+
     public Long getId() {
         return id;
     }
@@ -28,11 +28,11 @@ public class ChatDTO implements Serializable {
         this.id = id;
     }
 
-    public chatTypeEnum getChatType() {
+    public ChatTypeEnum getChatType() {
         return chatType;
     }
 
-    public void setChatType(chatTypeEnum chatType) {
+    public void setChatType(ChatTypeEnum chatType) {
         this.chatType = chatType;
     }
 

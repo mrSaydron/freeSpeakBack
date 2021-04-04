@@ -28,6 +28,23 @@ public class UserDictionary implements Serializable {
     @OneToMany(mappedBy = "dictionary", fetch = FetchType.LAZY)
     private Collection<UserDictionaryHasWord> dictionaryWords = new ArrayList<>();
 
+    public UserDictionary() {
+    }
+
+    public UserDictionary(User user, String baseLanguage, String targetLanguage) {
+        this.user = user;
+        this.baseLanguage = baseLanguage;
+        this.targetLanguage = targetLanguage;
+    }
+
+    public UserDictionary(Long id, User user, String baseLanguage, String targetLanguage, Collection<UserDictionaryHasWord> dictionaryWords) {
+        this.id = id;
+        this.user = user;
+        this.baseLanguage = baseLanguage;
+        this.targetLanguage = targetLanguage;
+        this.dictionaryWords = dictionaryWords;
+    }
+
     public Long getId() {
         return id;
     }

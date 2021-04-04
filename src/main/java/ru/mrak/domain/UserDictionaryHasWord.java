@@ -8,7 +8,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "user_dictionary_has_word")
-public class UserDictionaryHasWord implements Serializable {
+public class  UserDictionaryHasWord implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -27,8 +27,26 @@ public class UserDictionaryHasWord implements Serializable {
     @Column(name = "priority")
     private Integer priority;
 
-    @OneToMany(mappedBy = "dictionaryWord", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "dictionaryWord", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private Collection<UserWordProgress> wordProgresses = new ArrayList<>();
+
+    public UserDictionaryHasWord() {
+    }
+
+    public UserDictionaryHasWord(UserDictionary dictionary, Word word, Integer priority, Collection<UserWordProgress> wordProgresses) {
+        this.dictionary = dictionary;
+        this.word = word;
+        this.priority = priority;
+        this.wordProgresses = wordProgresses;
+    }
+
+    public UserDictionaryHasWord(Long id, UserDictionary dictionary, Word word, Integer priority, Collection<UserWordProgress> wordProgresses) {
+        this.id = id;
+        this.dictionary = dictionary;
+        this.word = word;
+        this.priority = priority;
+        this.wordProgresses = wordProgresses;
+    }
 
     public Long getId() {
         return id;
@@ -87,7 +105,6 @@ public class UserDictionaryHasWord implements Serializable {
     public String toString() {
         return "UserDictionaryHasWord{" +
             "id=" + id +
-            ", dictionary=" + dictionary +
             ", word=" + word +
             ", priority=" + priority +
             ", wordProgresses=" + wordProgresses +

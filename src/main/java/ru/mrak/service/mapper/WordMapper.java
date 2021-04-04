@@ -20,6 +20,8 @@ public abstract class WordMapper implements EntityMapper<WordDTO, Word> {
     @Autowired
     ServiceDataService serviceDataService;
 
+    public abstract WordDTO toDto(Word word, Boolean userHas);
+
     @AfterMapping
     void frequencyCalc(Word entity,
                        @MappingTarget WordDTO dto) {

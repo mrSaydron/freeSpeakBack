@@ -1,11 +1,14 @@
 package ru.mrak.service.dto;
 
+import lombok.ToString;
+
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
  * A DTO for the {@link ru.mrak.domain.Word} entity.
  */
+@ToString
 public class WordDTO implements Serializable {
 
     private Long id;
@@ -19,6 +22,7 @@ public class WordDTO implements Serializable {
     private String urlPicture;
     private String urlAudio;
     private Double frequency;
+    private Boolean userHas;
 
     public Long getId() {
         return id;
@@ -84,6 +88,14 @@ public class WordDTO implements Serializable {
         this.frequency = frequency;
     }
 
+    public Boolean getUserHas() {
+        return userHas;
+    }
+
+    public void setUserHas(Boolean userHas) {
+        this.userHas = userHas;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -101,17 +113,4 @@ public class WordDTO implements Serializable {
         return 31;
     }
 
-    @Override
-    public String toString() {
-        return "WordDTO{" +
-            "id=" + id +
-            ", word='" + word + '\'' +
-            ", translate='" + translate + '\'' +
-            ", partOfSpeech='" + partOfSpeech + '\'' +
-            ", totalAmount=" + totalAmount +
-            ", urlPicture='" + urlPicture + '\'' +
-            ", urlAudio='" + urlAudio + '\'' +
-            ", frequency=" + frequency +
-            '}';
-    }
 }

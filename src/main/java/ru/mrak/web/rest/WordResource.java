@@ -1,25 +1,26 @@
 package ru.mrak.web.rest;
 
-import ru.mrak.service.ServiceDataService;
-import ru.mrak.service.WordService;
-import ru.mrak.web.rest.errors.BadRequestAlertException;
-import ru.mrak.service.dto.WordDTO;
-import ru.mrak.service.dto.WordCriteria;
-import ru.mrak.service.WordQueryService;
-
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ru.mrak.domain.Word;
+import ru.mrak.service.WordQueryService;
+import ru.mrak.service.WordService;
+import ru.mrak.service.dto.WordCriteria;
+import ru.mrak.service.dto.WordDTO;
+import ru.mrak.service.dto.userWord.WordUserJoinDTO;
+import ru.mrak.service.mapper.WordMapper;
+import ru.mrak.web.rest.errors.BadRequestAlertException;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -32,6 +33,7 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api/word")
+@RequiredArgsConstructor
 public class WordResource {
 
     private final Logger log = LoggerFactory.getLogger(WordResource.class);
@@ -41,17 +43,10 @@ public class WordResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
+    private final WordMapper wordMapper;
+
     private final WordService wordService;
     private final WordQueryService wordQueryService;
-    private final ServiceDataService serviceDataService;
-
-    public WordResource(WordService wordService,
-                        WordQueryService wordQueryService,
-                        ServiceDataService serviceDataService) {
-        this.wordService = wordService;
-        this.wordQueryService = wordQueryService;
-        this.serviceDataService = serviceDataService;
-    }
 
     /**
      * {@code POST  /words} : Create a new word.
@@ -101,11 +96,13 @@ public class WordResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of words in body.
      */
     @GetMapping
-    public ResponseEntity<List<WordDTO>> getAllWords(WordCriteria criteria, Pageable pageable) {
+    public ResponseEntity<List<WordDTO>> getAllWordsForUser(WordCriteria criteria, Pageable pageable) {
         log.debug("REST request to get Words by criteria: {}", criteria);
-        Page<WordDTO> page = wordQueryService.findByCriteria(criteria, pageable);
+        Page<WordUserJoinDTO> page = wordService.findByCriteriaForUser(criteria, pageable);
+        Page<WordDTO> result = page.map(dto -> wordMapper.toDto(dto.getWord(), dto.getUserHas()));
+
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
+        return ResponseEntity.ok().headers(headers).body(result.getContent());
     }
 
     /**

@@ -61,11 +61,10 @@ public class WordQueryService extends QueryService<Word> {
      * @return the matching entities.
      */
     @Transactional(readOnly = true)
-    public Page<WordDTO> findByCriteria(WordCriteria criteria, Pageable page) {
+    public Page<Word> findByCriteria(WordCriteria criteria, Pageable page) {
         log.debug("find by criteria : {}, page: {}", criteria, page);
         final Specification<Word> specification = createSpecification(criteria);
-        return wordRepository.findAll(specification, page)
-            .map(wordMapper::toDto);
+        return wordRepository.findAll(specification, page);
     }
 
     /**

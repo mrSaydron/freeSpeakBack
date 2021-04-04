@@ -1,41 +1,21 @@
-package ru.mrak.domain;
+package ru.mrak.service.dto.userWord;
 
 import ru.mrak.domain.enumeration.UserWordProgressTypeEnum;
 
-import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Objects;
 
-@Entity
-@Table(name = "user_word_progress")
-public class UserWordProgress implements Serializable {
+public class WordProgressDTO {
 
-    private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_dictionary_has_word_id")
-    private UserDictionaryHasWord dictionaryWord;
-
-    @Column(name = "type")
-    @Enumerated(EnumType.STRING)
     private UserWordProgressTypeEnum type;
-
-    @Column(name = "successful_attempts")
     private int successfulAttempts;
-
-    @Column(name = "box_number")
     private int boxNumber;
 
-    public UserWordProgress() {
+    public WordProgressDTO() {
     }
 
-    public UserWordProgress(Long id, UserDictionaryHasWord dictionaryWord, UserWordProgressTypeEnum type, int successfulAttempts, int boxNumber) {
+    public WordProgressDTO(Long id, UserWordProgressTypeEnum type, int successfulAttempts, int boxNumber) {
         this.id = id;
-        this.dictionaryWord = dictionaryWord;
         this.type = type;
         this.successfulAttempts = successfulAttempts;
         this.boxNumber = boxNumber;
@@ -47,14 +27,6 @@ public class UserWordProgress implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public UserDictionaryHasWord getDictionaryWord() {
-        return dictionaryWord;
-    }
-
-    public void setDictionaryWord(UserDictionaryHasWord dictionaryWord) {
-        this.dictionaryWord = dictionaryWord;
     }
 
     public UserWordProgressTypeEnum getType() {
@@ -85,18 +57,18 @@ public class UserWordProgress implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserWordProgress that = (UserWordProgress) o;
+        WordProgressDTO that = (WordProgressDTO) o;
         return id.equals(that.id);
     }
 
     @Override
     public int hashCode() {
-        return 31;
+        return Objects.hash(id);
     }
 
     @Override
     public String toString() {
-        return "UserWordProgress{" +
+        return "WordProgressDTO{" +
             "id=" + id +
             ", type=" + type +
             ", successfulAttempts=" + successfulAttempts +

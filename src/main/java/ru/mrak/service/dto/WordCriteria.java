@@ -25,9 +25,12 @@ public class WordCriteria implements Serializable, Criteria {
 
     private static final long serialVersionUID = 1L;
 
+    // Фильтры
     private LongFilter id;
     private StringFilter wordFilter;
     private StringFilter partOfSpeechFilter;
+
+    // Сортировки
     private StringRangeFilter startWord;
     private LongFilter startAmount;
 

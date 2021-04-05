@@ -87,6 +87,7 @@ public class WordQueryService extends QueryService<Word> {
     protected Specification<Word> createSpecification(WordCriteria criteria) {
         Specification<Word> specification = Specification.where(null);
         if (criteria != null) {
+            // Филтры
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), Word_.id));
             }
@@ -96,6 +97,8 @@ public class WordQueryService extends QueryService<Word> {
             if (criteria.getWordFilter() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getWordFilter(), Word_.word));
             }
+
+            // Сортировки
             if (criteria.getStartWord() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getStartWord(), Word_.word));
             }

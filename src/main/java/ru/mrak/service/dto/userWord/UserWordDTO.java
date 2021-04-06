@@ -8,16 +8,25 @@ public class UserWordDTO {
 
     private Long id;
     private WordDTO word;
-    private List<WordProgressDTO> progress;
+    private List<WordProgressDTO> wordProgresses;
     private Integer priority;
 
     public UserWordDTO() {
     }
 
-    public UserWordDTO(WordDTO word, List<WordProgressDTO> progress, Integer priority) {
+    public UserWordDTO(Long id, WordDTO word, List<WordProgressDTO> wordProgresses, Integer priority) {
+        this.id = id;
         this.word = word;
-        this.progress = progress;
+        this.wordProgresses = wordProgresses;
         this.priority = priority;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public WordDTO getWord() {
@@ -28,12 +37,12 @@ public class UserWordDTO {
         this.word = word;
     }
 
-    public List<WordProgressDTO> getProgress() {
-        return progress;
+    public List<WordProgressDTO> getWordProgresses() {
+        return wordProgresses;
     }
 
-    public void setProgress(List<WordProgressDTO> progress) {
-        this.progress = progress;
+    public void setWordProgresses(List<WordProgressDTO> wordProgresses) {
+        this.wordProgresses = wordProgresses;
     }
 
     public Integer getPriority() {

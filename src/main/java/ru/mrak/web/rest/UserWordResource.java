@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ru.mrak.domain.UserDictionaryHasWord;
 import ru.mrak.service.UserWordQueryService;
 import ru.mrak.service.UserWordService;
 import ru.mrak.service.dto.userWord.UserWordCriteria;
@@ -41,8 +42,8 @@ public class UserWordResource {
     @Transactional(readOnly = true)
     public ResponseEntity<List<UserWordDTO>> getUserWords(UserWordCriteria criteria, Pageable pageable) {
         log.debug("REST request to get words for user by criteria: {}", criteria);
-        Page<UserWordDTO> page = userWordQueryService.findByCriteria(criteria, pageable)
-            .map(userWordMapper::toDto);
+        Page<UserDictionaryHasWord> pageHasWord = userWordQueryService.findByCriteria(criteria, pageable);
+        Page<UserWordDTO> page = pageHasWord.map(userWordMapper::toDto);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

@@ -30,7 +30,6 @@ public class UserWordResource {
 
     private final Logger log = LoggerFactory.getLogger(UserWordResource.class);
 
-    private final UserWordQueryService userWordQueryService;
     private final UserWordService userWordService;
 
     private final UserWordMapper userWordMapper;
@@ -42,7 +41,7 @@ public class UserWordResource {
     @Transactional(readOnly = true)
     public ResponseEntity<List<UserWordDTO>> getUserWords(UserWordCriteria criteria, Pageable pageable) {
         log.debug("REST request to get words for user by criteria: {}", criteria);
-        Page<UserDictionaryHasWord> pageHasWord = userWordQueryService.findByCriteria(criteria, pageable);
+        Page<UserDictionaryHasWord> pageHasWord = userWordService.findByCriteria(criteria, pageable);
         Page<UserWordDTO> page = pageHasWord.map(userWordMapper::toDto);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
@@ -64,5 +63,50 @@ public class UserWordResource {
     public void removeWord(@PathVariable Long wordId) {
         log.debug("REST request to remove word from user dictionary. Word id: {}", wordId);
         userWordService.removeWord(wordId);
+    }
+
+    /**
+     * Удаляет слова из словаря пользователя
+     */
+    @PutMapping("/remove-words")
+    public void removeWords(@RequestBody List<Long> wordIds) {
+        log.debug("REST request to remove words from user dictionary. Word ids: {}", wordIds);
+        userWordService.removeWords(wordIds);
+    }
+
+    /**
+     * Удаляет слова из словаря пользователя по запросу
+     */
+    @PutMapping("/remove-all-words")
+    public void removeAllWords(UserWordCriteria criteria) {
+        log.debug("REST request to remove words from user dictionary by criteria. Word id: {}", criteria);
+        userWordService.removeAllWords(criteria);
+    }
+
+    /**
+     * Удаляет слово из словаря пользователя
+     */
+    @PutMapping("/erase-word/{wordId}")
+    public void eraseWord(@PathVariable Long wordId) {
+        log.debug("REST request to erase progress word from user dictionary. Word id: {}", wordId);
+        userWordService.eraseWord(wordId);
+    }
+
+    /**
+     * Удаляет слова из словаря пользователя
+     */
+    @PutMapping("/erase-words")
+    public void eraseWords(@RequestBody List<Long> wordIds) {
+        log.debug("REST request to remove erase progress words from user dictionary. Word ids: {}", wordIds);
+        userWordService.eraseWords(wordIds);
+    }
+
+    /**
+     * Удаляет слова из словаря пользователя по запросу
+     */
+    @PutMapping("/erase-all-words")
+    public void eraseAllWords(UserWordCriteria criteria) {
+        log.debug("REST request to remove words from user dictionary by criteria. Word id: {}", criteria);
+        userWordService.eraseAllWords(criteria);
     }
 }

@@ -22,6 +22,7 @@ public class UserWordCriteria implements Serializable, Criteria {
 
     // Фильтры
     private StringFilter wordFilter;
+    private StringFilter partOfSpeech;
 
     // Сортировки
     private StringRangeFilter startWord;
@@ -32,6 +33,7 @@ public class UserWordCriteria implements Serializable, Criteria {
 
     public UserWordCriteria(UserWordCriteria other) {
         this.wordFilter = other.wordFilter;
+        this.partOfSpeech = other.partOfSpeech;
 
         this.startWord = other.startWord;
         this.startPriority = other.startPriority;

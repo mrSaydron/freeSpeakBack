@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.mrak.domain.User;
 import ru.mrak.domain.UserDictionary;
@@ -24,16 +23,14 @@ public interface UserDictionaryHasWordRepository extends JpaRepository<UserDicti
     @Query("select h from UserDictionaryHasWord h where h.dictionary.user = :user and h.word = :word")
     Optional<UserDictionaryHasWord> findByWordAndUser(Word word, User user);
 
-//    @Modifying
-//    @Query(value = "delete from user_dictionary_has_word h " +
-//        "where h.word_id = :wordId " +
-//        "and h.user_dictionary_id in (select ud.id from user_dictionary ud where ud.user_id = :userId)",
-//    nativeQuery = true)
-//    void deleteByWordAndUser(@Param("wordId") Long wordId,
-//                             @Param("userId") Long userId);
+    @Query("select h from UserDictionaryHasWord h where h.dictionary.user = :user and h.word.id in :wordIds")
+    List<UserDictionaryHasWord> findByWordIdsAndUser(List<Long> wordIds, User user);
 
     @Modifying
     @Query(value = "delete from UserDictionaryHasWord h where h.word = :word and h.dictionary in :userDictionaries")
-    void deleteByWordAndUser(Word word, List<UserDictionary> userDictionaries);
+    void deleteByWordAndUserDictionaries(Word word, List<UserDictionary> userDictionaries);
 
+    @Modifying
+    @Query(value = "delete from UserDictionaryHasWord h where h.word.id in :wordIds and h.dictionary in :userDictionaries")
+    void deleteByWordIdsAndUserDictionaries(List<Long> wordIds, List<UserDictionary> userDictionaries);
 }

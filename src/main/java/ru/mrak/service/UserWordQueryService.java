@@ -4,8 +4,6 @@ import io.github.jhipster.service.QueryService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,23 +24,21 @@ public class UserWordQueryService extends QueryService<UserDictionaryHasWord> {
 
     private final UserDictionaryHasWordRepository userDictionaryHasWordRepository;
 
-    @Transactional(readOnly = true)
-    public Page<UserDictionaryHasWord> findByCriteria(UserWordCriteria criteria, Pageable pageable) {
-        log.debug("find by criteria: {}, page: {}", criteria, pageable);
-        User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
-        final Specification<UserDictionaryHasWord> specification = createSpecification(criteria, user);
-        return userDictionaryHasWordRepository.findAll(specification, pageable);
-    }
-
-    private Specification<UserDictionaryHasWord> createSpecification(UserWordCriteria criteria, User user) {
+    public Specification<UserDictionaryHasWord> createSpecification(UserWordCriteria criteria, User user) {
+        log.debug("create specification, criteria: {}, user: {}", criteria, user);
         Specification<UserDictionaryHasWord> specification = (root, query, builder) -> builder.equal(root.join(UserDictionaryHasWord_.dictionary, JoinType.INNER).join(UserDictionary_.user).get(User_.ID), user.getId());
 
         if (criteria != null) {
             // Фильтры
             if (criteria.getWordFilter() != null && criteria.getWordFilter().getContains() != null) {
                 Specification<UserDictionaryHasWord> wordContains
-                    = (root, query, builder) -> builder.like(root.join(UserDictionaryHasWord_.word, JoinType.INNER).get(Word_.word), criteria.getWordFilter().getContains());
+                    = (root, query, builder) -> builder.like(root.join(UserDictionaryHasWord_.word, JoinType.INNER).get(Word_.word), "%" + criteria.getWordFilter().getContains() + "%");
                 specification = specification.and(wordContains);
+            }
+            if (criteria.getPartOfSpeech() != null && criteria.getPartOfSpeech().getContains() != null) {
+                Specification<UserDictionaryHasWord> partOfSpeechContains
+                    = (root, query, builder) -> builder.like(root.join(UserDictionaryHasWord_.word, JoinType.INNER).get(Word_.partOfSpeech), criteria.getPartOfSpeech().getContains());
+                specification = specification.and(partOfSpeechContains);
             }
 
             // Сортировки

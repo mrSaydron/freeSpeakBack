@@ -23,6 +23,7 @@ public class UserWordCriteria implements Serializable, Criteria {
     // Фильтры
     private StringFilter wordFilter;
     private StringFilter partOfSpeech;
+    private IntegerFilter boxNumber;
 
     // Сортировки
     private StringRangeFilter startWord;

@@ -4,6 +4,7 @@ import ru.mrak.domain.enumeration.UserWordProgressTypeEnum;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Objects;
 
 @Entity
@@ -30,15 +31,31 @@ public class UserWordProgress implements Serializable {
     @Column(name = "box_number")
     private int boxNumber;
 
+    @Column(name = "fail_last_date")
+    private Instant failLastDate;
+
+    @Column(name = "success_last_date")
+    private Instant successLastDate;
+
     public UserWordProgress() {
     }
 
-    public UserWordProgress(Long id, UserDictionaryHasWord dictionaryWord, UserWordProgressTypeEnum type, int successfulAttempts, int boxNumber) {
+    public UserWordProgress(
+        Long id,
+        UserDictionaryHasWord dictionaryWord,
+        UserWordProgressTypeEnum type,
+        int successfulAttempts,
+        int boxNumber,
+        Instant failLastDate,
+        Instant successLastDate
+    ) {
         this.id = id;
         this.dictionaryWord = dictionaryWord;
         this.type = type;
         this.successfulAttempts = successfulAttempts;
         this.boxNumber = boxNumber;
+        this.failLastDate = failLastDate;
+        this.successLastDate = successLastDate;
     }
 
     public Long getId() {
@@ -81,6 +98,22 @@ public class UserWordProgress implements Serializable {
         this.boxNumber = boxNumber;
     }
 
+    public Instant getFailLastDate() {
+        return failLastDate;
+    }
+
+    public void setFailLastDate(Instant failLastDate) {
+        this.failLastDate = failLastDate;
+    }
+
+    public Instant getSuccessLastDate() {
+        return successLastDate;
+    }
+
+    public void setSuccessLastDate(Instant successLastDate) {
+        this.successLastDate = successLastDate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -98,9 +131,12 @@ public class UserWordProgress implements Serializable {
     public String toString() {
         return "UserWordProgress{" +
             "id=" + id +
+            ", dictionaryWord=" + dictionaryWord +
             ", type=" + type +
             ", successfulAttempts=" + successfulAttempts +
             ", boxNumber=" + boxNumber +
+            ", failLastDate=" + failLastDate +
+            ", successLastDate=" + successLastDate +
             '}';
     }
 }

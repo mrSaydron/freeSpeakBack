@@ -3,6 +3,7 @@ package ru.mrak.service;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,10 +15,13 @@ import ru.mrak.domain.*;
 import ru.mrak.domain.enumeration.UserWordProgressTypeEnum;
 import ru.mrak.repository.UserDictionaryHasWordRepository;
 import ru.mrak.repository.UserDictionaryRepository;
+import ru.mrak.repository.UserWordProgressRepository;
 import ru.mrak.repository.WordRepository;
 import ru.mrak.service.dto.userWord.UserWordCriteria;
 
 import javax.persistence.EntityManager;
+import java.time.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,8 +41,15 @@ public class UserWordService {
     private final UserDictionaryHasWordRepository userDictionaryHasWordRepository;
     private final UserDictionaryRepository userDictionaryRepository;
     private final WordRepository wordRepository;
+    private final UserWordProgressRepository userWordProgressRepository;
 
     private final EntityManager entityManager;
+
+    @Value("${max-user-hearts}")
+    private Integer maxUserHearts;
+
+    @Value("${box-count}")
+    private Integer boxCount;
 
     @Transactional(readOnly = true)
     public Page<UserDictionaryHasWord> findByCriteria(UserWordCriteria criteria, @NonNull Pageable pageable) {
@@ -166,5 +177,81 @@ public class UserWordService {
                 wordProgress.setBoxNumber(0);
             }
         }
+    }
+
+    /**
+     * Возвращает осташиеся жизни пользователя для текущего дня
+     */
+    @Transactional(readOnly = true)
+    public int getLeftHearts() {
+        log.debug("get user left hearts");
+        User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
+        LocalDateTime currentDate = LocalDate.now().atStartOfDay();
+        Instant instant = currentDate.toInstant(ZoneOffset.UTC);
+        int lastHearts = maxUserHearts - userDictionaryHasWordRepository.getCountFailAnswersByUserAndDate(user, instant);
+        return Math.max(lastHearts, 0);
+    }
+
+    /**
+     * Возвращает оставшиеся слова для изучения на текущий день
+     */
+    @Transactional(readOnly = true)
+    public List<UserDictionaryHasWord> getWordsOfDay() {
+        log.debug("get words of day");
+        User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
+        Instant createdDate = user.getCreatedDate();
+        LocalDateTime createDay = LocalDateTime.ofInstant(createdDate, ZoneId.systemDefault()).toLocalDate().atStartOfDay();
+        LocalDate currentDate = LocalDate.now();
+        Duration between = Duration.between(createDay, currentDate.atStartOfDay());
+        long days = between.toDays();
+
+        List<Integer> boxes = new ArrayList<>();
+        boxes.add(1);
+        for (int box = 2; box <= boxCount; box++) {
+            if ((days + Math.pow(2, box - 2)) % Math.pow(2, box - 1) == 0) {
+                boxes.add(box);
+                break;
+            }
+        }
+
+        Instant currentInstant = currentDate.atStartOfDay().toInstant(ZoneOffset.UTC);
+
+        return userDictionaryHasWordRepository.getByUserAndBoxesAndLessFailDateAndLessSuccessDate(user, boxes, currentInstant);
+    }
+
+    /**
+     * Пользователь не верно ответил
+     * Прогресс сбрасывается, слово перемещается в первую коробку
+     * Записывается текущее вреся в поле с неправильным ответом
+     */
+    public void answerFail(Long progressId) {
+        log.debug("user fail answer on word progress");
+        UserWordProgress userWordProgress = userWordProgressRepository.findById(progressId).orElseThrow(RuntimeException::new);
+        userWordProgress.setBoxNumber(1);
+        userWordProgress.setFailLastDate(Instant.now());
+    }
+
+
+    /**
+     * Пользователь ответил правильно
+     * Елси сегодня не было не правильных ответов, то слово пееносится в следующую коробку. Но не больше последней коробки + 1
+     * Записывается текущее время в поле с правильным ответом
+     */
+    public void answerSuccess(Long progressId) {
+        log.debug("user success answer on word progress");
+        UserWordProgress userWordProgress = userWordProgressRepository.findById(progressId).orElseThrow(RuntimeException::new);
+        Instant currentInstant = LocalDate.now().atStartOfDay().toInstant(ZoneOffset.UTC);
+
+        if ((userWordProgress.getFailLastDate() == null || userWordProgress.getFailLastDate().compareTo(currentInstant) < 0)
+            && userWordProgress.getBoxNumber() <= boxCount
+        ) {
+            if (userWordProgress.getBoxNumber() == 0) {
+                userWordProgress.setBoxNumber(1);
+            }
+            userWordProgress.setBoxNumber(userWordProgress.getBoxNumber() + 1);
+        }
+        userWordProgress.setSuccessLastDate(Instant.now());
+
+//        userWordProgressRepository.save(userWordProgress);
     }
 }

@@ -8,7 +8,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.mrak.domain.*;
-import ru.mrak.repository.UserDictionaryHasWordRepository;
 import ru.mrak.service.dto.userWord.UserWordCriteria;
 
 import javax.persistence.criteria.JoinType;
@@ -19,10 +18,6 @@ import javax.persistence.criteria.JoinType;
 public class UserWordQueryService extends QueryService<UserDictionaryHasWord> {
 
     private final Logger log = LoggerFactory.getLogger(UserWordQueryService.class);
-
-    private final UserService userService;
-
-    private final UserDictionaryHasWordRepository userDictionaryHasWordRepository;
 
     public Specification<UserDictionaryHasWord> createSpecification(UserWordCriteria criteria, User user) {
         log.debug("create specification, criteria: {}, user: {}", criteria, user);
@@ -39,6 +34,11 @@ public class UserWordQueryService extends QueryService<UserDictionaryHasWord> {
                 Specification<UserDictionaryHasWord> partOfSpeechContains
                     = (root, query, builder) -> builder.like(root.join(UserDictionaryHasWord_.word, JoinType.INNER).get(Word_.partOfSpeech), criteria.getPartOfSpeech().getContains());
                 specification = specification.and(partOfSpeechContains);
+            }
+            if (criteria.getBoxNumber() != null && criteria.getBoxNumber().getEquals() != null) {
+                Specification<UserDictionaryHasWord> boxNumberEquals
+                    = (root, query, builder) -> builder.equal(root.join(UserDictionaryHasWord_.wordProgresses, JoinType.INNER).get(UserWordProgress_.BOX_NUMBER), criteria.getBoxNumber().getEquals());
+                specification = specification.and(boxNumberEquals);
             }
 
             // Сортировки

@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.mrak.domain.UserDictionaryHasWord;
-import ru.mrak.service.UserWordQueryService;
 import ru.mrak.service.UserWordService;
 import ru.mrak.service.dto.userWord.UserWordCriteria;
 import ru.mrak.service.dto.userWord.UserWordDTO;
@@ -108,5 +107,43 @@ public class UserWordResource {
     public void eraseAllWords(UserWordCriteria criteria) {
         log.debug("REST request to remove words from user dictionary by criteria. Word id: {}", criteria);
         userWordService.eraseAllWords(criteria);
+    }
+
+    /**
+     * Возвращает осташиеся жизни пользователя для текущего дня
+     */
+    @GetMapping("/left-hearts")
+    public Integer getHearts() {
+        log.debug("REST request to hearts user left");
+        return userWordService.getLeftHearts();
+    }
+
+    /**
+     * Возвращает оставшиеся слова для изучения в этот день
+     */
+    @GetMapping("/words-of-day")
+    @Transactional(readOnly = true)
+    public List<UserWordDTO> getWordsOfDay() {
+        log.debug("REST request words of day");
+        List<UserDictionaryHasWord> userWords = userWordService.getWordsOfDay();
+        return userWordMapper.toDto(userWords);
+    }
+
+    /**
+     * Пользователь ответил на слово не верно
+     */
+    @PutMapping("/answer-fail/{progressId}")
+    public void answerFail(@PathVariable Long progressId) {
+        log.debug("REST request word fail, progress id: {}", progressId);
+        userWordService.answerFail(progressId);
+    }
+
+    /**
+     * Пользователь ответил верно
+     */
+    @PutMapping("/answer-success/{progressId}")
+    public void answerSuccess(@PathVariable Long progressId) {
+        log.debug("REST request word success, progress id: {}", progressId);
+        userWordService.answerSuccess(progressId);
     }
 }

@@ -2,6 +2,7 @@ package ru.mrak.service.dto.userWord;
 
 import ru.mrak.domain.enumeration.UserWordProgressTypeEnum;
 
+import java.time.Instant;
 import java.util.Objects;
 
 public class WordProgressDTO {
@@ -10,15 +11,26 @@ public class WordProgressDTO {
     private UserWordProgressTypeEnum type;
     private int successfulAttempts;
     private int boxNumber;
+    private Instant failLastDate;
+    private Instant successLastDate;
 
     public WordProgressDTO() {
     }
 
-    public WordProgressDTO(Long id, UserWordProgressTypeEnum type, int successfulAttempts, int boxNumber) {
+    public WordProgressDTO(
+        Long id,
+        UserWordProgressTypeEnum type,
+        int successfulAttempts,
+        int boxNumber,
+        Instant failLastDate,
+        Instant successLastDate
+    ) {
         this.id = id;
         this.type = type;
         this.successfulAttempts = successfulAttempts;
         this.boxNumber = boxNumber;
+        this.failLastDate = failLastDate;
+        this.successLastDate = successLastDate;
     }
 
     public Long getId() {
@@ -53,6 +65,22 @@ public class WordProgressDTO {
         this.boxNumber = boxNumber;
     }
 
+    public Instant getFailLastDate() {
+        return failLastDate;
+    }
+
+    public void setFailLastDate(Instant failLastDate) {
+        this.failLastDate = failLastDate;
+    }
+
+    public Instant getSuccessLastDate() {
+        return successLastDate;
+    }
+
+    public void setSuccessLastDate(Instant successLastDate) {
+        this.successLastDate = successLastDate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -73,6 +101,9 @@ public class WordProgressDTO {
             ", type=" + type +
             ", successfulAttempts=" + successfulAttempts +
             ", boxNumber=" + boxNumber +
+            ", failLastDate=" + failLastDate +
+            ", successLastDate=" + successLastDate +
             '}';
     }
+
 }

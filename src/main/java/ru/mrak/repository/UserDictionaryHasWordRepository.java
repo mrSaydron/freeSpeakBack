@@ -10,6 +10,7 @@ import ru.mrak.domain.UserDictionary;
 import ru.mrak.domain.UserDictionaryHasWord;
 import ru.mrak.domain.Word;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,10 +28,33 @@ public interface UserDictionaryHasWordRepository extends JpaRepository<UserDicti
     List<UserDictionaryHasWord> findByWordIdsAndUser(List<Long> wordIds, User user);
 
     @Modifying
-    @Query(value = "delete from UserDictionaryHasWord h where h.word = :word and h.dictionary in :userDictionaries")
+    @Query("delete from UserDictionaryHasWord h where h.word = :word and h.dictionary in :userDictionaries")
     void deleteByWordAndUserDictionaries(Word word, List<UserDictionary> userDictionaries);
 
     @Modifying
-    @Query(value = "delete from UserDictionaryHasWord h where h.word.id in :wordIds and h.dictionary in :userDictionaries")
+    @Query("delete from UserDictionaryHasWord h where h.word.id in :wordIds and h.dictionary in :userDictionaries")
     void deleteByWordIdsAndUserDictionaries(List<Long> wordIds, List<UserDictionary> userDictionaries);
+
+    @Query(
+        "select count(h) " +
+            "from UserDictionaryHasWord h " +
+            "join h.wordProgresses p " +
+            "where h.dictionary.user = :user " +
+            "and p.failLastDate >= :currentDay")
+    int getCountFailAnswersByUserAndDate(User user, Instant currentDay);
+
+    @Query(
+        "select h " +
+            "from UserDictionaryHasWord h " +
+            "join h.wordProgresses p " +
+            "where h.dictionary.user = :user " +
+            "and p.boxNumber in :boxes " +
+            "and (p.successLastDate < :current or p.successLastDate is null) " +
+            "and (p.failLastDate < :current or p.failLastDate is null)"
+    )
+    List<UserDictionaryHasWord> getByUserAndBoxesAndLessFailDateAndLessSuccessDate(
+        User user,
+        List<Integer> boxes,
+        Instant current
+    );
 }

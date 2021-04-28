@@ -78,7 +78,7 @@ public class UserWordResource {
      */
     @PutMapping("/remove-all-words")
     public void removeAllWords(UserWordCriteria criteria) {
-        log.debug("REST request to remove words from user dictionary by criteria. Word id: {}", criteria);
+        log.debug("REST request to remove words from user dictionary by criteria. Criteria: {}", criteria);
         userWordService.removeAllWords(criteria);
     }
 
@@ -105,8 +105,35 @@ public class UserWordResource {
      */
     @PutMapping("/erase-all-words")
     public void eraseAllWords(UserWordCriteria criteria) {
-        log.debug("REST request to remove words from user dictionary by criteria. Word id: {}", criteria);
+        log.debug("REST request to remove words from user dictionary by criteria. Criteria: {}", criteria);
         userWordService.eraseAllWords(criteria);
+    }
+
+    /**
+     * Отмечает слово выученным
+     */
+    @PutMapping("/know-word/{wordId}")
+    public void knowWord(@PathVariable Long wordId) {
+        log.debug("REST request to move word to know box. Word id: {}", wordId);
+        userWordService.knowWord(wordId);
+    }
+
+    /**
+     * Отмечает слова выученнми
+     */
+    @PutMapping("/know-words")
+    public void knowWords(@RequestBody List<Long> wordIds) {
+        log.debug("REST request to move words to know box. Word ids: {}", wordIds);
+        userWordService.knowWords(wordIds);
+    }
+
+    /**
+     * Отмечает слова выученнвми по запросу
+     */
+    @PutMapping("/know-all-words")
+    public void knowAllWords(UserWordCriteria criteria) {
+        log.debug("REST request to nome words to know box by criteria. Criteria: {}", criteria);
+        userWordService.knowAllWords(criteria);
     }
 
     /**

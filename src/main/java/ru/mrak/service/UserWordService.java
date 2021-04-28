@@ -51,6 +51,12 @@ public class UserWordService {
     @Value("${box-count}")
     private Integer boxCount;
 
+    @Value("#{${box-count} + 1}")
+    private Integer knowBoxNumber;
+
+    private static final Integer PRELIMINARY_BOX_NUMBER = 0;
+    private static final Integer START_BOX_NUMBER = 1;
+
     @Transactional(readOnly = true)
     public Page<UserDictionaryHasWord> findByCriteria(UserWordCriteria criteria, @NonNull Pageable pageable) {
         log.debug("find by criteria: {}, page: {}", criteria, pageable);
@@ -147,7 +153,7 @@ public class UserWordService {
         UserDictionaryHasWord userDictionaryHasWord = userDictionaryHasWordRepository.findByWordAndUser(wordRepository.getOne(wordId), user)
             .orElseThrow(RuntimeException::new);
         for (UserWordProgress wordProgress : userDictionaryHasWord.getWordProgresses()) {
-            wordProgress.setBoxNumber(0);
+            wordProgress.setBoxNumber(PRELIMINARY_BOX_NUMBER);
         }
     }
 
@@ -160,7 +166,7 @@ public class UserWordService {
         List<UserDictionaryHasWord> userDictionaryHasWords = userDictionaryHasWordRepository.findByWordIdsAndUser(wordIds, user);
         for (UserDictionaryHasWord userDictionaryHasWord : userDictionaryHasWords) {
             for (UserWordProgress wordProgress : userDictionaryHasWord.getWordProgresses()) {
-                wordProgress.setBoxNumber(0);
+                wordProgress.setBoxNumber(PRELIMINARY_BOX_NUMBER);
             }
         }
     }
@@ -174,7 +180,7 @@ public class UserWordService {
         List<UserDictionaryHasWord> userDictionaryHasWords = findByCriteria(criteria, pageRequest).getContent();
         for (UserDictionaryHasWord userDictionaryHasWord : userDictionaryHasWords) {
             for (UserWordProgress wordProgress : userDictionaryHasWord.getWordProgresses()) {
-                wordProgress.setBoxNumber(0);
+                wordProgress.setBoxNumber(PRELIMINARY_BOX_NUMBER);
             }
         }
     }
@@ -227,7 +233,7 @@ public class UserWordService {
     public void answerFail(Long progressId) {
         log.debug("user fail answer on word progress");
         UserWordProgress userWordProgress = userWordProgressRepository.findById(progressId).orElseThrow(RuntimeException::new);
-        userWordProgress.setBoxNumber(1);
+        userWordProgress.setBoxNumber(START_BOX_NUMBER);
         userWordProgress.setFailLastDate(Instant.now());
     }
 
@@ -245,13 +251,52 @@ public class UserWordService {
         if ((userWordProgress.getFailLastDate() == null || userWordProgress.getFailLastDate().compareTo(currentInstant) < 0)
             && userWordProgress.getBoxNumber() <= boxCount
         ) {
-            if (userWordProgress.getBoxNumber() == 0) {
-                userWordProgress.setBoxNumber(1);
+            if (userWordProgress.getBoxNumber() == PRELIMINARY_BOX_NUMBER) {
+                userWordProgress.setBoxNumber(START_BOX_NUMBER);
             }
             userWordProgress.setBoxNumber(userWordProgress.getBoxNumber() + 1);
         }
         userWordProgress.setSuccessLastDate(Instant.now());
+    }
 
-//        userWordProgressRepository.save(userWordProgress);
+    /**
+     * Отмечает слово выученным
+     */
+    public void knowWord(Long wordId) {
+        log.debug("move word to know box. Word id: {}", wordId);
+        User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
+        UserDictionaryHasWord userDictionaryHasWord = userDictionaryHasWordRepository.findByWordAndUser(wordRepository.getOne(wordId), user)
+            .orElseThrow(RuntimeException::new);
+        for (UserWordProgress wordProgress : userDictionaryHasWord.getWordProgresses()) {
+            wordProgress.setBoxNumber(knowBoxNumber);
+        }
+    }
+
+    /**
+     * Отмечает слова выученными
+     */
+    public void knowWords(List<Long> wordIds) {
+        log.debug("move words to know box. Word ids: {}", wordIds);
+        User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
+        List<UserDictionaryHasWord> userDictionaryHasWords = userDictionaryHasWordRepository.findByWordIdsAndUser(wordIds, user);
+        for (UserDictionaryHasWord userDictionaryHasWord : userDictionaryHasWords) {
+            for (UserWordProgress wordProgress : userDictionaryHasWord.getWordProgresses()) {
+                wordProgress.setBoxNumber(knowBoxNumber);
+            }
+        }
+    }
+
+    /**
+     * Отмечает слова выученными по условию
+     */
+    public void knowAllWords(UserWordCriteria criteria) {
+        log.debug("move words to know box by criteria: {}", criteria);
+        PageRequest pageRequest = PageRequest.of(0, Integer.MAX_VALUE);
+        List<UserDictionaryHasWord> userDictionaryHasWords = findByCriteria(criteria, pageRequest).getContent();
+        for (UserDictionaryHasWord userDictionaryHasWord : userDictionaryHasWords) {
+            for (UserWordProgress wordProgress : userDictionaryHasWord.getWordProgresses()) {
+                wordProgress.setBoxNumber(knowBoxNumber);
+            }
+        }
     }
 }

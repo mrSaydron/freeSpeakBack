@@ -35,4 +35,5 @@
     <include file="config/liquibase/changelog/20210328230900_T-26_add_service_data_table.sql" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210404205300_T-31_add_word_to_dictionary.sql" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210420230200_T-29_add_answer_date_to_word_process.sql" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210501231400_T-47_add_view_book_user_know.sql" relativeToChangelogFile="false"/>
 </databaseChangeLog>

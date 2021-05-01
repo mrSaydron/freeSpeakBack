@@ -8,6 +8,8 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -56,6 +58,9 @@ public class Book implements Serializable {
                joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
                inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private Set<User> users = new HashSet<>();
+
+    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
+    private Collection<BookUserKnow> userKnows = new ArrayList<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -184,6 +189,11 @@ public class Book implements Serializable {
         this.users = users;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+
+
+    public Collection<BookUserKnow> getUserKnows() {
+        return userKnows;
+    }
 
     @Override
     public boolean equals(Object o) {

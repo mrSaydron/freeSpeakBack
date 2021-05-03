@@ -31,6 +31,3 @@ alter table book drop key ux_book_dictionary_id;
 
 -- changeset karmanov:T-23-9:20210328193200
 alter table book drop column book_dictionary_id;
-
--- changeset karmanov:T-23-10:20210328193200
-alter table book_dictionary modify book_id bigint not null comment 'идентификатор книги';

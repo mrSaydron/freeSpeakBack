@@ -59,8 +59,8 @@ public class Book implements Serializable {
                inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private Set<User> users = new HashSet<>();
 
-    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
-    private Collection<BookUserKnow> userKnows = new ArrayList<>();
+//    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
+//    private Collection<BookUserKnow> userKnows = new ArrayList<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -191,9 +191,9 @@ public class Book implements Serializable {
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
 
-    public Collection<BookUserKnow> getUserKnows() {
-        return userKnows;
-    }
+//    public Collection<BookUserKnow> getUserKnows() {
+//        return userKnows;
+//    }
 
     @Override
     public boolean equals(Object o) {

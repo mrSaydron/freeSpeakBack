@@ -47,9 +47,9 @@ public interface WordRepository extends JpaRepository<Word, Long>, JpaSpecificat
         "where 1=1", nativeQuery = true)
     void updateTotalAmountByBookId(@Param("bookId") Long bookId);
 
-    @Query(value = "select sum(bdhw.count)\n" +
-        "from book_dictionary_has_word bdhw\n" +
-        "join book_dictionary bd on bdhw.book_dictionary_id = bd.id\n" +
+    @Query(value = "select sum(bdhw.count) " +
+        "from book_dictionary_has_word bdhw " +
+        "join book_dictionary bd on bdhw.book_dictionary_id = bd.id " +
         "where bd.book_id = :bookId", nativeQuery = true)
     long getWordsCountByBook(@Param("bookId") Long bookId);
 }

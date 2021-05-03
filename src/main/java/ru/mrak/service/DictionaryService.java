@@ -112,33 +112,24 @@ public class DictionaryService {
                 .map(TokenLight::new)
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
-            List<BookDictionaryHasWord> dictionaryHasWords = tokenCountMap
-                .entrySet()
-                .stream()
-                .map(entry -> {
-                    CoreLabel token = entry.getKey().token;
-                    Long count = entry.getValue();
-
-                    Optional<Word> optionalWord = wordRepository.findByWord(token.lemma());
-                    Word word = optionalWord.orElseGet(() -> wordService.create(token));
+            tokenCountMap.forEach((tokenLight, count) -> {
+                    Optional<Word> optionalWord = wordRepository.findByWord(tokenLight.token.lemma());
+                    Word word = optionalWord.orElseGet(() -> wordService.create(tokenLight.token));
 
                     BookDictionaryHasWord dictionaryWord = new BookDictionaryHasWord();
                     dictionaryWord.setCount(count.intValue());
                     dictionaryWord.setWord(word);
                     dictionaryWord.setDictionary(dictionary);
-
-                    return dictionaryWord;
-                })
-                .collect(Collectors.toList());
+                    dictionary.getDictionaryWords().add(dictionaryWord);
+                });
 
             wordRepository.flush();
-            dictionaryHasWordRepository.saveAll(dictionaryHasWords);
-
+            dictionaryRepository.save(dictionary);
+            dictionaryHasWordRepository.saveAll(dictionary.getDictionaryWords());
         } catch (Exception e) {
-            System.out.println(e);
+            throw new RuntimeException(e);
         }
 
-        dictionaryRepository.save(dictionary);
         return dictionary;
     }
 

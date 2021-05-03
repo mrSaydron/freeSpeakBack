@@ -26,10 +26,12 @@ public class BookDictionaryHasWord implements Serializable {
     private Integer count;
 
     @ManyToOne
+    @JoinColumn(name = "book_dictionary_id")
     @JsonIgnoreProperties(value = "dictionaryHasWords", allowSetters = true)
     private BookDictionary dictionary;
 
     @ManyToOne
+    @JoinColumn(name = "word_id")
     @JsonIgnoreProperties(value = "dictionaryHasWords", allowSetters = true)
     private Word word;
 

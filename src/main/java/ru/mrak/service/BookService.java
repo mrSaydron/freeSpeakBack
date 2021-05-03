@@ -59,8 +59,10 @@ public class BookService {
 
         BookDictionary dictionary = dictionaryService.createByText(book.getText(), "eng", "ru");
         book.setDictionary(dictionary);
+        dictionary.setBook(book);
 
         book = bookRepository.save(book);
+        entityManager.flush();
 
         if (book.getPublicBook()) {
             wordService.updateTotalAmount(book);

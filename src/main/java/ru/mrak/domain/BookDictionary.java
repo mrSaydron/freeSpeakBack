@@ -63,6 +63,14 @@ public class BookDictionary implements Serializable {
         this.targetLanguage = targetLanguage;
     }
 
+    public Book getBook() {
+        return book;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
+    }
+
     public List<BookDictionaryHasWord> getDictionaryWords() {
         return dictionaryWords;
     }

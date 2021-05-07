@@ -94,6 +94,9 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Collection<BookUser> bookUserList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private Collection<UserDictionary> userDictionaries = new ArrayList<>();
+
     public Long getId() {
         return id;
     }
@@ -205,6 +208,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     public void setBookUserList(Collection<BookUser> bookUserList) {
         this.bookUserList = bookUserList;
+    }
+
+    public Collection<UserDictionary> getUserDictionaries() {
+        return userDictionaries;
+    }
+
+    public void setUserDictionaries(Collection<UserDictionary> userDictionaries) {
+        this.userDictionaries = userDictionaries;
     }
 
     @Override

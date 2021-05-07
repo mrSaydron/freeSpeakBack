@@ -1,5 +1,6 @@
 package ru.mrak.web.rest;
 
+import org.springframework.transaction.annotation.Transactional;
 import ru.mrak.service.BookService;
 import ru.mrak.web.rest.errors.BadRequestAlertException;
 import ru.mrak.service.dto.BookDTO;
@@ -96,6 +97,7 @@ public class BookResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of books in body.
      */
     @GetMapping
+    @Transactional(readOnly = true)
     public ResponseEntity<List<BookDTO>> getBooks(BookCriteria criteria, Pageable pageable) {
         log.debug("REST request to get library Books by criteria: {}", criteria);
         Page<BookDTO> page = bookQueryService.findByCriteria(criteria, pageable);

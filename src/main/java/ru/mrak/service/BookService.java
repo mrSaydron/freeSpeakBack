@@ -127,7 +127,7 @@ public class BookService {
         log.debug("Request to update last open book date: {}", id);
 
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
-        entityManager.merge(user);
+        entityManager.merge(user);// похоже что это лишнее
 
         BookUser bookUser = bookUserRepository.findById(new BookUserId(user.getId(), id))
             .orElseGet(() -> new BookUser(user.getId(), id));

@@ -9,6 +9,7 @@ import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
 import lombok.Getter;
 import lombok.Setter;
+import ru.mrak.web.rest.filter.StringRangeFilter;
 
 /**
  * Criteria class for the {@link ru.mrak.domain.Book} entity. This class is used
@@ -25,6 +26,7 @@ public class BookCriteria implements Serializable, Criteria {
 
     private static final long serialVersionUID = 1L;
 
+    // Фильтры
     private LongFilter id;
     private StringFilter title;
     private StringFilter author;
@@ -34,8 +36,17 @@ public class BookCriteria implements Serializable, Criteria {
     private LongFilter dictionaryId;
     private LongFilter loadedUserId;
     private LongFilter userId;
-    private StringFilter titleAuthor; // Строка для поиска по названию и автору
-    private BooleanFilter orPublicBook; // Поиск по книгам пользователя или публичным книгам
+
+    private StringFilter titleAuthorFilter; // Строка для поиска по названию и автору
+    private BooleanFilter orPublicBookFilter; // Поиск по книгам пользователя или публичным книгам
+    private BooleanFilter know100Filter;
+    private BooleanFilter know90Filter;
+    private BooleanFilter know50Filter;
+    private BooleanFilter know0Filter;
+
+    // Сортировки
+    private StringRangeFilter startTitle;
+    private StringRangeFilter startAuthor;
 
     public BookCriteria() {
     }
@@ -50,8 +61,17 @@ public class BookCriteria implements Serializable, Criteria {
         this.dictionaryId = other.dictionaryId == null ? null : other.dictionaryId.copy();
         this.loadedUserId = other.loadedUserId == null ? null : other.loadedUserId.copy();
         this.userId = other.userId == null ? null : other.userId.copy();
-        this.titleAuthor = other.titleAuthor == null ? null : other.titleAuthor.copy();
-        this.orPublicBook = other.orPublicBook == null ? null : other.orPublicBook.copy();
+
+        this.titleAuthorFilter = other.titleAuthorFilter == null ? null : other.titleAuthorFilter.copy();
+        this.orPublicBookFilter = other.orPublicBookFilter == null ? null : other.orPublicBookFilter.copy();
+        this.know100Filter = other.know100Filter == null ? null : other.know100Filter.copy();
+        this.know90Filter = other.know90Filter == null ? null : other.know90Filter.copy();
+        this.know50Filter = other.know50Filter == null ? null : other.know50Filter.copy();
+        this.know0Filter = other.know0Filter == null ? null : other.know0Filter.copy();
+
+        this.startTitle = other.startTitle == null ? null : other.startTitle.copy();
+        this.startAuthor = other.startAuthor == null ? null : other.startAuthor.copy();
+
     }
 
     @Override
@@ -78,8 +98,14 @@ public class BookCriteria implements Serializable, Criteria {
                 Objects.equals(dictionaryId, that.dictionaryId) &&
                 Objects.equals(loadedUserId, that.loadedUserId) &&
                 Objects.equals(userId, that.userId) &&
-                Objects.equals(titleAuthor, that.titleAuthor) &&
-                Objects.equals(orPublicBook, that.orPublicBook);
+                Objects.equals(titleAuthorFilter, that.titleAuthorFilter) &&
+                Objects.equals(orPublicBookFilter, that.orPublicBookFilter) &&
+                Objects.equals(know100Filter, that.know100Filter) &&
+                Objects.equals(know90Filter, that.know90Filter) &&
+                Objects.equals(know50Filter, that.know50Filter) &&
+                Objects.equals(know0Filter, that.know0Filter) &&
+                Objects.equals(startTitle, that.startTitle) &&
+                Objects.equals(startAuthor, that.startAuthor);
     }
 
     @Override
@@ -94,8 +120,14 @@ public class BookCriteria implements Serializable, Criteria {
             dictionaryId,
             loadedUserId,
             userId,
-            titleAuthor,
-            orPublicBook
+            titleAuthorFilter,
+            orPublicBookFilter,
+            know100Filter,
+            know90Filter,
+            know50Filter,
+            know0Filter,
+            startTitle,
+            startAuthor
         );
     }
 
@@ -112,8 +144,14 @@ public class BookCriteria implements Serializable, Criteria {
                 (dictionaryId != null ? "dictionaryId=" + dictionaryId + ", " : "") +
                 (loadedUserId != null ? "loadedUserId=" + loadedUserId + ", " : "") +
                 (userId != null ? "userId=" + userId + ", " : "") +
-                (titleAuthor != null ? "titleAuthor=" + titleAuthor + ", " : "") +
-                (orPublicBook != null ? "orPublicBook=" + orPublicBook + ", " : "") +
+                (titleAuthorFilter != null ? "titleAuthor=" + titleAuthorFilter + ", " : "") +
+                (orPublicBookFilter != null ? "orPublicBook=" + orPublicBookFilter + ", " : "") +
+                (know100Filter != null ? "orPublicBook=" + know100Filter + ", " : "") +
+                (know90Filter != null ? "orPublicBook=" + know90Filter + ", " : "") +
+                (know50Filter != null ? "orPublicBook=" + know50Filter + ", " : "") +
+                (know0Filter != null ? "orPublicBook=" + know0Filter + ", " : "") +
+                (startTitle != null ? "orPublicBook=" + startTitle + ", " : "") +
+                (startAuthor != null ? "orPublicBook=" + startAuthor + ", " : "") +
             "}";
     }
 

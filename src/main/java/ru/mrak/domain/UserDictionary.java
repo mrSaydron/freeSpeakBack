@@ -102,7 +102,7 @@ public class UserDictionary implements Serializable {
     public String toString() {
         return "UserDictionary{" +
             "id=" + id +
-            ", user=" + user +
+            ", userId=" + user.getId() +
             ", baseLanguage='" + baseLanguage + '\'' +
             ", targetLanguage='" + targetLanguage + '\'' +
             ", dictionaryWords=" + dictionaryWords +

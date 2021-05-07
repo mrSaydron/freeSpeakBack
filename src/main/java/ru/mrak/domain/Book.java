@@ -59,8 +59,8 @@ public class Book implements Serializable {
                inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private Set<User> users = new HashSet<>();
 
-//    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
-//    private Collection<BookUserKnow> userKnows = new ArrayList<>();
+    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
+    private Collection<BookUserKnow> userKnows = new ArrayList<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {

@@ -9,14 +9,13 @@ import java.util.Set;
  * A DTO for the {@link ru.mrak.domain.Book} entity.
  */
 public class BookDTO implements Serializable {
-    
+
     private Long id;
 
     @NotNull
     private String title;
 
     private String author;
-
     private String source;
 
     @NotNull
@@ -25,14 +24,12 @@ public class BookDTO implements Serializable {
     @NotNull
     private Boolean publicBook;
 
-
     private Long dictionaryId;
-
     private Long loadedUserId;
-
     private String loadedUserLogin;
     private Set<UserDTO> users = new HashSet<>();
-    
+    private Double know;
+
     public Long getId() {
         return id;
     }
@@ -113,6 +110,18 @@ public class BookDTO implements Serializable {
         this.users = users;
     }
 
+    public Boolean getPublicBook() {
+        return publicBook;
+    }
+
+    public Double getKnow() {
+        return know;
+    }
+
+    public void setKnow(Double know) {
+        this.know = know;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -144,6 +153,8 @@ public class BookDTO implements Serializable {
             ", loadedUserId=" + getLoadedUserId() +
             ", loadedUserLogin='" + getLoadedUserLogin() + "'" +
             ", users='" + getUsers() + "'" +
+            ", publicBook='" + getPublicBook() + "'" +
+            ", know='" + getKnow() + "'" +
             "}";
     }
 }

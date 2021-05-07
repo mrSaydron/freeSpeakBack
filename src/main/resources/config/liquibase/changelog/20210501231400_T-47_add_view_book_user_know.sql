@@ -2,7 +2,7 @@
 
 -- changeset karmanov:T-47-1:20210501231400
 create view book_user_know as
-select ujb.user_id, ujb.book_id, bd.id as book_dictionary_id, sum(bdhw.count) / wcnt.cnt as know
+select ujb.user_id, ujb.book_id, bd.id as book_dictionary_id, ifnull(sum(bdhw.count) / wcnt.cnt, 0) as know
 from (
          select u.id user_id, b.id book_id
          from jhi_user u, book b

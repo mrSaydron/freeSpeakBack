@@ -113,15 +113,15 @@ public class DictionaryService {
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
             tokenCountMap.forEach((tokenLight, count) -> {
-                    Optional<Word> optionalWord = wordRepository.findByWord(tokenLight.token.lemma());
-                    Word word = optionalWord.orElseGet(() -> wordService.create(tokenLight.token));
+                Optional<Word> optionalWord = wordRepository.findByWordAndPartOfSpeech(tokenLight.token.lemma(), tokenLight.token.tag());
+                Word word = optionalWord.orElseGet(() -> wordService.create(tokenLight.token));
 
-                    BookDictionaryHasWord dictionaryWord = new BookDictionaryHasWord();
-                    dictionaryWord.setCount(count.intValue());
-                    dictionaryWord.setWord(word);
-                    dictionaryWord.setDictionary(dictionary);
-                    dictionary.getDictionaryWords().add(dictionaryWord);
-                });
+                BookDictionaryHasWord dictionaryWord = new BookDictionaryHasWord();
+                dictionaryWord.setCount(count.intValue());
+                dictionaryWord.setWord(word);
+                dictionaryWord.setDictionary(dictionary);
+                dictionary.getDictionaryWords().add(dictionaryWord);
+            });
 
             wordRepository.flush();
             dictionaryRepository.save(dictionary);

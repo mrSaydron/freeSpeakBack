@@ -41,7 +41,7 @@ public enum TagEnum {
     UH("UH", "interjection", "ah, oops"), // Междометие
     VB("VB", "verb base form", "eat"), // Глагол, базовая форма
     VBD("VBD", "verb past tense", "ate"), // Глагол в прошедшей форме
-    VBG("VBG", "verb gerund", "eating"), // Глагор, герундий
+    VBG("VBG", "verb gerund", "eating"), // Глагол, герундий
     VBN("VBN", "verb past participle", "eaten"), // Глагол причастие в прошедшем времени
     VBP("VBP", "verb non-3sg pres", "eat"), // Глагол ???
     VBZ("VBZ", "verb 3sg pers", "eats"), // Глагол ???

@@ -1,6 +1,7 @@
 package ru.mrak;
 
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.scheduling.annotation.EnableAsync;
 import ru.mrak.config.ApplicationProperties;
 
 import io.github.jhipster.config.DefaultProfileUtil;
@@ -14,7 +15,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.env.Environment;
-import ru.mrak.service.TokenizerService;
+import ru.mrak.service.tarnslate.TranslateService;
+import ru.mrak.service.tarnslate.YandexTranslateService;
 
 import javax.annotation.PostConstruct;
 import java.net.InetAddress;
@@ -24,6 +26,7 @@ import java.util.Collection;
 
 @SpringBootApplication
 @EnableConfigurationProperties({LiquibaseProperties.class, ApplicationProperties.class})
+@EnableAsync
 public class LibFourApp {
 
     private static final Logger log = LoggerFactory.getLogger(LibFourApp.class);
@@ -66,8 +69,15 @@ public class LibFourApp {
         Environment env = applicationContext.getEnvironment();
         logApplicationStartup(env);
 
-//        TokenizerService tokenizerService = applicationContext.getBean(TokenizerService.class);
-//        tokenizerService.test();
+//        applicationContext.getBean(TranslateService.class).updateAllWords();
+
+        boolean ret = true;
+        while (ret) {
+            ret = ((YandexTranslateService) applicationContext.getBean(TranslateService.class)).updateNoTranslateWords(50);
+        }
+
+//        ((YandexTranslateService) applicationContext.getBean(TranslateService.class)).test("say");
+
     }
 
     private static void logApplicationStartup(Environment env) {

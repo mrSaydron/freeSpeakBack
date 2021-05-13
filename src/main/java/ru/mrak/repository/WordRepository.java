@@ -6,6 +6,7 @@ import ru.mrak.domain.Word;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -16,6 +17,8 @@ import java.util.Optional;
 public interface WordRepository extends JpaRepository<Word, Long>, JpaSpecificationExecutor<Word> {
 
     Optional<Word> findByWord(String word);
+
+    Optional<Word> findByWordAndPartOfSpeech(String word, String partOfSpeech);
 
     @Query(value = "update word " +
         "set word.total_amount = (" +
@@ -52,4 +55,9 @@ public interface WordRepository extends JpaRepository<Word, Long>, JpaSpecificat
         "join book_dictionary bd on bdhw.book_dictionary_id = bd.id " +
         "where bd.book_id = :bookId", nativeQuery = true)
     long getWordsCountByBook(@Param("bookId") Long bookId);
+
+    List<Word> findAllByTranslateIsNull();
+
+    @Query(value = "select * from word w where w.translate is null limit :count", nativeQuery = true)
+    List<Word> findByTranslateIsNull(@Param("count") int count);
 }

@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.mrak.service.s3.MinioS3Service;
+import ru.mrak.util.FileUtil;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -25,7 +27,9 @@ public class FileService {
     public String savePictureFile(MultipartFile file) {
         log.debug("Save picture file: {}", file.getName());
         String bucket = s3BucketPrefix + "picture";
-//        String fileName = UUID.randomUUID() +
+        Optional<String> anExtends = FileUtil.getExtends(file.getName());
+        String fileName = UUID.randomUUID() + anExtends.map(ext -> "." + ext).orElse("");
+
         return null;
     }
 }

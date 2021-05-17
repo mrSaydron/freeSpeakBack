@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.function.Function;
 
+/**
+ * Класс обертка над входным потоков. Проверяет входной поток, если потк не проходит проверку возвращает -1 при чтении
+ */
 public class CheckingInputStream extends InputStream {
     private byte[] buffer = new byte[1024];
     private int bufLen = 0;

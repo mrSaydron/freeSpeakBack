@@ -287,6 +287,7 @@ dependencies {
 //    implementation 'edu.stanford.nlp:stanford-corenlp:4.2.0:models-english'
     implementation 'edu.stanford.nlp:stanford-corenlp:4.2.0:javadoc'
     implementation 'edu.stanford.nlp:stanford-corenlp:4.2.0:sources'
+    implementation 'io.minio:minio:8.2.1'
 }
 
 if (project.hasProperty("gae")) {

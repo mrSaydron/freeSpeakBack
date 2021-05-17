@@ -71,12 +71,12 @@ public class LibFourApp {
 
 //        applicationContext.getBean(TranslateService.class).updateAllWords();
 
-        boolean ret = true;
-        while (ret) {
-            ret = ((YandexTranslateService) applicationContext.getBean(TranslateService.class)).updateNoTranslateWords(50);
-        }
+//        boolean ret = true;
+//        while (ret) {
+//            ret = ((YandexTranslateService) applicationContext.getBean(TranslateService.class)).updateNoTranslateWords(50);
+//        }
 
-//        ((YandexTranslateService) applicationContext.getBean(TranslateService.class)).test("say");
+//        ((YandexTranslateService) applicationContext.getBean(TranslateService.class)).test("read");
 
     }
 

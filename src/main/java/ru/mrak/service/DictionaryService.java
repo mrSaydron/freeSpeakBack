@@ -16,7 +16,9 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.mrak.service.tarnslate.TranslateService;
 
+import javax.persistence.EntityManager;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -31,14 +33,17 @@ public class DictionaryService {
 
     private final Logger log = LoggerFactory.getLogger(DictionaryService.class);
 
+    private final DictionaryMapper dictionaryMapper;
+
     private final TokenizerService tokenizerService;
     private final WordService wordService;
+    private final TranslateService translateService;
 
     private final DictionaryRepository dictionaryRepository;
     private final DictionaryHasWordRepository dictionaryHasWordRepository;
     private final WordRepository wordRepository;
 
-    private final DictionaryMapper dictionaryMapper;
+    private final EntityManager entityManager;
 
     /**
      * Save a dictionary.
@@ -112,9 +117,14 @@ public class DictionaryService {
                 .map(TokenLight::new)
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
+            List<Word> newWords = new ArrayList<>();
             tokenCountMap.forEach((tokenLight, count) -> {
                 Optional<Word> optionalWord = wordRepository.findByWordAndPartOfSpeech(tokenLight.token.lemma(), tokenLight.token.tag());
-                Word word = optionalWord.orElseGet(() -> wordService.create(tokenLight.token));
+                Word word = optionalWord.orElseGet(() -> {
+                    Word newWord = wordService.create(tokenLight.token);
+                    newWords.add(newWord);
+                    return newWord;
+                });
 
                 BookDictionaryHasWord dictionaryWord = new BookDictionaryHasWord();
                 dictionaryWord.setCount(count.intValue());
@@ -126,10 +136,14 @@ public class DictionaryService {
             wordRepository.flush();
             dictionaryRepository.save(dictionary);
             dictionaryHasWordRepository.saveAll(dictionary.getDictionaryWords());
+            entityManager.flush();
+
+            translateService.updateWords(newWords);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
+        log.debug("CreateByText finish");
         return dictionary;
     }
 

@@ -11,7 +11,6 @@ public class CheckingInputStream extends InputStream {
     private byte[] buffer = new byte[1024];
     private int bufLen = 0;
     private int bufIndex = 0;
-    private boolean isContentValid = false;
     private boolean checked = false;
     private InputStream wrapped;
     private Function<CheckingInputStream, Boolean> checkStream;
@@ -23,19 +22,18 @@ public class CheckingInputStream extends InputStream {
 
     @Override
     public int read() throws IOException {
-        bufLen = wrapped.read(buffer);
         if (!checked) {
-            isContentValid = checkStream.apply(this);
-        }
-        int result = -1;
-        if (isContentValid) {
-            if (bufIndex < bufLen) {
-                result = buffer[bufIndex++] & 0xFF;
-            } else {
-                result = wrapped.read();
+            checked = true;
+            bufLen = wrapped.read(buffer);
+            if(!checkStream.apply(this)) {
+                return -1;
             }
         }
-        return result;
+        if (bufIndex < bufLen) {
+            return buffer[bufIndex++] & 0xFF;
+        } else {
+            return wrapped.read();
+        }
     }
 
     public byte[] getBuffer() {

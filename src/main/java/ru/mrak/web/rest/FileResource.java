@@ -4,10 +4,8 @@ import io.minio.errors.*;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.mrak.service.FileService;
 
@@ -24,10 +22,16 @@ public class FileResource {
 
     private final FileService fileService;
 
-    @PostMapping
+    @PostMapping("/picture")
     public String saveFile(@RequestParam("file") MultipartFile file) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         log.debug("Rest request for save file");
         return fileService.savePictureFile(file);
+    }
+
+    @GetMapping("/url")
+    public String getFileUrl(@RequestParam("file-name") String fileName) {
+        log.debug("REST request url for file name: {}", fileName);
+        return fileService.getUrl(fileName);
     }
 
 }

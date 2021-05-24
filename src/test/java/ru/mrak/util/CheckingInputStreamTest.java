@@ -3,12 +3,11 @@ package ru.mrak.util;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 class CheckingInputStreamTest {
 
@@ -16,15 +15,17 @@ class CheckingInputStreamTest {
     public void validTest() throws IOException {
         Function<CheckingInputStream, Boolean> checkFunction = stream -> {
             String s = new String(stream.getBuffer(), Charset.defaultCharset());
-            return s.substring(0, 4).equals("test");
+            return s.substring(0, 4).equals("abcd");
         };
 
-        String test = "test";
+        String test = "abcdefghijklmnopqrstuvwxyz";
         InputStream stream = new ByteArrayInputStream(test.getBytes(StandardCharsets.UTF_8));
         CheckingInputStream checkingInputStream = new CheckingInputStream(stream, checkFunction);
-        int actual = checkingInputStream.read();
+        String actual = (new BufferedReader(new InputStreamReader(checkingInputStream, StandardCharsets.UTF_8)))
+            .lines()
+            .collect(Collectors.joining());
 
-        Assertions.assertThat(actual).isGreaterThanOrEqualTo(0);
+        Assertions.assertThat(actual).isEqualTo(test);
     }
 
     @Test

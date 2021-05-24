@@ -52,6 +52,9 @@ public class Book implements Serializable {
     @JsonIgnoreProperties(value = "books", allowSetters = true)
     private User loadedUser;
 
+    @Column(name = "picture_name")
+    private String pictureName;
+
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JoinTable(name = "book_user",
@@ -188,12 +191,14 @@ public class Book implements Serializable {
     public void setUsers(Set<User> users) {
         this.users = users;
     }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
+    public String getPictureName() {
+        return pictureName;
+    }
 
-//    public Collection<BookUserKnow> getUserKnows() {
-//        return userKnows;
-//    }
+    public void setPictureName(String pictureName) {
+        this.pictureName = pictureName;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -221,6 +226,7 @@ public class Book implements Serializable {
             ", source='" + getSource() + "'" +
             ", text='" + getText() + "'" +
             ", publicBook='" + isPublicBook() + "'" +
+            ", pictureName='" + getPictureName() + "'" +
             "}";
     }
 }

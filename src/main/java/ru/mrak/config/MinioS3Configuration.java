@@ -11,10 +11,10 @@ public class MinioS3Configuration {
     @Value("${s3-endpoint}")
     public String s3Endpoint;
 
-    @Value("${s3-access-key")
+    @Value("${s3-access-key}")
     public String accessKey;
 
-    @Value("${s3-secret-key")
+    @Value("${s3-secret-key}")
     public String secretKey;
 
     @Bean

@@ -26,7 +26,6 @@ import java.util.Collection;
 
 @SpringBootApplication
 @EnableConfigurationProperties({LiquibaseProperties.class, ApplicationProperties.class})
-@EnableAsync
 public class LibFourApp {
 
     private static final Logger log = LoggerFactory.getLogger(LibFourApp.class);
@@ -70,6 +69,8 @@ public class LibFourApp {
         logApplicationStartup(env);
 
 //        applicationContext.getBean(TranslateService.class).updateAllWords();
+
+//        applicationContext.getBean(TranslateService.class).updateNoTranslateWords();
 
 //        boolean ret = true;
 //        while (ret) {

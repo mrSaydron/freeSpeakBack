@@ -25,9 +25,6 @@ public abstract class BookMapper implements EntityMapper<BookDTO, Book> {
     @Autowired
     private BookUserKnowRepository bookUserKnowRepository;
 
-    @Autowired
-    private EntityManager entityManager;
-
     @Mapping(source = "dictionary.id", target = "dictionaryId")
     @Mapping(source = "loadedUser.id", target = "loadedUserId")
     @Mapping(source = "loadedUser.login", target = "loadedUserLogin")

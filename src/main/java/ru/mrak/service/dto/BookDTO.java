@@ -29,6 +29,7 @@ public class BookDTO implements Serializable {
     private String loadedUserLogin;
     private Set<UserDTO> users = new HashSet<>();
     private Double know;
+    private String pictureName;
 
     public Long getId() {
         return id;
@@ -122,6 +123,14 @@ public class BookDTO implements Serializable {
         this.know = know;
     }
 
+    public String getPictureName() {
+        return pictureName;
+    }
+
+    public void setPictureName(String pictureName) {
+        this.pictureName = pictureName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -155,6 +164,7 @@ public class BookDTO implements Serializable {
             ", users='" + getUsers() + "'" +
             ", publicBook='" + getPublicBook() + "'" +
             ", know='" + getKnow() + "'" +
+            ", pictureName='" + getPictureName() + "'" +
             "}";
     }
 }

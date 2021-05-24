@@ -6,7 +6,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import ru.mrak.domain.Word;
@@ -18,7 +20,6 @@ import ru.mrak.domain.yndex.WordHead;
 import ru.mrak.repository.WordRepository;
 import ru.mrak.service.WordService;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.OptionalInt;
 import java.util.Set;
@@ -63,12 +64,16 @@ public class YandexTranslateService implements TranslateService {
     }
 
     @Override
+    @Async
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void updateWords(List<Word> words) {
         log.debug("Update words");
         words.forEach(this::updateWord);
+        log.debug("Update words finish");
     }
 
     @Override
+    @Async
     public void updateWord(Word word) {
         log.debug("Update word: {}", word);
         try {
@@ -77,22 +82,22 @@ public class YandexTranslateService implements TranslateService {
             if (posEnums != null) {
                 String translate = null;
                 if (lookup.getDef().size() > 0) {
-                    for (WordDef wordDef : lookup.getDef()) {
-                        if (posEnums.contains(wordDef.getPos())) {
-                            translate = translateFilter(wordDef);
-                            break;
+                    if (lookup.getDef().size() == 1) {
+                        translate = translateFilter(lookup.getDef().get(0));
+                    } else {
+                        for (WordDef wordDef : lookup.getDef()) {
+                            if (posEnums.contains(wordDef.getPos())) {
+                                translate = translateFilter(wordDef);
+                                break;
+                            }
                         }
                     }
-                } else {
-                    translate = "-";
-                }
-                if (translate == null && lookup.getDef().size() == 1) {
-                    translate = translateFilter(lookup.getDef().get(0));
-                }
-                if (translate != null) {
-                    word.setTranslate(translate);
-                } else {
-                    log.warn("Not found part of speech: {}, in translate for word: {}", word.getPartOfSpeech(), word.getWord());
+                    if (translate != null) {
+                        word.setTranslate(translate);
+                        wordRepository.save(word);
+                    } else {
+                        log.warn("Not found part of speech: {}, in translate for word: {}", word.getPartOfSpeech(), word.getWord());
+                    }
                 }
             } else {
                 log.warn("Not find part of speech: {}, for word: {}", word.getPartOfSpeech(), word.getWord());

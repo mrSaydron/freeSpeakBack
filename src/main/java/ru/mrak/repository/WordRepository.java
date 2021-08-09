@@ -60,4 +60,6 @@ public interface WordRepository extends JpaRepository<Word, Long>, JpaSpecificat
 
     @Query(value = "select * from word w where w.translate is null limit :count", nativeQuery = true)
     List<Word> findByTranslateIsNull(@Param("count") int count);
+
+    List<Word> findByAudioFileRequestedIsFalse();
 }

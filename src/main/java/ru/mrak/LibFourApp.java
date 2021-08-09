@@ -1,7 +1,6 @@
 package ru.mrak;
 
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.scheduling.annotation.EnableAsync;
 import ru.mrak.config.ApplicationProperties;
 
 import io.github.jhipster.config.DefaultProfileUtil;
@@ -15,14 +14,19 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.env.Environment;
-import ru.mrak.service.tarnslate.TranslateService;
-import ru.mrak.service.tarnslate.YandexTranslateService;
+import ru.mrak.domain.Word;
+import ru.mrak.domain.abby.AbbyTranslate;
+import ru.mrak.domain.abby.ArticleModel;
+import ru.mrak.domain.enumeration.TagEnum;
+import ru.mrak.service.tarnslate.*;
 
 import javax.annotation.PostConstruct;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 @SpringBootApplication
 @EnableConfigurationProperties({LiquibaseProperties.class, ApplicationProperties.class})
@@ -76,9 +80,23 @@ public class LibFourApp {
 //        while (ret) {
 //            ret = ((YandexTranslateService) applicationContext.getBean(TranslateService.class)).updateNoTranslateWords(50);
 //        }
+//
+//        Word word = new Word();
+//        word.setWord("canvas");
+//        word.setPartOfSpeech(TagEnum.NN.getTag());
+//        applicationContext.getBean(TranslateService.class).updateWord(word);
 
-//        ((YandexTranslateService) applicationContext.getBean(TranslateService.class)).test("read");
+//        List<ArticleModel> word = applicationContext.getBean(AbbyTranslateService.class).translation("word");
+//        System.out.println(word);
 
+//        WooordhuntService wooordhuntService = applicationContext.getBean(WooordhuntService.class);
+//        while(true) {
+//            String word = "doorrr";
+//            Optional<GetSoundServiceInterface.SoundResult> result = wooordhuntService.getSound(word);
+//            System.out.println(result);
+//        }
+
+        applicationContext.getBean(TranslateServiceInterface.class).updateNoRequestAudio();
     }
 
     private static void logApplicationStartup(Environment env) {

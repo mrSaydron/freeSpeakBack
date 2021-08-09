@@ -6,13 +6,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import ru.mrak.domain.SoundResult;
 import ru.mrak.service.s3.MinioS3Service;
 import ru.mrak.util.CheckingInputStream;
 import ru.mrak.util.FileUtil;
 
+import javax.mail.internet.ContentType;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
@@ -36,6 +38,8 @@ public class FileService {
     public static final String PICTURE_BUCKET = "picture";
     public static final String AUDIO_BUCKET = "audio";
 
+    //TODO проверка существуют ли бакеты
+
     /**
      * Сохранение изображения в хранилище
      * @param file загружаемый файл
@@ -51,6 +55,7 @@ public class FileService {
             bucket,
             fileName,
             file.getSize(),
+            null,
             new CheckingInputStream(file.getInputStream(), checkPicture));
         return bucket + "/" + fileName;
     }
@@ -74,13 +79,15 @@ public class FileService {
     };
 
     /**
-     * Сохранение аудио файла
-     * @param file загружаемый файл
-     * @return имя файла
+     * Созраняет аудио файл, файл созраняется без каких либо проверок
+     * @return имя корзины + имя файла
      */
-    public String saveAudioFile(MultipartFile file) {
-        //todo
-        return null;
+    public String saveAudioFile(SoundResult sound) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+        log.debug("Save audio file");
+        String bucket = s3BucketPrefix + AUDIO_BUCKET;
+        String fileName = UUID.randomUUID() + sound.getFileType();
+        s3Service.saveFile(bucket, fileName, sound.getContentSize(), sound.getContentType(), sound.getSound());
+        return bucket + "/" + fileName;
     }
 
     /**

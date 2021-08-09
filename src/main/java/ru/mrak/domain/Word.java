@@ -41,6 +41,13 @@ public class Word implements Serializable {
     @Column(name = "url_audio")
     private String urlAudio;
 
+    @Column(name = "transcription")
+    private String transcription;
+
+    @NotNull
+    @Column(name = "audio_file_requested")
+    private boolean audioFileRequested;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
@@ -118,6 +125,22 @@ public class Word implements Serializable {
         this.urlAudio = urlAudio;
     }
 
+    public String getTranscription() {
+        return transcription;
+    }
+
+    public void setTranscription(String transcription) {
+        this.transcription = transcription;
+    }
+
+    public boolean isAudioFileRequested() {
+        return audioFileRequested;
+    }
+
+    public void setAudioFileRequested(boolean audioFileRequested) {
+        this.audioFileRequested = audioFileRequested;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -145,6 +168,8 @@ public class Word implements Serializable {
             ", totalAmount=" + totalAmount +
             ", urlPicture='" + urlPicture + '\'' +
             ", urlAudio='" + urlAudio + '\'' +
+            ", transcription='" + transcription + '\'' +
+            ", audioFileRequested='" + audioFileRequested + '\'' +
             '}';
     }
 }

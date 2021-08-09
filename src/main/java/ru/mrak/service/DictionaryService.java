@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.mrak.service.tarnslate.TranslateService;
+import ru.mrak.service.tarnslate.TranslateServiceInterface;
 
 import javax.persistence.EntityManager;
 import java.util.*;
@@ -37,7 +37,7 @@ public class DictionaryService {
 
     private final TokenizerService tokenizerService;
     private final WordService wordService;
-    private final TranslateService translateService;
+    private final TranslateServiceInterface translateService;
 
     private final DictionaryRepository dictionaryRepository;
     private final DictionaryHasWordRepository dictionaryHasWordRepository;

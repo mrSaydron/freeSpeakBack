@@ -129,3 +129,5 @@ jhipster:
 s3-endpoint: http://localhost:9100
 s3-access-key: minioadmin
 s3-secret-key: minioadmin
+
+abby-key: YTI0NThjMWQtZjEyMC00NGJlLWI5Y2YtMGExZWY4YTVhNzA3OmIzY2E2OTA1YTQwMjQ4OGZiNjJhYjUzMDM5NDc4Njk1

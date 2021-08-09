@@ -21,14 +21,17 @@ public class MinioS3Service {
 
     private final MinioClient minioClient;
 
-    public void saveFile(String bucket, String fileName, Long fileSize, InputStream stream) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+    //todo создание бакетов
+
+    public void saveFile(String bucket, String fileName, Long fileSize, String contentType, InputStream stream) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         log.debug("Save file, bucket: {}, name: {}", bucket, fileName);
         minioClient.putObject(
             PutObjectArgs.builder()
-            .stream(stream, fileSize, -1)
-            .bucket(bucket)
-            .object(fileName)
-            .build()
+                .stream(stream, fileSize, -1)
+                .bucket(bucket)
+                .object(fileName)
+                .contentType(contentType)
+                .build()
         );
     }
 

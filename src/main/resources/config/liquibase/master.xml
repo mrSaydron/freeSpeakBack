@@ -37,4 +37,5 @@
     <include file="config/liquibase/changelog/20210420230200_T-29_add_answer_date_to_word_process.sql" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210501231400_T-47_add_view_book_user_know.sql" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210519115400_T-62_add_picture_name_to_book.sql" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210529100800_T-45_add_audio_to_words.sql" relativeToChangelogFile="false"/>
 </databaseChangeLog>

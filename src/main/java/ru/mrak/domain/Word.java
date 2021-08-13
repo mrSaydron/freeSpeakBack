@@ -35,11 +35,11 @@ public class Word implements Serializable {
     @Column(name = "total_amount")
     private Long totalAmount;
 
-    @Column(name = "url_picture")
-    private String urlPicture;
+    @Column(name = "picture_id")
+    private String pictureId;
 
-    @Column(name = "url_audio")
-    private String urlAudio;
+    @Column(name = "audio_id")
+    private String audioId;
 
     @Column(name = "transcription")
     private String transcription;
@@ -109,20 +109,20 @@ public class Word implements Serializable {
         return serialVersionUID;
     }
 
-    public String getUrlPicture() {
-        return urlPicture;
+    public String getPictureId() {
+        return pictureId;
     }
 
-    public void setUrlPicture(String urlPicture) {
-        this.urlPicture = urlPicture;
+    public void setPictureId(String pictureId) {
+        this.pictureId = pictureId;
     }
 
-    public String getUrlAudio() {
-        return urlAudio;
+    public String getAudioId() {
+        return audioId;
     }
 
-    public void setUrlAudio(String urlAudio) {
-        this.urlAudio = urlAudio;
+    public void setAudioId(String audioId) {
+        this.audioId = audioId;
     }
 
     public String getTranscription() {
@@ -166,8 +166,8 @@ public class Word implements Serializable {
             ", translate='" + translate + '\'' +
             ", partOfSpeech='" + partOfSpeech + '\'' +
             ", totalAmount=" + totalAmount +
-            ", urlPicture='" + urlPicture + '\'' +
-            ", urlAudio='" + urlAudio + '\'' +
+            ", urlPicture='" + pictureId + '\'' +
+            ", urlAudio='" + audioId + '\'' +
             ", transcription='" + transcription + '\'' +
             ", audioFileRequested='" + audioFileRequested + '\'' +
             '}';

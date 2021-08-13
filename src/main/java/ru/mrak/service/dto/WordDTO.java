@@ -19,8 +19,8 @@ public class WordDTO implements Serializable {
     private String translate;
     private String partOfSpeech;
     private Long totalAmount;
-    private String urlPicture;
-    private String urlAudio;
+    private String pictureId;
+    private String audioId;
     private Double frequency;
     private Boolean userHas;
 
@@ -64,20 +64,20 @@ public class WordDTO implements Serializable {
         this.totalAmount = totalAmount;
     }
 
-    public String getUrlPicture() {
-        return urlPicture;
+    public String getPictureId() {
+        return pictureId;
     }
 
-    public void setUrlPicture(String urlPicture) {
-        this.urlPicture = urlPicture;
+    public void setPictureId(String pictureId) {
+        this.pictureId = pictureId;
     }
 
-    public String getUrlAudio() {
-        return urlAudio;
+    public String getAudioId() {
+        return audioId;
     }
 
-    public void setUrlAudio(String urlAudio) {
-        this.urlAudio = urlAudio;
+    public void setAudioId(String audioId) {
+        this.audioId = audioId;
     }
 
     public Double getFrequency() {

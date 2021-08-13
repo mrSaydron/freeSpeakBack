@@ -100,8 +100,8 @@ public class TranslateService implements TranslateServiceInterface {
         wooordhuntService.getSound(word.getWord())
             .ifPresent(soundResult -> {
                 try {
-                    String fileName = fileService.saveAudioFile(soundResult);
-                    word.setUrlAudio(fileName);
+                    String fileId = fileService.saveAudioFile(soundResult);
+                    word.setAudioId(fileId);
                 } catch (Exception e) {
                     log.warn("Can not upload audio file", e);
                 }
@@ -116,6 +116,7 @@ public class TranslateService implements TranslateServiceInterface {
     }
 
     @Override
+    @Transactional
     public void updateNoRequestAudio() {
         log.debug("Update audio for all not request words");
         wordRepository.findByAudioFileRequestedIsFalse().forEach(this::fillAudioToWord);

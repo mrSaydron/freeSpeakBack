@@ -96,7 +96,7 @@ public class LibFourApp {
 //            System.out.println(result);
 //        }
 
-        applicationContext.getBean(TranslateServiceInterface.class).updateNoRequestAudio();
+//        applicationContext.getBean(TranslateServiceInterface.class).updateNoRequestAudio();
     }
 
     private static void logApplicationStartup(Environment env) {

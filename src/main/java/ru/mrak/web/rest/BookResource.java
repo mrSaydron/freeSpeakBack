@@ -153,4 +153,22 @@ public class BookResource {
         log.debug("REST request to open Book: {}", id);
         bookService.updateLastOpenDate(id);
     }
+
+    /**
+     * Запрашивает все ли слова из книги есть в словаре пользователя
+     */
+    @GetMapping("check-user-library/{bookId}")
+    public boolean checkUserLibrary(@PathVariable Long bookId) {
+        log.debug("REST request to check word for Book: {}", bookId);
+        return bookService.checkUserLibrary(bookId);
+    }
+
+    /**
+     * Добавляет слова из книги в словарь пользователя
+     */
+    @PutMapping("add-words-to-dictionary/{bookId}")
+    public void addWordsToDictionary(@PathVariable Long bookId) {
+        log.debug("REST request to add words in book to user dictionary");
+        bookService.addWordsToDictionary(bookId);
+    }
 }

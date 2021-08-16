@@ -16,6 +16,7 @@ import ru.mrak.service.mapper.BookMapper;
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -33,6 +34,7 @@ public class BookService {
     private final UserService userService;
     private final DictionaryService dictionaryService;
     private final WordService wordService;
+    private final UserWordService userWordService;
 
     private final BookRepository bookRepository;
     private final BookUserRepository bookUserRepository;
@@ -134,5 +136,23 @@ public class BookService {
 
         bookUser.setLastOpenDate(LocalDateTime.now());
         bookUserRepository.save(bookUser);
+    }
+
+    /**
+     * Все ли слова из книги есть в словаре пользователя
+     */
+    public boolean checkUserLibrary(Long bookId) {
+        User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
+        return bookRepository.getMissingWords(user.getId(), bookId).isEmpty();
+    }
+
+    /**
+     * Добавляет недостающие слова из книги в словарь пользователя
+     */
+    @Transactional
+    public void addWordsToDictionary(Long bookId) {
+        User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
+        List<Long> wordIds = bookRepository.getMissingWords(user.getId(), bookId);
+        wordIds.forEach(userWordService::addWord);
     }
 }

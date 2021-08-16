@@ -71,13 +71,21 @@ public class UserWordService {
      */
     public void addWord(Long wordId) {
         log.debug("add word to user dictionary, word id: {}", wordId);
+        Word word = wordRepository.getOne(wordId);
+        addWord(word);
+    }
+
+    /**
+     * Добавляет слово в словарь пользователя
+     */
+    public void addWord(Word word) {
         UserDictionary userDictionary = getUserDictionary();
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
         Optional<UserDictionaryHasWord> userHasWord
-            = userDictionaryHasWordRepository.findByWordAndUser(wordRepository.getOne(wordId), user);
+            = userDictionaryHasWordRepository.findByWordAndUser(wordRepository.getOne(word.getId()), user);
 
         if (!userHasWord.isPresent()) {
-            UserDictionaryHasWord userDictionaryHasWord = newUserDictionaryHasWord(userDictionary, wordRepository.getOne(wordId));
+            UserDictionaryHasWord userDictionaryHasWord = newUserDictionaryHasWord(userDictionary, word);
             userDictionary.getDictionaryWords().add(userDictionaryHasWord);
             userDictionaryRepository.save(userDictionary);
             entityManager.flush();

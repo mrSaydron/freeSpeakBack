@@ -119,7 +119,7 @@ public class UserWordResource {
     }
 
     /**
-     * Отмечает слова выученнми
+     * Отмечает слова выученными
      */
     @PutMapping("/know-words")
     public void knowWords(@RequestBody List<Long> wordIds) {

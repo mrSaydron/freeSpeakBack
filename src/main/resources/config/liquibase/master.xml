@@ -38,4 +38,6 @@
     <include file="config/liquibase/changelog/20210501231400_T-47_add_view_book_user_know.sql" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210519115400_T-62_add_picture_name_to_book.sql" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210529100800_T-45_add_audio_to_words.sql" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210820100900_T-76_add_table_with_level_knowledge.sql" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210820100900_T-76_edit_book_user_know_view.sql" relativeToChangelogFile="false"/>
 </databaseChangeLog>

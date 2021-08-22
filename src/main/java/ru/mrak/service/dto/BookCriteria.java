@@ -3,10 +3,7 @@ package ru.mrak.service.dto;
 import java.io.Serializable;
 import java.util.Objects;
 import io.github.jhipster.service.Criteria;
-import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.LongFilter;
-import io.github.jhipster.service.filter.StringFilter;
+import io.github.jhipster.service.filter.*;
 import lombok.Getter;
 import lombok.Setter;
 import ru.mrak.web.rest.filter.StringRangeFilter;
@@ -39,10 +36,10 @@ public class BookCriteria implements Serializable, Criteria {
 
     private StringFilter titleAuthorFilter; // Строка для поиска по названию и автору
     private BooleanFilter orPublicBookFilter; // Поиск по книгам пользователя или публичным книгам
-    private BooleanFilter know100Filter;
-    private BooleanFilter know90Filter;
-    private BooleanFilter know50Filter;
+    private BooleanFilter know95Filter;
+    private BooleanFilter know85Filter;
     private BooleanFilter know0Filter;
+    private DoubleFilter knowFilter;
 
     // Сортировки
     private StringRangeFilter startTitle;
@@ -64,10 +61,10 @@ public class BookCriteria implements Serializable, Criteria {
 
         this.titleAuthorFilter = other.titleAuthorFilter == null ? null : other.titleAuthorFilter.copy();
         this.orPublicBookFilter = other.orPublicBookFilter == null ? null : other.orPublicBookFilter.copy();
-        this.know100Filter = other.know100Filter == null ? null : other.know100Filter.copy();
-        this.know90Filter = other.know90Filter == null ? null : other.know90Filter.copy();
-        this.know50Filter = other.know50Filter == null ? null : other.know50Filter.copy();
+        this.know95Filter = other.know95Filter == null ? null : other.know95Filter.copy();
+        this.know85Filter = other.know85Filter == null ? null : other.know85Filter.copy();
         this.know0Filter = other.know0Filter == null ? null : other.know0Filter.copy();
+        this.knowFilter = other.knowFilter == null ? null : other.knowFilter.copy();
 
         this.startTitle = other.startTitle == null ? null : other.startTitle.copy();
         this.startAuthor = other.startAuthor == null ? null : other.startAuthor.copy();
@@ -100,10 +97,10 @@ public class BookCriteria implements Serializable, Criteria {
                 Objects.equals(userId, that.userId) &&
                 Objects.equals(titleAuthorFilter, that.titleAuthorFilter) &&
                 Objects.equals(orPublicBookFilter, that.orPublicBookFilter) &&
-                Objects.equals(know100Filter, that.know100Filter) &&
-                Objects.equals(know90Filter, that.know90Filter) &&
-                Objects.equals(know50Filter, that.know50Filter) &&
+                Objects.equals(know95Filter, that.know95Filter) &&
+                Objects.equals(know85Filter, that.know85Filter) &&
                 Objects.equals(know0Filter, that.know0Filter) &&
+                Objects.equals(knowFilter, that.knowFilter) &&
                 Objects.equals(startTitle, that.startTitle) &&
                 Objects.equals(startAuthor, that.startAuthor);
     }
@@ -122,10 +119,10 @@ public class BookCriteria implements Serializable, Criteria {
             userId,
             titleAuthorFilter,
             orPublicBookFilter,
-            know100Filter,
-            know90Filter,
-            know50Filter,
+            know95Filter,
+            know85Filter,
             know0Filter,
+            knowFilter,
             startTitle,
             startAuthor
         );
@@ -146,10 +143,10 @@ public class BookCriteria implements Serializable, Criteria {
                 (userId != null ? "userId=" + userId + ", " : "") +
                 (titleAuthorFilter != null ? "titleAuthor=" + titleAuthorFilter + ", " : "") +
                 (orPublicBookFilter != null ? "orPublicBook=" + orPublicBookFilter + ", " : "") +
-                (know100Filter != null ? "orPublicBook=" + know100Filter + ", " : "") +
-                (know90Filter != null ? "orPublicBook=" + know90Filter + ", " : "") +
-                (know50Filter != null ? "orPublicBook=" + know50Filter + ", " : "") +
+                (know95Filter != null ? "orPublicBook=" + know95Filter + ", " : "") +
+                (know85Filter != null ? "orPublicBook=" + know85Filter + ", " : "") +
                 (know0Filter != null ? "orPublicBook=" + know0Filter + ", " : "") +
+                (knowFilter != null ? "orPublicBook=" + knowFilter + ", " : "") +
                 (startTitle != null ? "orPublicBook=" + startTitle + ", " : "") +
                 (startAuthor != null ? "orPublicBook=" + startAuthor + ", " : "") +
             "}";

@@ -89,15 +89,9 @@ public class BookQueryService extends QueryService<Book> {
      * @return the matching {@link Specification} of the entity.
      */
     protected Specification<Book> createSpecification(BookCriteria criteria) {
-
-        Specification<Book> startPredicate;
         User user = userService.getUserWithAuthorities().orElseThrow(() -> new RuntimeException("Что то пошло не так"));
-        startPredicate = (root, query, builder) -> builder.equal(root.join(Book_.users, JoinType.LEFT).get(User_.ID), user.getId());
-        if (criteria != null && criteria.getOrPublicBookFilter() != null && criteria.getOrPublicBookFilter().getEquals()) {
-            startPredicate = startPredicate.or(buildSpecification(criteria.getOrPublicBookFilter(), Book_.publicBook));
-        }
 
-        Specification<Book> specification = Specification.where(startPredicate);
+        Specification<Book> specification = Specification.where(null);
 
         if (criteria != null) {
             if (criteria.getId() != null) {

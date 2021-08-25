@@ -1,8 +1,16 @@
 package ru.mrak.web.rest;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import ru.mrak.domain.User;
 import ru.mrak.repository.UserRepository;
 import ru.mrak.security.SecurityUtils;
+import ru.mrak.security.jwt.JWTFilter;
+import ru.mrak.security.jwt.TokenProvider;
 import ru.mrak.service.MailService;
 import ru.mrak.service.UserService;
 import ru.mrak.service.dto.PasswordChangeDTO;
@@ -36,21 +44,30 @@ public class AccountResource {
 
     private final Logger log = LoggerFactory.getLogger(AccountResource.class);
 
-    private final UserRepository userRepository;
-
     private final UserService userService;
-
     private final MailService mailService;
 
-    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService) {
+    private final TokenProvider tokenProvider;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+
+    private final UserRepository userRepository;
+
+    public AccountResource(UserRepository userRepository,
+                           UserService userService,
+                           MailService mailService,
+                           TokenProvider tokenProvider,
+                           AuthenticationManagerBuilder authenticationManagerBuilder) {
 
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
+        this.tokenProvider = tokenProvider;
+        this.authenticationManagerBuilder = authenticationManagerBuilder;
     }
 
     /**
      * {@code POST  /register} : register the user.
+     * Регистрирует пользователя, и возвращает ему токен
      *
      * @param managedUserVM the managed user View Model.
      * @throws InvalidPasswordException {@code 400 (Bad Request)} if the password is incorrect.
@@ -59,12 +76,21 @@ public class AccountResource {
      */
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
+    public ResponseEntity<UserJWTController.JWTToken> registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
         if (!checkPasswordLength(managedUserVM.getPassword())) {
             throw new InvalidPasswordException();
         }
-        User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
-        mailService.sendActivationEmail(user);
+        userService.registerUser(managedUserVM, managedUserVM.getPassword());
+
+        UsernamePasswordAuthenticationToken authenticationToken =
+            new UsernamePasswordAuthenticationToken(managedUserVM.getLogin(), managedUserVM.getPassword());
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = tokenProvider.createToken(authentication, true);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+        return new ResponseEntity<>(new UserJWTController.JWTToken(jwt), httpHeaders, HttpStatus.OK);
     }
 
     /**

@@ -15,6 +15,7 @@ import ru.mrak.service.MailService;
 import ru.mrak.service.UserService;
 import ru.mrak.service.dto.PasswordChangeDTO;
 import ru.mrak.service.dto.UserDTO;
+import ru.mrak.service.mapper.UserMapper;
 import ru.mrak.web.rest.errors.*;
 import ru.mrak.web.rest.vm.KeyAndPasswordVM;
 import ru.mrak.web.rest.vm.ManagedUserVM;
@@ -44,6 +45,8 @@ public class AccountResource {
 
     private final Logger log = LoggerFactory.getLogger(AccountResource.class);
 
+    private final UserMapper userMapper;
+
     private final UserService userService;
     private final MailService mailService;
 
@@ -56,13 +59,15 @@ public class AccountResource {
                            UserService userService,
                            MailService mailService,
                            TokenProvider tokenProvider,
-                           AuthenticationManagerBuilder authenticationManagerBuilder) {
+                           AuthenticationManagerBuilder authenticationManagerBuilder,
+                           UserMapper userMapper) {
 
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
         this.tokenProvider = tokenProvider;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
+        this.userMapper = userMapper;
     }
 
     /**
@@ -174,10 +179,11 @@ public class AccountResource {
      * @param mail the mail of the user.
      */
     @PostMapping(path = "/account/reset-password/init")
-    public void requestPasswordReset(@RequestBody String mail) {
-        Optional<User> user = userService.requestPasswordReset(mail);
-        if (user.isPresent()) {
-            mailService.sendPasswordResetMail(user.get());
+    public void requestPasswordReset(@RequestBody Map<String, String> mail) {
+        Optional<User> optionalUser = userService.requestPasswordReset(mail.get("mail"));
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            mailService.sendPasswordResetMail(user);
         } else {
             // Pretend the request has been successful to prevent checking which emails really exist
             // but log that an invalid attempt has been made
@@ -193,14 +199,27 @@ public class AccountResource {
      * @throws RuntimeException {@code 500 (Internal Server Error)} if the password could not be reset.
      */
     @PostMapping(path = "/account/reset-password/finish")
-    public void finishPasswordReset(@RequestBody KeyAndPasswordVM keyAndPassword) {
+    public ResponseEntity<UserJWTController.JWTToken> finishPasswordReset(@RequestBody KeyAndPasswordVM keyAndPassword) {
         if (!checkPasswordLength(keyAndPassword.getNewPassword())) {
             throw new InvalidPasswordException();
         }
-        Optional<User> user =
+        Optional<User> optionalUser =
             userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
 
-        if (!user.isPresent()) {
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+
+            UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(user.getLogin(), keyAndPassword.getNewPassword());
+            Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = tokenProvider.createToken(authentication, true);
+
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+            return new ResponseEntity<>(new UserJWTController.JWTToken(jwt), httpHeaders, HttpStatus.OK);
+
+        } else {
             throw new AccountResourceException("No user was found for this reset key");
         }
     }

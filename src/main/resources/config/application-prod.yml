@@ -33,9 +33,9 @@ spring:
       enabled: false
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mariadb://localhost:3306/lib_four?useLegacyDatetimeCode=false&serverTimezone=UTC
-    username: root
-    password:
+    url: jdbc:postgresql://rc1c-ioetg4b3ssimabjx.mdb.yandexcloud.net:6432/db1?&targetServerType=master
+    username: mrsaydron
+    password: 16729438
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -135,3 +135,9 @@ jhipster:
 # ===================================================================
 
 # application:
+
+s3-endpoint: http://localhost:9100
+s3-access-key: minioadmin
+s3-secret-key: minioadmin
+
+abby-key: YTI0NThjMWQtZjEyMC00NGJlLWI5Y2YtMGExZWY4YTVhNzA3OmIzY2E2OTA1YTQwMjQ4OGZiNjJhYjUzMDM5NDc4Njk1

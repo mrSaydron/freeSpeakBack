@@ -12,7 +12,6 @@
         <modifyDataType
             columnName="text"
             newDataType="MEDIUMTEXT"
-            schemaName="lib_four"
             tableName="book"
         />
     </changeSet>

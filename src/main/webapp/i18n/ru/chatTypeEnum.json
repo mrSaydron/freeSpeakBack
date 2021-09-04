@@ -1,9 +1,0 @@
-{
-  "libFourApp": {
-    "chatTypeEnum": {
-      "null": "",
-      "SUPPORT": "SUPPORT",
-      "COMMON": "COMMON"
-    }
-  }
-}

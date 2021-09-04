@@ -1,15 +1,22 @@
 -- liquibase formatted sql
 
 -- changeset karmanov:20210820100900_T-76-1
+create sequence knowledge_progress_seq;
 create table knowledge_progress
 (
-    id bigint auto_increment,
-    box_number int not null comment 'Номер коробки для которой указывается уровень знаний',
-    type enum('direct', 'reverse', 'test', 'listening', 'spelling') not null comment 'Тип коробки',
-    knowledge double not null comment 'Уровень знания, в от 0 до 1',
-    constraint knowledge_progress_pk
-        primary key (id)
-) comment 'Связывает коробки и уровень знаний';
+    id bigint default nextval('public.knowledge_progress_seq')
+        not null constraint knowledge_progress_pk
+        primary key,
+    box_number int not null,
+    type progress_type not null,
+    knowledge real not null
+);
+alter sequence knowledge_progress_seq owned by knowledge_progress.id;
+
+comment on column knowledge_progress.box_number is 'Номер коробки для которой указывается уровень знаний';
+comment on column knowledge_progress.type is 'Тип коробки';
+comment on column knowledge_progress.knowledge is 'Уровень знания, в от 0 до 1';
+comment on table knowledge_progress is 'Связывает коробки и уровень знаний';
 
 -- changeset karmanov:20210820100900_T-76-2
 insert into knowledge_progress (box_number, type, knowledge) values (1, 'direct', 0.2);

@@ -14,17 +14,17 @@ plugins {
     id "java"
     id "maven-publish"
     id "idea"
-    id "jacoco"
+//    id "jacoco"
     id "org.springframework.boot"
     id "com.google.cloud.tools.jib"
-    id "com.gorylenko.gradle-git-properties"
-    id "com.github.node-gradle.node"
-    id "net.ltgt.apt-eclipse"
-    id "net.ltgt.apt-idea"
-    id "net.ltgt.apt"
+//    id "com.gorylenko.gradle-git-properties"
+//    id "com.github.node-gradle.node"
+//    id "net.ltgt.apt-eclipse"
+//    id "net.ltgt.apt-idea"
+//    id "net.ltgt.apt"
     id "org.liquibase.gradle"
-    id "org.sonarqube"
-    id "io.spring.nohttp"
+//    id "org.sonarqube"
+//    id "io.spring.nohttp"
     //jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here
 }
 
@@ -38,7 +38,7 @@ targetCompatibility=1.8
 assert System.properties["java.specification.version"] == "1.8" || "11" || "12" || "13" || "14"
 
 apply from: "gradle/docker.gradle"
-apply from: "gradle/sonar.gradle"
+//apply from: "gradle/sonar.gradle"
 //jhipster-needle-gradle-apply-from - JHipster will add additional gradle scripts to be applied here
 
 if (project.hasProperty("prod") || project.hasProperty("gae")) {
@@ -71,15 +71,15 @@ idea {
     }
 }
 
-eclipse {
-    sourceSets {
-        main {
-            java {
-                srcDirs += ["build/generated/sources/annotationProcessor/java/main"]
-            }
-        }
-    }
-}
+//eclipse {
+//    sourceSets {
+//        main {
+//            java {
+//                srcDirs += ["build/generated/sources/annotationProcessor/java/main"]
+//            }
+//        }
+//    }
+//}
 
 defaultTasks "bootRun"
 
@@ -87,49 +87,49 @@ springBoot {
     mainClassName = "ru.mrak.LibFourApp"
 }
 
-test {
-    useJUnitPlatform()
-    exclude "**/*IT*", "**/*IntTest*"
+//test {
+//    useJUnitPlatform()
+//    exclude "**/*IT*", "**/*IntTest*"
+//
+//    testLogging {
+//        events 'FAILED', 'SKIPPED'
+//    }
+//    // uncomment if the tests reports are not generated
+//    // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
+//    // ignoreFailures true
+//    reports.html.enabled = false
+//}
 
-    testLogging {
-        events 'FAILED', 'SKIPPED'
-    }
-    // uncomment if the tests reports are not generated
-    // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
-    // ignoreFailures true
-    reports.html.enabled = false
-}
+//task integrationTest(type: Test) {
+//    useJUnitPlatform()
+//    description = "Execute integration tests."
+//    group = "verification"
+//    include "**/*IT*", "**/*IntTest*"
+//
+//    testLogging {
+//        events 'FAILED', 'SKIPPED'
+//    }
+//
+//    if (project.hasProperty('testcontainers')) {
+//        environment 'spring.profiles.active', 'testcontainers'
+//    }
+//
+//    // uncomment if the tests reports are not generated
+//    // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
+//    // ignoreFailures true
+//    reports.html.enabled = false
+//}
 
-task integrationTest(type: Test) {
-    useJUnitPlatform()
-    description = "Execute integration tests."
-    group = "verification"
-    include "**/*IT*", "**/*IntTest*"
-
-    testLogging {
-        events 'FAILED', 'SKIPPED'
-    }
-
-    if (project.hasProperty('testcontainers')) {
-        environment 'spring.profiles.active', 'testcontainers'
-    }
-
-    // uncomment if the tests reports are not generated
-    // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
-    // ignoreFailures true
-    reports.html.enabled = false
-}
-
-check.dependsOn integrationTest
-task testReport(type: TestReport) {
-    destinationDir = file("$buildDir/reports/tests")
-    reportOn test
-}
-
-task integrationTestReport(type: TestReport) {
-    destinationDir = file("$buildDir/reports/tests")
-    reportOn integrationTest
-}
+//check.dependsOn integrationTest
+//task testReport(type: TestReport) {
+//    destinationDir = file("$buildDir/reports/tests")
+//    reportOn test
+//}
+//
+//task integrationTestReport(type: TestReport) {
+//    destinationDir = file("$buildDir/reports/tests")
+//    reportOn integrationTest
+//}
 
 if (!project.hasProperty("runList")) {
     project.ext.runList = "main"
@@ -140,15 +140,25 @@ project.ext.diffChangelogFile = "src/main/resources/config/liquibase/changelog/"
 liquibase {
     activities {
         main {
-            driver "org.mariadb.jdbc.Driver"
-            url "jdbc:mariadb://localhost:3360/lib_four"
-            username "admin"
+            driver "org.postgresql.Driver"
+            url "jdbc:postgresql://localhost:5432/postgres"
+            username "postgres"
             password "123"
             changeLogFile "src/main/resources/config/liquibase/master.xml"
             defaultSchemaName ""
             logLevel "debug"
             classpath "src/main/resources/"
         }
+//        main {
+//            driver "org.mariadb.jdbc.Driver"
+//            url "jdbc:mariadb://localhost:3360/lib_four"
+//            username "admin"
+//            password "123"
+//            changeLogFile "src/main/resources/config/liquibase/master.xml"
+//            defaultSchemaName ""
+//            logLevel "debug"
+//            classpath "src/main/resources/"
+//        }
         diffLog {
             driver "org.mariadb.jdbc.Driver"
             url "jdbc:mariadb://localhost:3360/lib_four"
@@ -165,19 +175,19 @@ liquibase {
     runList = project.ext.runList
 }
 
-gitProperties {
-    failOnNoGitDirectory = false
-    keys = ["git.branch", "git.commit.id.abbrev", "git.commit.id.describe"]
-}
+//gitProperties {
+//    failOnNoGitDirectory = false
+//    keys = ["git.branch", "git.commit.id.abbrev", "git.commit.id.describe"]
+//}
 
-checkstyle {
-    toolVersion '${checkstyle_version}'
-    configFile file("checkstyle.xml")
-    checkstyleTest.enabled = false
-}
-nohttp {
-    source.include "build.gradle", "README.md"
-}
+//checkstyle {
+//    toolVersion '${checkstyle_version}'
+//    configFile file("checkstyle.xml")
+//    checkstyleTest.enabled = false
+//}
+//nohttp {
+//    source.include "build.gradle", "README.md"
+//}
 
 configurations {
     providedRuntime
@@ -260,8 +270,8 @@ dependencies {
         exclude module: "mapstruct"
     }
     implementation "io.springfox:springfox-bean-validators"
-    implementation "org.mariadb.jdbc:mariadb-java-client"
-    liquibaseRuntime "org.mariadb.jdbc:mariadb-java-client"
+    implementation "org.postgresql:postgresql"
+    liquibaseRuntime "org.postgresql:postgresql"
     implementation "org.mapstruct:mapstruct:${mapstruct_version}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
     annotationProcessor "org.hibernate:hibernate-jpamodelgen:${hibernate_version}"
@@ -311,13 +321,13 @@ wrapper {
 }
 
 
-if (project.hasProperty("nodeInstall")) {
-    node {
-        version = "${node_version}"
-        npmVersion = "${npm_version}"
-        yarnVersion = "${yarn_version}"
-        download = true
-    }
-}
+//if (project.hasProperty("nodeInstall")) {
+//    node {
+//        version = "${node_version}"
+//        npmVersion = "${npm_version}"
+//        yarnVersion = "${yarn_version}"
+//        download = true
+//    }
+//}
 compileJava.dependsOn processResources
 processResources.dependsOn bootBuildInfo

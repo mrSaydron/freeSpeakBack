@@ -66,9 +66,10 @@ public class BookService {
         book = bookRepository.save(book);
         entityManager.flush();
 
-        if (book.getPublicBook()) {
-            wordService.updateTotalAmount(book);
-        }
+        // todo не понятно почему не работает. Книга не сохранена во время подсчета слов
+//        if (book.getPublicBook()) {
+//            wordService.updateTotalAmount(book);
+//        }
 
         return bookMapper.toDto(book);
     }

@@ -2,6 +2,7 @@ package ru.mrak.service;
 
 import edu.stanford.nlp.ling.CoreLabel;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Propagation;
 import ru.mrak.domain.*;
 import ru.mrak.domain.enumeration.ServiceDataKeysEnum;
 import ru.mrak.repository.UserDictionaryHasWordRepository;

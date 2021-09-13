@@ -85,6 +85,7 @@ public class AccountResource {
         if (!checkPasswordLength(managedUserVM.getPassword())) {
             throw new InvalidPasswordException();
         }
+        managedUserVM.setLangKey("ru");
         userService.registerUser(managedUserVM, managedUserVM.getPassword());
 
         UsernamePasswordAuthenticationToken authenticationToken =

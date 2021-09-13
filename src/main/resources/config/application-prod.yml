@@ -50,16 +50,16 @@ spring:
   liquibase:
     contexts: prod
   mail:
-    host: localhost
+    host: free-speak.ru
     port: 25
-    username:
-    password:
+    username: system
+    password: 16729438
   thymeleaf:
     cache: true
 
 # ===================================================================
 # To enable TLS in production, generate a certificate using:
-# keytool -genkey -alias lib_four -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
+# keytool -genkey -alias lib_four -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12_hipster -validity 3650
 #
 # You can also use Let's Encrypt:
 # https://maximilian-boehm.com/hp2121/Create-a-Java-Keystore-JKS-from-Let-s-Encrypt-Certificates.htm
@@ -69,7 +69,7 @@ spring:
 # server:
 #   port: 443
 #   ssl:
-#     key-store: classpath:config/tls/keystore.p12
+#     key-store: classpath:config/tls/keystore.p12_hipster
 #     key-store-password: password
 #     key-store-type: PKCS12
 #     key-alias: selfsigned
@@ -110,7 +110,7 @@ jhipster:
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000
   mail: # specific JHipster mail property, for standard properties see MailProperties
-    base-url: http://my-server-url-to-change # Modify according to your server's URL
+    base-url: http://free-speak.ru # Modify according to your server's URL
   metrics:
     logs: # Reports metrics in the logs
       enabled: false

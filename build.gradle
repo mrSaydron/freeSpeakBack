@@ -297,7 +297,12 @@ dependencies {
 //    implementation 'edu.stanford.nlp:stanford-corenlp:4.2.0:models-english'
     implementation 'edu.stanford.nlp:stanford-corenlp:4.2.0:javadoc'
     implementation 'edu.stanford.nlp:stanford-corenlp:4.2.0:sources'
+
+    // s3 libraries
     implementation 'io.minio:minio:8.2.1'
+//    implementation 'software.amazon.awssdk:ec2:2.17.34'
+//    implementation 'software.amazon.awssdk:s3:2.17.34'
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.62'
 }
 
 if (project.hasProperty("gae")) {

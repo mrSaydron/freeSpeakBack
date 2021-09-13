@@ -103,7 +103,7 @@ public class TranslateService implements TranslateServiceInterface {
                     String fileId = fileService.saveAudioFile(soundResult);
                     word.setAudioId(fileId);
                 } catch (Exception e) {
-                    log.warn("Can not upload audio file", e);
+                    log.warn("Can not upload audio file for word: {}", word.getWord());
                 }
             });
         word.setAudioFileRequested(true);

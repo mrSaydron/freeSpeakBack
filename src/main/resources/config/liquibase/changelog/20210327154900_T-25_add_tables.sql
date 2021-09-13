@@ -41,15 +41,12 @@ comment on column user_dictionary_has_word.word_id is 'идентификато�
 comment on column user_dictionary_has_word.priority is 'приоритет изучения слова';
 comment on table user_dictionary_has_word is 'Связка словаря пользователя со словом';
 
--- changeset karmanov:T-25-4:20210327154900
-create type progress_type as enum ('direct', 'reverse', 'test', 'listening', 'spelling');
-
 -- changeset karmanov:T-25-5:20210327154900
 create table user_word_progress
 (
     id bigint null,
     user_dictionary_has_word_id bigint not null,
-    type progress_type not null,
+    type varchar(32) not null,
     successful_attempts int not null default 0,
     box_number int not null default 0,
     constraint user_word_progress_pk

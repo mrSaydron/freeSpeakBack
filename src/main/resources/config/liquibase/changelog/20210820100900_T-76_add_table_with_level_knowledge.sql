@@ -8,7 +8,7 @@ create table knowledge_progress
         not null constraint knowledge_progress_pk
         primary key,
     box_number int not null,
-    type progress_type not null,
+    type varchar(32) not null,
     knowledge real not null
 );
 alter sequence knowledge_progress_seq owned by knowledge_progress.id;

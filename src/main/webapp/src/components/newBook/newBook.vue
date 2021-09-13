@@ -142,7 +142,7 @@ export default class Library extends Vue {
       }
       this.book.publicBook = true
       await this.bookService.create(this.book)
-      this.$router.push('/library')
+      this.$router.push('/')
     }
   }
 

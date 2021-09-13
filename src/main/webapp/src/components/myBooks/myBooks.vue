@@ -28,7 +28,6 @@ import BookService from '@/services/bookService'
 import { BookDto } from '@/model/bookDto'
 import { BookFilter } from '@/services/filters/bookFilter'
 import { SortValue, asc } from '@/util/sortValue'
-import { DefaultNamesEnum } from '@/model/enums/defaultNamesEnum'
 import FileService from '@/services/fileService'
 
 @Component({
@@ -81,11 +80,12 @@ export default class MyBooks extends Vue {
   public async retrieve (): Promise<void> {
     const nextBooks = await this.bookService.retrieve(this.bookFilter)
     nextBooks.forEach(book => {
-      const name = book.pictureName ? book.pictureName : DefaultNamesEnum.book
-      this.fileService.getUrl(name)
-        .then(res => {
-          book.pictureUrl = res
-        })
+      if (book.pictureName) {
+        this.fileService.getUrl(book.pictureName)
+          .then(res => {
+            book.pictureUrl = res
+          })
+      }
     })
     this.books = this.books.concat(nextBooks)
     this.allElements = this.books.length < this.requestCount

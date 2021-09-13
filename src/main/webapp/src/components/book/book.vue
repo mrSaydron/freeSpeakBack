@@ -64,7 +64,6 @@ import BookDictionary from '@/components/book/bookDictionary.vue'
 import { DictionaryDto } from '@/model/dictionaryDto'
 import BookDictionaryService from '@/services/bookDictionaryService'
 import FileService from '@/services/fileService'
-import { DefaultNamesEnum } from '@/model/enums/defaultNamesEnum'
 
 @Component({
   components: {
@@ -91,9 +90,12 @@ export default class Book extends Vue {
       this.bookService.find(Number(bookId))
         .then(book => {
           this.book = book
-          const name = this.book.pictureName ? this.book.pictureName : DefaultNamesEnum.book
-          this.fileService.getUrl(name)
-            .then(res => { this.book.pictureUrl = res })
+          if (this.book.pictureName) {
+            this.fileService.getUrl(this.book.pictureName)
+              .then(res => {
+                this.book.pictureUrl = res
+              })
+          }
           if (this.book && this.book.dictionaryId) {
             this.dictionaryService.find(this.book.dictionaryId)
               .then(dictionary => {

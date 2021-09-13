@@ -88,7 +88,6 @@ import { Inject, Vue } from 'vue-property-decorator'
 import BookService from '@/services/bookService'
 import { BookDto } from '@/model/bookDto'
 import FileService from '@/services/fileService'
-import { DefaultNamesEnum } from '@/model/enums/defaultNamesEnum'
 
 @Component({
   components: {
@@ -101,10 +100,6 @@ export default class Library extends Vue {
   public book: BookDto = new BookDto()
   public valid = false
   public picture: File | undefined
-
-  public async mounted () {
-    this.book.pictureUrl = await this.fileService.getUrl(DefaultNamesEnum.book)
-  }
 
   public titleRules = [
     (v: string): boolean | string => !!v || 'Название книги обязательно к заполнению',

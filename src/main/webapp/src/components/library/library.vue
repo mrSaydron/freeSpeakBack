@@ -67,7 +67,6 @@ import { SortValue, asc, desc, SortDirection } from '@/util/sortValue'
 import SortButton from '@/common/sortButton.vue'
 import SelectButton from '@/common/selectButton.vue'
 import FileService from '@/services/fileService'
-import { DefaultNamesEnum } from '@/model/enums/defaultNamesEnum'
 import { knowLevels } from '@/model/enums/knowLevelEnum'
 
 @Component({
@@ -118,11 +117,12 @@ export default class Library extends Vue {
   public async retrieve (add: boolean): Promise<void> {
     const nextBooks = await this.bookService.retrieve(this.bookFilter)
     nextBooks.forEach(book => {
-      const name = book.pictureName ? book.pictureName : DefaultNamesEnum.book
-      this.fileService.getUrl(name)
-        .then(res => {
-          book.pictureUrl = res
-        })
+      if (book.pictureName) {
+        this.fileService.getUrl(book.pictureName)
+          .then(res => {
+            book.pictureUrl = res
+          })
+      }
     })
     if (add) {
       this.books = this.books.concat(nextBooks)

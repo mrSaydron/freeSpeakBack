@@ -39,7 +39,7 @@ public class WooordhuntService implements GetSoundServiceInterface {
             SoundResult soundResult = new SoundResult(soundStream, FILE_TYPE, contentLength, contentType);
             result = Optional.of(soundResult);
         } catch (IOException e) {
-            log.warn("Con not get sound", e);
+            log.warn("Con not get sound for word: {}", word);
         }
         return result;
     }

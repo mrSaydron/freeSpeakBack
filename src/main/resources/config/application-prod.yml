@@ -50,10 +50,16 @@ spring:
   liquibase:
     contexts: prod
   mail:
-    host: free-speak.ru
-    port: 25
-    username: system
-    password: 16729438
+      host: smtp.yandex.com
+      port: 465
+      username: system@free-speak.ru
+      password: xjoilrkcbseolrni
+      properties:
+          mail:
+              smtp:
+                  auth: true
+                  ssl:
+                      enable: true
   thymeleaf:
     cache: true
 
@@ -110,7 +116,7 @@ jhipster:
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000
   mail: # specific JHipster mail property, for standard properties see MailProperties
-    base-url: http://free-speak.ru # Modify according to your server's URL
+    base-url: https://free-speak.ru # Modify according to your server's URL
   metrics:
     logs: # Reports metrics in the logs
       enabled: false

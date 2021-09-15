@@ -59,7 +59,7 @@ management:
 
 spring:
   application:
-    name: lib_four
+    name: free-speak
   profiles:
     # The commented value for `active` can be replaced with valid Spring profiles to load.
     # Otherwise, it will be filled in by gradle when building the JAR file
@@ -141,7 +141,7 @@ jhipster:
   #     allow-credentials: true
   #     max-age: 1800
   mail:
-    from: lib_four@localhost
+    from: system@free-speak.ru
   swagger:
     default-include-pattern: /api/.*
     title: lib_four API

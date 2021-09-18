@@ -9,7 +9,6 @@ public interface TranslateServiceInterface {
     void updateAllWords();
     void updateNoTranslateWords();
 
-    @Async
     void updateWords(List<Word> words);
 
     @Async

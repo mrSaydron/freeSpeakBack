@@ -20,6 +20,7 @@ public interface WordRepository extends JpaRepository<Word, Long>, JpaSpecificat
 
     Optional<Word> findByWordAndPartOfSpeech(String word, String partOfSpeech);
 
+    @Modifying
     @Query(value = "update word " +
         "set word.total_amount = (" +
         "select sum(bdhw.count) " +
@@ -39,15 +40,14 @@ public interface WordRepository extends JpaRepository<Word, Long>, JpaSpecificat
         "where b.public_book = true", nativeQuery = true)
     Long getWordsCount();
 
-    @Query(value = "update word " +
-        "set word.total_amount = word.total_amount + (" +
-        "select sum(bdhw.count) " +
-        "from word w " +
-        "join book_dictionary_has_word bdhw on w.id = bdhw.word_id " +
+    @Modifying
+    @Query(value = "update word w " +
+        "set total_amount = coalesce(total_amount, 0) + ( " +
+        "select COALESCE(sum(bdhw.count), 0) " +
+        "from book_dictionary_has_word bdhw " +
         "join book_dictionary bd on bdhw.book_dictionary_id = bd.id " +
-        " where bd.book_id = :bookId " +
-        "and word.id = w.id) " +
-        "where 1=1", nativeQuery = true)
+        "where bd.book_id = 3 " +
+        "and w.id = bdhw.word_id)", nativeQuery = true)
     void updateTotalAmountByBookId(@Param("bookId") Long bookId);
 
     @Query(value = "select sum(bdhw.count) " +

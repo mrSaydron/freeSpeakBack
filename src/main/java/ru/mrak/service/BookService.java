@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.mrak.domain.*;
@@ -43,35 +44,32 @@ public class BookService {
 
     /**
      * Save a book.
-     *
      * @param bookDTO the entity to save.
-     * @return the persisted entity.
      */
-    public BookDTO save(BookDTO bookDTO) {
+    @Async
+    public void save(BookDTO bookDTO, User user) {
         log.debug("Request to save Book : {}", bookDTO);
         Book book = bookMapper.toEntity(bookDTO);
-        User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
-        if (book.getLoadedUser() == null) {
-            book.setLoadedUser(user);
-        }
+        book.setInProcessing(true);
+
+        book.setLoadedUser(user);
         if (book.getUsers() == null) {
             book.setUsers(new HashSet<>());
         }
         book.getUsers().add(user);
+        book = bookRepository.save(book);
+        entityManager.flush();
 
         BookDictionary dictionary = dictionaryService.createByText(book.getText(), "eng", "ru");
         book.setDictionary(dictionary);
         dictionary.setBook(book);
 
-        book = bookRepository.save(book);
+        book.setInProcessing(false);
         entityManager.flush();
 
-        // todo не понятно почему не работает. Книга не сохранена во время подсчета слов
-//        if (book.getPublicBook()) {
-//            wordService.updateTotalAmount(book);
-//        }
-
-        return bookMapper.toDto(book);
+        if (book.getPublicBook()) {
+            wordService.updateTotalAmount(book.getId());
+        }
     }
 
     /**

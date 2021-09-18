@@ -132,9 +132,9 @@ public class WordService {
     /**
      * Обновляет количество слов (частоту) по книге
      */
-    public void updateTotalAmount(Book book) {
-        wordRepository.updateTotalAmountByBookId(book.getId());
-        long wordsCount = wordRepository.getWordsCountByBook(book.getId());
+    public void updateTotalAmount(long bookId) {
+        wordRepository.updateTotalAmountByBookId(bookId);
+        long wordsCount = wordRepository.getWordsCountByBook(bookId);
         wordsCount += Long.parseLong(serviceDataService.getByKey(ServiceDataKeysEnum.totalWords).getValue());
         serviceDataService.save(ServiceDataKeysEnum.totalWords, String.valueOf(wordsCount));
     }

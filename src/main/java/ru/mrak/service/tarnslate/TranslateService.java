@@ -43,16 +43,14 @@ public class TranslateService implements TranslateServiceInterface {
     }
 
     @Override
-    @Async
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional
     public void updateWords(List<Word> words) {
         log.debug("Update words");
-        words.forEach(this::updateWord);//todo сделать ассинхронным
+        words.forEach(this::updateWord);
         log.debug("Update words finish");
     }
 
     @Override
-    @Async
     public void updateWord(Word word) {
         log.debug("Update word: {}", word);
         try {

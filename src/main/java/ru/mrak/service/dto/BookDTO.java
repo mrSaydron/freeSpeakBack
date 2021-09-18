@@ -30,6 +30,7 @@ public class BookDTO implements Serializable {
     private Set<UserDTO> users = new HashSet<>();
     private Double know;
     private String pictureName;
+    private Boolean inProcessing;
 
     public Long getId() {
         return id;
@@ -131,6 +132,14 @@ public class BookDTO implements Serializable {
         this.pictureName = pictureName;
     }
 
+    public Boolean getInProcessing() {
+        return inProcessing;
+    }
+
+    public void setInProcessing(Boolean inProcessing) {
+        this.inProcessing = inProcessing;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -165,6 +174,7 @@ public class BookDTO implements Serializable {
             ", publicBook='" + getPublicBook() + "'" +
             ", know='" + getKnow() + "'" +
             ", pictureName='" + getPictureName() + "'" +
+            ", inProcessing='" + getInProcessing() + "'" +
             "}";
     }
 }

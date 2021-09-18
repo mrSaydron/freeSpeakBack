@@ -1,7 +1,9 @@
 package ru.mrak.web.rest;
 
 import org.springframework.transaction.annotation.Transactional;
+import ru.mrak.domain.User;
 import ru.mrak.service.BookService;
+import ru.mrak.service.UserService;
 import ru.mrak.web.rest.errors.BadRequestAlertException;
 import ru.mrak.service.dto.BookDTO;
 import ru.mrak.service.dto.BookCriteria;
@@ -41,12 +43,13 @@ public class BookResource {
     private String applicationName;
 
     private final BookService bookService;
-
     private final BookQueryService bookQueryService;
+    private final UserService userService;
 
-    public BookResource(BookService bookService, BookQueryService bookQueryService) {
+    public BookResource(BookService bookService, BookQueryService bookQueryService, UserService userService) {
         this.bookService = bookService;
         this.bookQueryService = bookQueryService;
+        this.userService = userService;
     }
 
     /**
@@ -57,15 +60,13 @@ public class BookResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping
-    public ResponseEntity<BookDTO> createBook(@Valid @RequestBody BookDTO bookDTO) throws URISyntaxException {
+    public void createBook(@Valid @RequestBody BookDTO bookDTO) throws URISyntaxException {
         log.debug("REST request to save Book : {}", bookDTO);
         if (bookDTO.getId() != null) {
             throw new BadRequestAlertException("A new book cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        BookDTO result = bookService.save(bookDTO);
-        return ResponseEntity.created(new URI("/api/books/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
-            .body(result);
+        User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
+        bookService.save(bookDTO, user);
     }
 
     /**
@@ -79,14 +80,15 @@ public class BookResource {
      */
     @PutMapping
     public ResponseEntity<BookDTO> updateBook(@Valid @RequestBody BookDTO bookDTO) throws URISyntaxException {
-        log.debug("REST request to update Book : {}", bookDTO);
-        if (bookDTO.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        BookDTO result = bookService.save(bookDTO);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, bookDTO.getId().toString()))
-            .body(result);
+        throw new RuntimeException("Not implemented");
+//        log.debug("REST request to update Book : {}", bookDTO);
+//        if (bookDTO.getId() == null) {
+//            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+//        }
+//        BookDTO result = bookService.save(bookDTO);
+//        return ResponseEntity.ok()
+//            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, bookDTO.getId().toString()))
+//            .body(result);
     }
 
     /**

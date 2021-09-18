@@ -42,7 +42,7 @@ public class Book implements Serializable {
     private String text;
 
     @NotNull
-    @Column(name = "public_book", nullable = false, length = 16_777_214)
+    @Column(name = "public_book", nullable = false)
     private Boolean publicBook;
 
     @OneToOne(mappedBy = "book", fetch = FetchType.LAZY)
@@ -54,6 +54,9 @@ public class Book implements Serializable {
 
     @Column(name = "picture_name")
     private String pictureName;
+
+    @Column(name = "in_processing")
+    private boolean inProcessing;
 
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -200,6 +203,22 @@ public class Book implements Serializable {
         this.pictureName = pictureName;
     }
 
+    public boolean isInProcessing() {
+        return inProcessing;
+    }
+
+    public void setInProcessing(boolean inProcessing) {
+        this.inProcessing = inProcessing;
+    }
+
+    public Collection<BookUserKnow> getUserKnows() {
+        return userKnows;
+    }
+
+    public void setUserKnows(Collection<BookUserKnow> userKnows) {
+        this.userKnows = userKnows;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -227,6 +246,7 @@ public class Book implements Serializable {
             ", text='" + getText() + "'" +
             ", publicBook='" + isPublicBook() + "'" +
             ", pictureName='" + getPictureName() + "'" +
+            ", inProcessing='" + isInProcessing() + "'" +
             "}";
     }
 }

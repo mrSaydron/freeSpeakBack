@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="20210920000002_fill_token_rule" author="karmanov">
+        <loadData
+                  file="config/liquibase/data/token_rule.csv"
+                  separator=";"
+                  tableName="token_rule">
+            <column name="part_of_speech" type="string"/>
+            <column name="rule_name" type="string"/>
+        </loadData>
+    </changeSet>
+</databaseChangeLog>

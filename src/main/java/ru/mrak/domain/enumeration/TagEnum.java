@@ -2,6 +2,9 @@ package ru.mrak.domain.enumeration;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ru.mrak.service.DictionaryService;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -58,18 +61,34 @@ public enum TagEnum {
     COMMA(",", "comma", ","),
     FINAL_PUNC(".", "sentence-final punc", ". ! ?"),
     SENTENCE_PUNC(":", "mid-sentence punc", ": ; ... - --"),
+    HYPH("HYPH", "", ""), // Не понятно что такое, возможно знак переноса
+    QUOTE("``", "", ""), // Какой то значок
+    QUOTE_2("''", "", ""), // Какой то значок
+    _LRB_("-LRB-", null, "("), // Скобка слева
+    _RRB_("-RRB-", null, ")"), // Скобка справа
+    ANY(null, null, null), // Сервистный тэг, любая часть речи
     ;
 
     private String tag;
     private String description;
     private String example;
 
-    public static final Map<String, TagEnum> byTag;
+    private static final Logger log = LoggerFactory.getLogger(TagEnum.class);
+
+    private static final Map<String, TagEnum> byTag;
     public static final Set<TagEnum> filterTags = new HashSet<>(
         Arrays.asList(CD, EX, IN, JJ, JJR, JJS, MD, NN, NNS, PDT, PRP, PRPS, RB, RBR, RBS, RP, VB, VBD, VBG, VBN, VBP, VBZ, WDT, WP, WPS, WRB)
     );
 
     static {
         byTag = Arrays.stream(TagEnum.values()).collect(Collectors.toMap(item -> item.tag, Function.identity()));
+    }
+
+    public static TagEnum getByTag(String tag) {
+        TagEnum tagEnum = byTag.get(tag);
+        if (tagEnum == null) {
+            log.warn("No tag: {}", tag);
+        }
+        return tagEnum;
     }
 }

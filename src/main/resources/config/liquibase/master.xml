@@ -41,4 +41,8 @@
     <include file="config/liquibase/changelog/20210820100900_T-76_add_table_with_level_knowledge.sql" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210820100900_T-76_edit_book_user_know_view.sql" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210918000000_added_field_in_processing_to_book.sql" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210919000000_add_table_word_exception.sql" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210920000000_fill_exception_word.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210920000001_add_table_token_rule.sql" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210920000002_fill_token_rule.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

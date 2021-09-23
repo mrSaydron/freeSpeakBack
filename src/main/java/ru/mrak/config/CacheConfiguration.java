@@ -19,6 +19,8 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.*;
 import ru.mrak.domain.BookDictionary;
 import ru.mrak.domain.BookDictionaryHasWord;
+import ru.mrak.domain.entity.ExceptionWord;
+import ru.mrak.domain.entity.TokenRule;
 
 @Configuration
 @EnableCaching
@@ -59,6 +61,8 @@ public class CacheConfiguration {
             createCache(cm, ru.mrak.domain.Chat.class.getName() + ".users");
             createCache(cm, ru.mrak.domain.Message.class.getName());
             // jhipster-needle-ehcache-add-entry
+            createCache(cm, ExceptionWord.class.getName());
+            createCache(cm, TokenRule.class.getName());
         };
     }
 

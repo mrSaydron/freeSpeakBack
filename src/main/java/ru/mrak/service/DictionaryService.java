@@ -4,11 +4,10 @@ import edu.stanford.nlp.ling.CoreLabel;
 import lombok.RequiredArgsConstructor;
 import ru.mrak.domain.BookDictionary;
 import ru.mrak.domain.BookDictionaryHasWord;
+import ru.mrak.domain.TokenLight;
 import ru.mrak.domain.Word;
 import ru.mrak.domain.enumeration.TagEnum;
-import ru.mrak.repository.DictionaryHasWordRepository;
-import ru.mrak.repository.DictionaryRepository;
-import ru.mrak.repository.WordRepository;
+import ru.mrak.repository.*;
 import ru.mrak.service.dto.BookDictionaryDTO;
 import ru.mrak.service.mapper.DictionaryMapper;
 import org.slf4j.Logger;
@@ -42,6 +41,8 @@ public class DictionaryService {
     private final DictionaryRepository dictionaryRepository;
     private final DictionaryHasWordRepository dictionaryHasWordRepository;
     private final WordRepository wordRepository;
+    private final ExceptionWordRepository exceptionWordRepository;
+    private final TokenRuleRepository tokenRuleRepository;
 
     private final EntityManager entityManager;
 
@@ -71,7 +72,6 @@ public class DictionaryService {
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
-
     /**
      * Get one dictionary by id.
      *
@@ -99,29 +99,32 @@ public class DictionaryService {
      * Формирует словарь из переданного текста. Текст разбивается на токены, фильтруется, считается количество слов
      * @param text - текст из которого формируется словарь
      * @param baseLanguage - язык текста
-     * @param targerLanguage - целеваой язык
+     * @param targetLanguage - целеваой язык
      * @return - словарь
      */
-    public BookDictionary createByText(String text, String baseLanguage, String targerLanguage) {
+    public BookDictionary createByText(String text, String baseLanguage, String targetLanguage) {
         BookDictionary dictionary = new BookDictionary();
         dictionary.setBaseLanguage(baseLanguage);
-        dictionary.setTargetLanguage(targerLanguage);
+        dictionary.setTargetLanguage(targetLanguage);
 
         List<BookDictionaryHasWord> dictionaryWords = new ArrayList<>();
         dictionary.setDictionaryWords(dictionaryWords);
-
         try {
             List<CoreLabel> tokens = tokenizerService.getTokens(text);
             Map<TokenLight, Long> tokenCountMap = tokens.stream()
-                .filter(token -> TagEnum.filterTags.contains(TagEnum.byTag.get(token.tag())))
+                .filter(token -> TagEnum.filterTags.contains(TagEnum.getByTag(token.tag())))
                 .map(TokenLight::new)
+                .peek(this::exceptionWord)
+                .peek(this::exceptionWordAnyPOS)
+                .peek(this::applyRuleTransformation)
+                .peek(this::defaultWordTransformation)
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
             List<Word> newWords = new ArrayList<>();
             tokenCountMap.forEach((tokenLight, count) -> {
-                Optional<Word> optionalWord = wordRepository.findByWordAndPartOfSpeech(tokenLight.token.lemma(), tokenLight.token.tag());
+                Optional<Word> optionalWord = wordRepository.findByWordAndPartOfSpeech(tokenLight.getWord(), tokenLight.getTag().getTag());
                 Word word = optionalWord.orElseGet(() -> {
-                    Word newWord = wordService.create(tokenLight.token);
+                    Word newWord = wordService.create(tokenLight);
                     newWords.add(newWord);
                     return newWord;
                 });
@@ -147,29 +150,51 @@ public class DictionaryService {
         return dictionary;
     }
 
-    public static class TokenLight {
-        public String lemma;
-        public String tag;
-        public CoreLabel token;
+    /**
+     * Преобразование токена в резулютирующее слово, есил другие преобразователи не отработали
+     * Из токена берется лемма и тег
+     */
+    private void defaultWordTransformation(TokenLight tokenLight) {
+        if (tokenLight.isDone()) return;
+        tokenLight.setWord(tokenLight.getToken().lemma());
+        tokenLight.setTag(TagEnum.getByTag(tokenLight.getToken().tag()));
+    }
 
-        public TokenLight(CoreLabel token) {
-            this.token = token;
-            this.lemma = token.lemma();
-            this.tag = token.tag();
-        }
+    /**
+     * Проверяет, это слово есть в исключениях
+     */
+    private void exceptionWord(TokenLight tokenLight) {
+        if (tokenLight.isDone()) return;
+        exceptionWordRepository.findByWordAndPartOfSpeech(tokenLight.getToken().word(), TagEnum.getByTag(tokenLight.getToken().tag()))
+            .ifPresent(exceptionWord -> {
+                tokenLight.setDone(true);
+                tokenLight.setWord(exceptionWord.getWord());
+                tokenLight.setTag(exceptionWord.getPartOfSpeech());
+            });
+    }
 
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            TokenLight that = (TokenLight) o;
-            return Objects.equals(lemma, that.lemma) &&
-                Objects.equals(tag, that.tag);
-        }
+    /**
+     * Проверяет слово на исключение, без зависимости от части речи
+     */
+    private void exceptionWordAnyPOS(TokenLight tokenLight) {
+        if (tokenLight.isDone()) return;
+        exceptionWordRepository.findByWordAndPartOfSpeech(tokenLight.getToken().word(), TagEnum.ANY)
+            .ifPresent(exceptionWord -> {
+                tokenLight.setDone(true);
+                tokenLight.setWord(exceptionWord.getWord());
+                tokenLight.setTag(exceptionWord.getPartOfSpeech());
+            });
+    }
 
-        @Override
-        public int hashCode() {
-            return Objects.hash(lemma, tag);
-        }
+    /**
+     * Применяет правило в зависимости от части речи
+     */
+    private void applyRuleTransformation(TokenLight tokenLight) {
+        if (tokenLight.isDone()) return;
+        tokenRuleRepository.findByPartOfSpeech(TagEnum.getByTag(tokenLight.getToken().tag()))
+            .ifPresent(tokenRule -> {
+                tokenLight.setDone(true);
+                tokenRule.getRule().getRule().accept(tokenLight);
+            });
     }
 }

@@ -55,7 +55,7 @@ public class TranslateService implements TranslateServiceInterface {
         log.debug("Update word: {}", word);
         try {
             WordHead lookup = yandexTranslateService.requestWord(word.getWord());
-            Set<PosEnum> posEnums = PosEnum.tagToPos.get(TagEnum.byTag.get(word.getPartOfSpeech()));
+            Set<PosEnum> posEnums = PosEnum.tagToPos.get(TagEnum.getByTag(word.getPartOfSpeech()));
             if (posEnums != null) {
                 WordDef chooseWord = null;
                 if (lookup.getDef().size() > 0) {

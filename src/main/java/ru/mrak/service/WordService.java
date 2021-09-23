@@ -107,13 +107,12 @@ public class WordService {
 
     /**
      * Создается слово из токена
-     * @param token - токен
      * @return - созданное слово
      */
-    public Word create(CoreLabel token) {
+    public Word create(TokenLight tokenLight) {
         Word word = new Word();
-        word.setWord(token.lemma());
-        word.setPartOfSpeech(token.tag());
+        word.setWord(tokenLight.getWord());
+        word.setPartOfSpeech(tokenLight.getTag().getTag());
 
         wordRepository.save(word);
 

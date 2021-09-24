@@ -36,6 +36,7 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
     @Query(value = "select bdhw.word_id " +
         "from book_dictionary bd " +
         "join book_dictionary_has_word bdhw on bd.id = bdhw.book_dictionary_id " +
+        "join word w on w.id = bdhw.word_id " +
         "left join ( " +
         "select udhw.id, udhw.word_id, ud.base_language, ud.target_language " +
         "from user_dictionary ud " +
@@ -43,7 +44,8 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
         "where ud.user_id = :userId " +
         ") user_words on user_words.word_id = bdhw.word_id " +
         "where user_words.id is null " +
-        "and bd.book_id = :bookId", nativeQuery = true)
+        "and bd.book_id = :bookId " +
+        "and w.translate is not null ", nativeQuery = true)
     List<Long> getMissingWords(@Param("userId") Long userId, @Param("bookId") Long bookId);
 
 }

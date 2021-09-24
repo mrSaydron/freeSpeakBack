@@ -36,4 +36,8 @@ public class TokenRule implements Serializable {
     @Enumerated(EnumType.STRING)
     private TokenRuleEnum rule;
 
+    @NotNull
+    @Column(name = "target_part_of_speech")
+    @Enumerated(EnumType.STRING)
+    private TagEnum targetPOS;
 }

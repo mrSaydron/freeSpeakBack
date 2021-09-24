@@ -43,11 +43,11 @@ public enum TagEnum {
     TO("TO", "to", "to"), // ???
     UH("UH", "interjection", "ah, oops"), // Междометие
     VB("VB", "verb base form", "eat"), // Глагол, базовая форма
-    VBD("VBD", "verb past tense", "ate"), // Глагол в прошедшей форме
+    VBD("VBD", "verb past tense", "ate"), // Глагол 2 форма
     VBG("VBG", "verb gerund", "eating"), // Глагол, герундий
-    VBN("VBN", "verb past participle", "eaten"), // Глагол причастие в прошедшем времени
-    VBP("VBP", "verb non-3sg pres", "eat"), // Глагол ???
-    VBZ("VBZ", "verb 3sg pers", "eats"), // Глагол ???
+    VBN("VBN", "verb past participle", "eaten"), // Глагол 3 форма
+    VBP("VBP", "verb non-3sg pres", "eat"), // Глагол мастоимениями I...
+    VBZ("VBZ", "verb 3sg pers", "eats"), // Глагол с местоимениями he she it
     WDT("WDT", "wh-determiner", "which, that"), // Вопрос определитель
     WP("WP", "wh-pronoun", "what, who"), // Вопрос к местоимению
     WPS("WP$", "possessive wh-", "whose"), // Вопрос к притяжательному местоимению
@@ -66,20 +66,18 @@ public enum TagEnum {
     QUOTE_2("''", "", ""), // Какой то значок
     _LRB_("-LRB-", null, "("), // Скобка слева
     _RRB_("-RRB-", null, ")"), // Скобка справа
-    ANY(null, null, null), // Сервистный тэг, любая часть речи
+
+    ANY("ANY", null, null), // Сервистный тэг, любая часть речи
+    REMOVE("REMOVE", null, null), // Тег помечающий слово на удаление
     ;
 
-    private String tag;
-    private String description;
-    private String example;
+    private final String tag;
+    private final String description;
+    private final String example;
 
     private static final Logger log = LoggerFactory.getLogger(TagEnum.class);
 
     private static final Map<String, TagEnum> byTag;
-    public static final Set<TagEnum> filterTags = new HashSet<>(
-        Arrays.asList(CD, EX, IN, JJ, JJR, JJS, MD, NN, NNS, PDT, PRP, PRPS, RB, RBR, RBS, RP, VB, VBD, VBG, VBN, VBP, VBZ, WDT, WP, WPS, WRB)
-    );
-
     static {
         byTag = Arrays.stream(TagEnum.values()).collect(Collectors.toMap(item -> item.tag, Function.identity()));
     }

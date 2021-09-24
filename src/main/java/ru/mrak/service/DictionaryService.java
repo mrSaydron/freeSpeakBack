@@ -82,7 +82,10 @@ public class DictionaryService {
     public Optional<BookDictionaryDTO> findOne(Long id) {
         log.debug("Request to get Dictionary : {}", id);
         return dictionaryRepository.findById(id)
-            .map(dictionaryMapper::toDto);
+            .map(dictionaryMapper::toDto)
+            .filter(bookDictionaryDTO -> bookDictionaryDTO.getDictionaryWords()
+                    .removeIf(dictionaryHasWordDTO -> dictionaryHasWordDTO.getWord().getTranslate() != null)
+            );
     }
 
     /**
@@ -112,12 +115,12 @@ public class DictionaryService {
         try {
             List<CoreLabel> tokens = tokenizerService.getTokens(text);
             Map<TokenLight, Long> tokenCountMap = tokens.stream()
-                .filter(token -> TagEnum.filterTags.contains(TagEnum.getByTag(token.tag())))
                 .map(TokenLight::new)
                 .peek(this::exceptionWord)
                 .peek(this::exceptionWordAnyPOS)
                 .peek(this::applyRuleTransformation)
                 .peek(this::defaultWordTransformation)
+                .filter(tokenLight -> tokenLight.getTag() != TagEnum.REMOVE)
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
             List<Word> newWords = new ArrayList<>();
@@ -156,8 +159,7 @@ public class DictionaryService {
      */
     private void defaultWordTransformation(TokenLight tokenLight) {
         if (tokenLight.isDone()) return;
-        tokenLight.setWord(tokenLight.getToken().lemma());
-        tokenLight.setTag(TagEnum.getByTag(tokenLight.getToken().tag()));
+        tokenLight.setTag(TagEnum.REMOVE);
     }
 
     /**
@@ -194,7 +196,7 @@ public class DictionaryService {
         tokenRuleRepository.findByPartOfSpeech(TagEnum.getByTag(tokenLight.getToken().tag()))
             .ifPresent(tokenRule -> {
                 tokenLight.setDone(true);
-                tokenRule.getRule().getRule().accept(tokenLight);
+                tokenRule.getRule().getRule().accept(tokenLight, tokenRule.getTargetPOS());
             });
     }
 }

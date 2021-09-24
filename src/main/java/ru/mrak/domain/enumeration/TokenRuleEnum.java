@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import ru.mrak.domain.TokenLight;
 
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
@@ -12,16 +13,27 @@ import java.util.function.Consumer;
 @AllArgsConstructor
 @Getter
 public enum TokenRuleEnum {
-    LEMMA(tokenLight -> {
+    LEMMA((tokenLight, targetPOS) -> {
         tokenLight.setTag(TagEnum.getByTag(tokenLight.getToken().tag()));
         tokenLight.setWord(tokenLight.getToken().lemma());
     }),
-    NO_LEMMA(tokenLight -> {
+    NO_LEMMA((tokenLight, targetPOS) -> {
         tokenLight.setTag(TagEnum.getByTag(tokenLight.getToken().tag()));
         tokenLight.setWord(tokenLight.getToken().word());
     }),
+    NUMBER((tokenLight, targetPOS) -> {
+        if (tokenLight.getToken().word().matches("[0-9]*")) {
+            tokenLight.setTag(TagEnum.REMOVE);
+        } else {
+            tokenLight.setTag(TagEnum.getByTag(tokenLight.getToken().tag()));
+            tokenLight.setWord(tokenLight.getToken().word());
+        }
+    }),
+    REMOVE((tokenLight, targetPOS) -> {
+        tokenLight.setTag(TagEnum.REMOVE);
+    })
     ;
 
-    private final Consumer<TokenLight> rule;
+    private final BiConsumer<TokenLight, TagEnum> rule;
 
 }

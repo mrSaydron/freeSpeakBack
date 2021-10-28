@@ -1,0 +1,59 @@
+package ru.mrak.model.entity;
+
+import org.hibernate.annotations.CollectionId;
+import org.hibernate.annotations.Type;
+import ru.mrak.config.Constants;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = "book_sentence")
+public class BookSentence {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_sentence_seq")
+    @SequenceGenerator(name = "book_sentence_seq", sequenceName = "book_sentence_seq", allocationSize = 1)
+    private Long id;
+
+    @Column(name = "book_id")
+    private Long bookId;
+
+    @ElementCollection
+    @CollectionTable(
+        name = "book_sentence_has_word",
+        joinColumns = @JoinColumn(name = "book_sentence_id")
+    )
+    @CollectionId(
+        columns = @Column(name = "id"),
+        type = @Type(type = "long"),
+        generator = "book_sentence_has_word_seq"
+    )
+    @SequenceGenerator(name = "book_sentence_has_word_seq", sequenceName = "book_sentence_has_word_seq", allocationSize = 1)
+    private List<BookSentenceHasWord> words = new ArrayList<>();
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public List<BookSentenceHasWord> getWords() {
+        return words;
+    }
+
+    public void setWords(List<BookSentenceHasWord> words) {
+        this.words = words;
+    }
+
+    public Long getBookId() {
+        return bookId;
+    }
+
+    public void setBookId(Long bookId) {
+        this.bookId = bookId;
+    }
+}

@@ -3,7 +3,7 @@ package ru.mrak.service;
 import ru.mrak.config.Constants;
 
 import ru.mrak.LibFourApp;
-import ru.mrak.domain.User;
+import ru.mrak.model.entity.User;
 import io.github.jhipster.config.JHipsterProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

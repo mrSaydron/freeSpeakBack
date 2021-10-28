@@ -3,7 +3,7 @@ package ru.mrak.service.tarnslate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import ru.mrak.domain.SoundResult;
+import ru.mrak.model.SoundResult;
 
 import java.io.IOException;
 import java.io.InputStream;

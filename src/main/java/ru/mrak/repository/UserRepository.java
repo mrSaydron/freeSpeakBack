@@ -1,6 +1,6 @@
 package ru.mrak.repository;
 
-import ru.mrak.domain.User;
+import ru.mrak.model.entity.User;
 
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;

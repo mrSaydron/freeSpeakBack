@@ -1,7 +1,7 @@
 package ru.mrak.service.mapper;
 
 import org.mapstruct.Mapper;
-import ru.mrak.domain.UserWordProgress;
+import ru.mrak.model.entity.userWordProgress.UserWordProgress;
 import ru.mrak.service.dto.userWord.WordProgressDTO;
 
 /**

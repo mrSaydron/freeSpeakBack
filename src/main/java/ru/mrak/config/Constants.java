@@ -12,6 +12,8 @@ public final class Constants {
     public static final String DEFAULT_LANGUAGE = "ru";
     public static final String ANONYMOUS_USER = "anonymoususer";
 
+    public static final String ID_GENERATOR = "ID_GENERATOR";
+
     private Constants() {
     }
 }

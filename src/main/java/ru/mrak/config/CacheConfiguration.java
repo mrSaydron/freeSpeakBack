@@ -17,10 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import io.github.jhipster.config.cache.PrefixedKeyGenerator;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.*;
-import ru.mrak.domain.BookDictionary;
-import ru.mrak.domain.BookDictionaryHasWord;
-import ru.mrak.domain.entity.ExceptionWord;
-import ru.mrak.domain.entity.TokenRule;
+import ru.mrak.model.entity.*;
 
 @Configuration
 @EnableCaching
@@ -49,18 +46,12 @@ public class CacheConfiguration {
         return cm -> {
             createCache(cm, ru.mrak.repository.UserRepository.USERS_BY_LOGIN_CACHE);
             createCache(cm, ru.mrak.repository.UserRepository.USERS_BY_EMAIL_CACHE);
-            createCache(cm, ru.mrak.domain.User.class.getName());
-            createCache(cm, ru.mrak.domain.Authority.class.getName());
-            createCache(cm, ru.mrak.domain.User.class.getName() + ".authorities");
-            createCache(cm, ru.mrak.domain.Book.class.getName());
-            createCache(cm, BookDictionary.class.getName());
-            createCache(cm, ru.mrak.domain.Word.class.getName());
-            createCache(cm, BookDictionaryHasWord.class.getName());
-            createCache(cm, ru.mrak.domain.Book.class.getName() + ".users");
-            createCache(cm, ru.mrak.domain.Chat.class.getName());
-            createCache(cm, ru.mrak.domain.Chat.class.getName() + ".users");
-            createCache(cm, ru.mrak.domain.Message.class.getName());
-            // jhipster-needle-ehcache-add-entry
+            createCache(cm, User.class.getName());
+            createCache(cm, Authority.class.getName());
+            createCache(cm, User.class.getName() + ".authorities");
+            createCache(cm, Book.class.getName());
+            createCache(cm, Word.class.getName());
+            createCache(cm, Book.class.getName() + ".users");
             createCache(cm, ExceptionWord.class.getName());
             createCache(cm, TokenRule.class.getName());
         };

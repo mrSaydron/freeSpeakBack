@@ -8,7 +8,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.mrak.domain.*;
+import ru.mrak.model.*;
+import ru.mrak.model.entity.Book;
+import ru.mrak.model.entity.Book_;
+import ru.mrak.model.entity.bookUserKnow.BookUserKnow;
+import ru.mrak.model.entity.User;
+import ru.mrak.model.entity.bookUserKnow.BookUserKnow_;
 import ru.mrak.repository.BookRepository;
 import ru.mrak.service.dto.BookCriteria;
 import ru.mrak.service.dto.BookDTO;
@@ -36,13 +41,10 @@ public class BookQueryService extends QueryService<Book> {
 
     private final BookRepository bookRepository;
 
-    private final EntityManager entityManager;
-
-    public BookQueryService(BookRepository bookRepository, BookMapper bookMapper, UserService userService, EntityManager entityManager) {
+    public BookQueryService(BookRepository bookRepository, BookMapper bookMapper, UserService userService) {
         this.bookRepository = bookRepository;
         this.bookMapper = bookMapper;
         this.userService = userService;
-        this.entityManager = entityManager;
     }
 
     /**
@@ -98,34 +100,11 @@ public class BookQueryService extends QueryService<Book> {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), Book_.id));
             }
             if (criteria.getTitle() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getTitle(), Book_.title));
+                specification = specification.and(buildRangeSpecification(criteria.getTitle(), Book_.title));
             }
             if (criteria.getAuthor() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getAuthor(), Book_.author));
+                specification = specification.and(buildRangeSpecification(criteria.getAuthor(), Book_.author));
             }
-            if (criteria.getSource() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getSource(), Book_.source));
-            }
-            if (criteria.getText() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getText(), Book_.text));
-            }
-            if (criteria.getPublicBook() != null) {
-                specification = specification.and(buildSpecification(criteria.getPublicBook(), Book_.publicBook));
-            }
-            if (criteria.getDictionaryId() != null) {
-                specification = specification.and(buildSpecification(criteria.getDictionaryId(),
-                    root -> root.join(Book_.dictionary, JoinType.LEFT).get(BookDictionary_.id)));
-            }
-            if (criteria.getLoadedUserId() != null) {
-                specification = specification.and(buildSpecification(criteria.getLoadedUserId(),
-                    root -> root.join(Book_.loadedUser, JoinType.LEFT).get(User_.id)));
-            }
-            if (criteria.getUserId() != null) {
-                specification = specification.and(buildSpecification(criteria.getUserId(),
-                    root -> root.join(Book_.users, JoinType.LEFT).get(User_.id)));
-            }
-
-            // Фильтры
             if (criteria.getTitleAuthorFilter() != null) {
                 Specification<Book> commonSpecification =
                     Specification.where(buildStringSpecification(criteria.getTitleAuthorFilter(), Book_.author))
@@ -133,9 +112,7 @@ public class BookQueryService extends QueryService<Book> {
 
                 specification = specification.and(commonSpecification);
             }
-
             if (criteria.getKnowFilter() != null) {
-
                 Specification<Book> knowSpecification = (root, query, builder)
                     -> {
                     CollectionJoin<Book, BookUserKnow> userKnowJoin = root.join(Book_.userKnows, JoinType.LEFT);
@@ -143,10 +120,13 @@ public class BookQueryService extends QueryService<Book> {
                     Predicate less;
                     if (criteria.getKnowFilter().getLessThan() != null) {
                         less = builder.lessThan(userKnowJoin.get(BookUserKnow_.know), criteria.getKnowFilter().getLessThan());
-                    } else {
+                    } else if (criteria.getKnowFilter().getGreaterThanOrEqual() != null){
                         less = builder.lessThan(userKnowJoin.get(BookUserKnow_.know), criteria.getKnowFilter().getLessThanOrEqual());
+                    } else {
+                        throw new RuntimeException("Нет такого условия");
                     }
-                    Predicate greaterThanOrEqualToKnow = builder.greaterThanOrEqualTo(userKnowJoin.get(BookUserKnow_.know), criteria.getKnowFilter().getGreaterThanOrEqual());
+                    Predicate greaterThanOrEqualToKnow
+                        = builder.greaterThanOrEqualTo(userKnowJoin.get(BookUserKnow_.know), criteria.getKnowFilter().getGreaterThanOrEqual());
                     Predicate equalUser = builder.equal(userKnowJoin.get(BookUserKnow_.userId), user.getId());
 
                     return builder.and(less, greaterThanOrEqualToKnow, equalUser);
@@ -154,15 +134,6 @@ public class BookQueryService extends QueryService<Book> {
 
                 specification = specification.and(knowSpecification);
             }
-
-            // Сортировки
-            if (criteria.getStartTitle() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getStartTitle(), Book_.title));
-            }
-            if (criteria.getStartAuthor() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getStartAuthor(), Book_.author));
-            }
-
         }
 
         return specification;

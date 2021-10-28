@@ -1,12 +1,13 @@
 package ru.mrak.service.dto;
 
 import lombok.ToString;
+import ru.mrak.model.entity.Word;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
- * A DTO for the {@link ru.mrak.domain.Word} entity.
+ * A DTO for the {@link Word} entity.
  */
 @ToString
 public class WordDTO implements Serializable {

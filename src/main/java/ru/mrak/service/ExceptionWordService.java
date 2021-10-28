@@ -3,9 +3,9 @@ package ru.mrak.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.mrak.domain.entity.ExceptionWord;
-import ru.mrak.domain.TokenLight;
-import ru.mrak.domain.enumeration.TagEnum;
+import ru.mrak.model.entity.ExceptionWord;
+import ru.mrak.model.TokenLight;
+import ru.mrak.model.enumeration.PartOfSpeechEnum;
 import ru.mrak.repository.ExceptionWordRepository;
 
 import java.util.List;
@@ -37,10 +37,10 @@ public class ExceptionWordService {
 
         private ExceptionWordFinder(List<ExceptionWord> exceptionWords) {
             exceptionWordMap = exceptionWords.stream()
-                .filter(exceptionWord -> exceptionWord.getPartOfSpeech() != TagEnum.ANY)
+                .filter(exceptionWord -> exceptionWord.getPartOfSpeech() != PartOfSpeechEnum.ANY)
                 .collect(Collectors.toMap(Key::new, Function.identity()));
             anyPOSExceptionWordMap = exceptionWords.stream()
-                .filter(exceptionWord -> exceptionWord.getPartOfSpeech() == TagEnum.ANY)
+                .filter(exceptionWord -> exceptionWord.getPartOfSpeech() == PartOfSpeechEnum.ANY)
                 .collect(Collectors.toMap(ExceptionWord::getWord, Function.identity()));
         }
 

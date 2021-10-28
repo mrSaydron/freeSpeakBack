@@ -1,6 +1,6 @@
 package ru.mrak.service.s3;
 
-import ru.mrak.domain.enumeration.BucketEnum;
+import ru.mrak.model.enumeration.BucketEnum;
 
 import java.io.IOException;
 import java.io.InputStream;

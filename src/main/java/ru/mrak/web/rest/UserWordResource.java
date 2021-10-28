@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import ru.mrak.domain.UserDictionaryHasWord;
+import ru.mrak.model.entity.userWordProgress.UserWordProgress;
 import ru.mrak.service.UserWordService;
 import ru.mrak.service.dto.userWord.UserWordCriteria;
 import ru.mrak.service.dto.userWord.UserWordDTO;
@@ -40,8 +40,8 @@ public class UserWordResource {
     @Transactional(readOnly = true)
     public ResponseEntity<List<UserWordDTO>> getUserWords(UserWordCriteria criteria, Pageable pageable) {
         log.debug("REST request to get words for user by criteria: {}", criteria);
-        Page<UserDictionaryHasWord> pageHasWord = userWordService.findByCriteria(criteria, pageable);
-        Page<UserWordDTO> page = pageHasWord.map(userWordMapper::toDto);
+        Page<UserWordProgress> userWords = userWordService.findByCriteria(criteria, pageable);
+        Page<UserWordDTO> page = userWords.map(userWordMapper::toDto);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -152,8 +152,11 @@ public class UserWordResource {
     @Transactional(readOnly = true)
     public List<UserWordDTO> getWordsOfDay() {
         log.debug("REST request words of day");
-        List<UserDictionaryHasWord> userWords = userWordService.getWordsOfDay();
-        return userWordMapper.toDto(userWords);
+//        List<UserHasWord> userWords = userWordService.getWordsOfDay();
+//        return userWordMapper.toDto(userWords);
+
+        // todo
+        return null;
     }
 
     /**
@@ -162,7 +165,9 @@ public class UserWordResource {
     @PutMapping("/answer-fail/{progressId}")
     public void answerFail(@PathVariable Long progressId) {
         log.debug("REST request word fail, progress id: {}", progressId);
-        userWordService.answerFail(progressId);
+//        userWordService.answerFail(progressId);
+
+        // todo
     }
 
     /**
@@ -171,6 +176,8 @@ public class UserWordResource {
     @PutMapping("/answer-success/{progressId}")
     public void answerSuccess(@PathVariable Long progressId) {
         log.debug("REST request word success, progress id: {}", progressId);
-        userWordService.answerSuccess(progressId);
+//        userWordService.answerSuccess(progressId);
+
+        // todo
     }
 }

@@ -39,18 +39,7 @@
         </v-col>
       </v-row>
     </v-parallax>
-    <v-tabs v-model="tab">
-      <v-tab>Текст</v-tab>
-      <v-tab>Словарь</v-tab>
-    </v-tabs>
-    <v-tabs-items v-model="tab">
-      <v-tab-item>
-        <book-text :text="book.text"></book-text>
-      </v-tab-item>
-      <v-tab-item>
-        <book-dictionary :dictionary="dictionary"></book-dictionary>
-      </v-tab-item>
-    </v-tabs-items>
+    <book-text :bookSentences="bookSentences"></book-text>
   </div>
 </template>
 
@@ -64,6 +53,7 @@ import BookDictionary from '@/components/book/bookDictionary.vue'
 import { DictionaryDto } from '@/model/dictionaryDto'
 import BookDictionaryService from '@/services/bookDictionaryService'
 import FileService from '@/services/fileService'
+import { BookSentenceDto } from '@/model/bookSentenceDto'
 
 @Component({
   components: {
@@ -82,27 +72,36 @@ export default class Book extends Vue {
   public dictionary: DictionaryDto = {}
   public tab = 0
   public userHasAllWords: boolean | null = null
+  public bookSentences: BookSentenceDto[] = []
 
   public async mounted () {
     if (this.id) {
       const bookId = Number(this.id)
-      this.bookService.sendOpenBook(bookId).catch(err => console.log(err))
+
+      this.bookService.findBookSentences(bookId)
+        .then(data => {
+          this.bookSentences = data
+        })
+        .catch(err => console.log(err))
+
       this.bookService.find(Number(bookId))
         .then(book => {
           this.book = book
-          if (this.book.pictureName) {
-            this.fileService.getUrl(this.book.pictureName)
+          if (this.book.pictureId) {
+            this.fileService.getUrl(this.book.pictureId)
               .then(res => {
                 this.book.pictureUrl = res
               })
           }
-          if (this.book && this.book.dictionaryId) {
-            this.dictionaryService.find(this.book.dictionaryId)
-              .then(dictionary => {
-                this.dictionary = dictionary
-              })
-          }
+          // todo запрос слов книги
+          // if (this.book && this.book.dictionaryId) {
+          //   this.dictionaryService.find(this.book.dictionaryId)
+          //     .then(dictionary => {
+          //       this.dictionary = dictionary
+          //     })
+          // }
         })
+
       this.bookService.checkUserLibrary(bookId)
         .then(check => {
           this.userHasAllWords = check

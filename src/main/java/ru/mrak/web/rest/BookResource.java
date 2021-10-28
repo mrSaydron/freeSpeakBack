@@ -1,9 +1,16 @@
 package ru.mrak.web.rest;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
-import ru.mrak.domain.User;
+import ru.mrak.model.entity.BookSentence;
+import ru.mrak.model.entity.User;
+import ru.mrak.model.entity.Book;
 import ru.mrak.service.BookService;
 import ru.mrak.service.UserService;
+import ru.mrak.service.dto.BookCreateDTO;
+import ru.mrak.service.dto.BookSentenceDTO;
+import ru.mrak.service.mapper.BookMapper;
+import ru.mrak.service.mapper.BookSentenceMapper;
 import ru.mrak.web.rest.errors.BadRequestAlertException;
 import ru.mrak.service.dto.BookDTO;
 import ru.mrak.service.dto.BookCriteria;
@@ -23,16 +30,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
 /**
- * REST controller for managing {@link ru.mrak.domain.Book}.
+ * REST controller for managing {@link Book}.
  */
 @RestController
 @RequestMapping("/api/book")
+@RequiredArgsConstructor
 public class BookResource {
 
     private final Logger log = LoggerFactory.getLogger(BookResource.class);
@@ -42,15 +49,12 @@ public class BookResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
+    private final BookMapper bookMapper;
+    private final BookSentenceMapper bookSentenceMapper;
+
     private final BookService bookService;
     private final BookQueryService bookQueryService;
     private final UserService userService;
-
-    public BookResource(BookService bookService, BookQueryService bookQueryService, UserService userService) {
-        this.bookService = bookService;
-        this.bookQueryService = bookQueryService;
-        this.userService = userService;
-    }
 
     /**
      * {@code POST  /books} : Create a new book.
@@ -60,13 +64,9 @@ public class BookResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping
-    public void createBook(@Valid @RequestBody BookDTO bookDTO) throws URISyntaxException {
+    public void createBook(@Valid @RequestBody BookCreateDTO bookDTO) throws URISyntaxException {
         log.debug("REST request to save Book : {}", bookDTO);
-        if (bookDTO.getId() != null) {
-            throw new BadRequestAlertException("A new book cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
-        bookService.save(bookDTO, user);
+        bookService.save(bookDTO);
     }
 
     /**
@@ -146,17 +146,6 @@ public class BookResource {
     }
 
     /**
-     * Оповещает о том что пользователь открыл книгу
-     *
-     * @param id идентификатор книги
-     */
-    @PutMapping("/open/{id}")
-    public void openBook(@PathVariable Long id) {
-        log.debug("REST request to open Book: {}", id);
-        bookService.updateLastOpenDate(id);
-    }
-
-    /**
      * Запрашивает все ли слова из книги есть в словаре пользователя
      */
     @GetMapping("check-user-library/{bookId}")
@@ -172,5 +161,13 @@ public class BookResource {
     public void addWordsToDictionary(@PathVariable Long bookId) {
         log.debug("REST request to add words in book to user dictionary");
         bookService.addWordsToDictionary(bookId);
+    }
+
+    @Transactional(readOnly = true)
+    @GetMapping("words/{bookId}")
+    public List<BookSentenceDTO> getSentences(@PathVariable Long bookId) {
+        log.debug("REST all words in book");
+        List<BookSentence> bookServices = bookService.getSentences(bookId);
+        return bookSentenceMapper.toDto(bookServices);
     }
 }

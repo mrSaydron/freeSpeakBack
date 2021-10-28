@@ -2,14 +2,12 @@ package ru.mrak.service.mapper;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.mrak.domain.*;
-import ru.mrak.domain.enumeration.ServiceDataKeysEnum;
+import ru.mrak.model.entity.Word;
+import ru.mrak.model.enumeration.ServiceDataKeysEnum;
 import ru.mrak.service.ServiceDataService;
 import ru.mrak.service.dto.WordDTO;
 
 import org.mapstruct.*;
-
-import java.util.List;
 
 /**
  * Mapper for the entity {@link Word} and its DTO {@link WordDTO}.
@@ -20,7 +18,7 @@ public abstract class WordMapper implements EntityMapper<WordDTO, Word> {
     @Autowired
     ServiceDataService serviceDataService;
 
-    public abstract WordDTO toDto(Word word, Boolean userHas);
+    public abstract WordDTO toDto(Word word);
 
     @AfterMapping
     void frequencyCalc(Word entity,

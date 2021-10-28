@@ -1,8 +1,8 @@
 package ru.mrak.service;
 
 import ru.mrak.config.Constants;
-import ru.mrak.domain.Authority;
-import ru.mrak.domain.User;
+import ru.mrak.model.entity.Authority;
+import ru.mrak.model.entity.User;
 import ru.mrak.repository.AuthorityRepository;
 import ru.mrak.repository.UserRepository;
 import ru.mrak.security.AuthoritiesConstants;

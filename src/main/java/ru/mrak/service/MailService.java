@@ -1,6 +1,6 @@
 package ru.mrak.service;
 
-import ru.mrak.domain.User;
+import ru.mrak.model.entity.User;
 
 import io.github.jhipster.config.JHipsterProperties;
 

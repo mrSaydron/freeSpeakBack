@@ -5,8 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.mrak.domain.ServiceData;
-import ru.mrak.domain.enumeration.ServiceDataKeysEnum;
+import ru.mrak.model.entity.ServiceData;
+import ru.mrak.model.enumeration.ServiceDataKeysEnum;
 import ru.mrak.repository.ServiceDataRepository;
 
 @Service

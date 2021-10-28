@@ -2,8 +2,8 @@ package ru.mrak.service.dto;
 
 import ru.mrak.config.Constants;
 
-import ru.mrak.domain.Authority;
-import ru.mrak.domain.User;
+import ru.mrak.model.entity.Authority;
+import ru.mrak.model.entity.User;
 
 import javax.validation.constraints.*;
 import java.time.Instant;

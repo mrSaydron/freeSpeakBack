@@ -2,8 +2,10 @@ import axios from 'axios'
 
 // import buildPaginationQueryOpts from '@/shared/sort/sorts';
 
+import { BookCreateDto } from '@/model/bookCreateDto.ts'
 import { BookDto } from '@/model/bookDto.ts'
 import { BookFilter } from '@/services/filters/bookFilter'
+import { BookSentenceDto } from '@/model/bookSentenceDto'
 
 const baseApiUrl = '/api/book'
 
@@ -35,11 +37,11 @@ export default class BookService {
     const params = new URLSearchParams()
     params.append('size', '' + (bookFilter.requestCount || BookService.REQUEST_COUNT_DEFAULT))
     BookService.fillRequestQuery(params, bookFilter)
-    return new Promise<BookDto[]>((resolve, reject) => {
+    return new Promise<BookCreateDto[]>((resolve, reject) => {
       axios
         .get(`${baseApiUrl}?${params.toString()}`)
         .then(res => {
-          res.data.forEach((book: BookDto) => { book.pictureUrl = '' })
+          res.data.forEach((book: BookCreateDto) => { book.pictureUrl = '' })
           resolve(res.data)
         })
         .catch(err => {
@@ -85,8 +87,8 @@ export default class BookService {
     })
   }
 
-  public async create (entity: BookDto): Promise<BookDto> {
-    return new Promise<BookDto>((resolve, reject) => {
+  public async create (entity: BookCreateDto): Promise<BookCreateDto> {
+    return new Promise<BookCreateDto>((resolve, reject) => {
       axios
         .post(`${baseApiUrl}`, entity)
         .then(res => {
@@ -98,8 +100,8 @@ export default class BookService {
     })
   }
 
-  public update (entity: BookDto): Promise<BookDto> {
-    return new Promise<BookDto>((resolve, reject) => {
+  public update (entity: BookCreateDto): Promise<BookCreateDto> {
+    return new Promise<BookCreateDto>((resolve, reject) => {
       axios
         .put(`${baseApiUrl}`, entity)
         .then(res => {
@@ -111,12 +113,12 @@ export default class BookService {
     })
   }
 
-  public async sendOpenBook (id: number): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
+  public async findBookSentences (id: number): Promise<BookSentenceDto[]> {
+    return new Promise<BookSentenceDto[]>((resolve, reject) => {
       axios
-        .put(`${baseApiUrl}/open/${id}`)
+        .get(`${baseApiUrl}/words/${id}`)
         .then(res => {
-          resolve(res)
+          resolve(res.data)
         })
         .catch(err => {
           reject(err)

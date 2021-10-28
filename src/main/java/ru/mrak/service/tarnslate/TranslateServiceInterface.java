@@ -1,7 +1,7 @@
 package ru.mrak.service.tarnslate;
 
 import org.springframework.scheduling.annotation.Async;
-import ru.mrak.domain.Word;
+import ru.mrak.model.entity.Word;
 
 import java.util.List;
 

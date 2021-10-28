@@ -9,9 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
-import ru.mrak.domain.yndex.Translate;
-import ru.mrak.domain.yndex.WordDef;
-import ru.mrak.domain.yndex.WordHead;
+import ru.mrak.model.yndex.Translate;
+import ru.mrak.model.yndex.WordDef;
+import ru.mrak.model.yndex.WordHead;
 
 import java.util.OptionalInt;
 import java.util.stream.Collectors;

@@ -1,7 +1,7 @@
 package ru.mrak.service.mapper;
 
-import ru.mrak.domain.Authority;
-import ru.mrak.domain.User;
+import ru.mrak.model.entity.Authority;
+import ru.mrak.model.entity.User;
 import ru.mrak.service.dto.UserDTO;
 
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package ru.mrak.repository;
 
-import ru.mrak.domain.Authority;
+import ru.mrak.model.entity.Authority;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

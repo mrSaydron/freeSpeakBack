@@ -1,7 +1,5 @@
 package ru.mrak.service.dto;
 
-import ru.mrak.domain.BookDictionaryHasWord;
-
 import java.io.Serializable;
 
 /**

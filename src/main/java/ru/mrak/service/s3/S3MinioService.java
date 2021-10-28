@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
-import ru.mrak.domain.enumeration.BucketEnum;
+import ru.mrak.model.enumeration.BucketEnum;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -8,14 +8,21 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.mrak.domain.*;
+import ru.mrak.model.entity.Book;
+import ru.mrak.model.entity.BookSentence;
+import ru.mrak.model.entity.bookUser.BookUser;
+import ru.mrak.model.entity.bookUser.BookUserId;
+import ru.mrak.model.entity.User;
 import ru.mrak.repository.BookRepository;
+import ru.mrak.repository.BookSentenceRepository;
 import ru.mrak.repository.BookUserRepository;
+import ru.mrak.service.dto.BookCreateDTO;
 import ru.mrak.service.dto.BookDTO;
 import ru.mrak.service.mapper.BookMapper;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -33,43 +40,35 @@ public class BookService {
     private final BookMapper bookMapper;
 
     private final UserService userService;
-    private final DictionaryService dictionaryService;
     private final WordService wordService;
     private final UserWordService userWordService;
+    private final TextService textService;
 
     private final BookRepository bookRepository;
-    private final BookUserRepository bookUserRepository;
+    private final BookSentenceRepository bookSentenceRepository;
 
     private final EntityManager entityManager;
 
     /**
      * Save a book.
-     * @param bookDTO the entity to save.
      */
-    @Async
-    public void save(BookDTO bookDTO, User user) {
+    public void save(BookCreateDTO bookDTO) {
         log.debug("Request to save Book : {}", bookDTO);
-        Book book = bookMapper.toEntity(bookDTO);
-        book.setInProcessing(true);
 
-        book.setLoadedUser(user);
-        if (book.getUsers() == null) {
-            book.setUsers(new HashSet<>());
-        }
-        book.getUsers().add(user);
+        Book book = new Book();
+        book.setTitle(bookDTO.getTitle());
+        book.setAuthor(bookDTO.getAuthor());
+        book.setPictureId(bookDTO.getPictureId());
         book = bookRepository.save(book);
-        entityManager.flush();
 
-        BookDictionary dictionary = dictionaryService.createByText(book.getText(), "eng", "ru");
-        book.setDictionary(dictionary);
-        dictionary.setBook(book);
-
-        book.setInProcessing(false);
-        entityManager.flush();
-
-        if (book.getPublicBook()) {
-            wordService.updateTotalAmount(book.getId());
+        List<BookSentence> bookSentences = textService.createByText(bookDTO.getText());
+        for (BookSentence bookSentence : bookSentences) {
+            bookSentence.setBookId(book.getId());
+            bookSentenceRepository.save(bookSentence);
         }
+
+        entityManager.flush();
+        wordService.updateTotalAmount(book.getId());
     }
 
     /**
@@ -84,7 +83,6 @@ public class BookService {
         return bookRepository.findAll(pageable)
             .map(bookMapper::toDto);
     }
-
 
     /**
      * Get all the books with eager load of many-to-many relationships.
@@ -119,25 +117,6 @@ public class BookService {
     }
 
     /**
-     * Выствляет дату последнего открытия книги на текущую
-     * Если данную книгу пользователь открывает впервые, создается новая запись
-     *
-     * @param id идентификатор книги
-     */
-    public void updateLastOpenDate(Long id) {
-        log.debug("Request to update last open book date: {}", id);
-
-        User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
-        entityManager.merge(user);// похоже что это лишнее
-
-        BookUser bookUser = bookUserRepository.findById(new BookUserId(user.getId(), id))
-            .orElseGet(() -> new BookUser(user.getId(), id));
-
-        bookUser.setLastOpenDate(LocalDateTime.now());
-        bookUserRepository.save(bookUser);
-    }
-
-    /**
      * Все ли слова из книги есть в словаре пользователя
      */
     public boolean checkUserLibrary(Long bookId) {
@@ -153,5 +132,15 @@ public class BookService {
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
         List<Long> wordIds = bookRepository.getMissingWords(user.getId(), bookId);
         wordIds.forEach(userWordService::addWord);
+    }
+
+    /**
+     * Возвращает предложения указанной книги
+     */
+    @Transactional(readOnly = true)
+    public List<BookSentence> getSentences(Long bookId) {
+        List<BookSentence> bookSentences = bookSentenceRepository.findAllByBookId(bookId);
+        bookSentences.sort(Comparator.comparing(BookSentence::getId));
+        return bookSentences;
     }
 }

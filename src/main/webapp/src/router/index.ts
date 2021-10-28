@@ -4,7 +4,7 @@ import VueRouter, { Route, RouteConfig } from 'vue-router'
 import { Authority } from '@/shared/authority'
 
 import Library from '@/components/library/library.vue'
-import NewBook from '@/components/newBook/newBook.vue'
+import NewBook from '@/components/bookCreate/bookCreate.vue'
 import Book from '@/components/book/book.vue'
 import MyDictionary from '@/components/myDictionary/myDictionary.vue'
 import CardsLearn from '@/components/cardsLearn/cardsLearn.vue'

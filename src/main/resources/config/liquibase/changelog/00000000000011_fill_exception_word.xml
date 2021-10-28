@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="00000000000011_fill_exception_word" author="karmanov" runOnChange="true">
+        <delete tableName="knowledge_progress">
+            <where>1=1</where>
+        </delete>
+        <loadData
+                  file="config/liquibase/data/exception_word.csv"
+                  separator=";"
+                  tableName="exception_word">
+            <column name="word" type="string"/>
+            <column name="part_of_speech" type="string"/>
+            <column name="target_word" type="string"/>
+            <column name="target_part_of_speech" type="string"/>
+        </loadData>
+    </changeSet>
+</databaseChangeLog>

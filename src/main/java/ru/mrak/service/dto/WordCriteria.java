@@ -1,20 +1,18 @@
 package ru.mrak.service.dto;
 
-import java.io.Serializable;
-import java.util.Objects;
 import io.github.jhipster.service.Criteria;
-import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
-import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
-import io.github.jhipster.service.filter.StringFilter;
+import ru.mrak.model.entity.Word;
+import ru.mrak.model.enumeration.PartOfSpeechEnum;
 import ru.mrak.web.rest.filter.StringRangeFilter;
 
+import java.io.Serializable;
+import java.util.Objects;
+
 /**
- * Criteria class for the {@link ru.mrak.domain.Word} entity. This class is used
- * in {@link ru.mrak.web.rest.WordResource} to receive all the possible filtering options from
+ * Criteria class for the {@link Word} entity. This class is used
+ * in {@link ru.mrak.web.rest.WordContoller} to receive all the possible filtering options from
  * the Http GET request parameters.
  * For example the following could be a valid request:
  * {@code /words?id.greaterThan=5&attr1.contains=something&attr2.specified=false}
@@ -27,12 +25,10 @@ public class WordCriteria implements Serializable, Criteria {
 
     // Фильтры
     private LongFilter id;
-    private StringFilter wordFilter;
-    private StringFilter partOfSpeechFilter;
-
-    // Сортировки
-    private StringRangeFilter startWord;
+    private StringRangeFilter wordFilter;
+    private Filter<PartOfSpeechEnum> partOfSpeechFilter;
     private LongFilter startAmount;
+    private Filter<Long> user;
 
     public WordCriteria() {
     }
@@ -41,8 +37,8 @@ public class WordCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.wordFilter = other.wordFilter == null ? null : other.wordFilter.copy();
         this.partOfSpeechFilter = other.partOfSpeechFilter == null ? null : other.partOfSpeechFilter.copy();
-        this.startWord = other.startWord == null ? null : other.startWord.copy();
         this.startAmount = other.startAmount == null ? null : other.startAmount.copy();
+        this.user = other.user;
     }
 
     @Override
@@ -58,28 +54,20 @@ public class WordCriteria implements Serializable, Criteria {
         this.id = id;
     }
 
-    public StringFilter getWordFilter() {
+    public StringRangeFilter getWordFilter() {
         return wordFilter;
     }
 
-    public void setWordFilter(StringFilter wordFilter) {
+    public void setWordFilter(StringRangeFilter wordFilter) {
         this.wordFilter = wordFilter;
     }
 
-    public StringFilter getPartOfSpeechFilter() {
+    public Filter<PartOfSpeechEnum> getPartOfSpeechFilter() {
         return partOfSpeechFilter;
     }
 
-    public void setPartOfSpeechFilter(StringFilter partOfSpeechFilter) {
+    public void setPartOfSpeechFilter(Filter<PartOfSpeechEnum> partOfSpeechFilter) {
         this.partOfSpeechFilter = partOfSpeechFilter;
-    }
-
-    public StringRangeFilter getStartWord() {
-        return startWord;
-    }
-
-    public void setStartWord(StringRangeFilter startWord) {
-        this.startWord = startWord;
     }
 
     public LongFilter getStartAmount() {
@@ -90,6 +78,14 @@ public class WordCriteria implements Serializable, Criteria {
         this.startAmount = startAmount;
     }
 
+    public Filter<Long> getUser() {
+        return user;
+    }
+
+    public void setUser(Filter<Long> user) {
+        this.user = user;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -98,13 +94,13 @@ public class WordCriteria implements Serializable, Criteria {
         return Objects.equals(id, that.id) &&
             Objects.equals(wordFilter, that.wordFilter) &&
             Objects.equals(partOfSpeechFilter, that.partOfSpeechFilter) &&
-            Objects.equals(startWord, that.startWord) &&
-            Objects.equals(startAmount, that.startAmount);
+            Objects.equals(startAmount, that.startAmount) &&
+            Objects.equals(user, that.user);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, wordFilter, partOfSpeechFilter, startWord, startAmount);
+        return Objects.hash(id, wordFilter, partOfSpeechFilter, startAmount, user);
     }
 
     @Override
@@ -113,8 +109,8 @@ public class WordCriteria implements Serializable, Criteria {
             "id=" + id +
             ", wordFilter=" + wordFilter +
             ", partOfSpeechFilter=" + partOfSpeechFilter +
-            ", startWord=" + startWord +
             ", startAmount=" + startAmount +
+            ", user=" + user +
             '}';
     }
 }

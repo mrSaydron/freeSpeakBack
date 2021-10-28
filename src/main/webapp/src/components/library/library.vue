@@ -115,10 +115,10 @@ export default class Library extends Vue {
   }
 
   public async retrieve (add: boolean): Promise<void> {
-    const nextBooks = await this.bookService.retrieve(this.bookFilter)
+    const nextBooks: BookDto[] = await this.bookService.retrieve(this.bookFilter)
     nextBooks.forEach(book => {
-      if (book.pictureName) {
-        this.fileService.getUrl(book.pictureName)
+      if (book.pictureId) {
+        this.fileService.getUrl(book.pictureId)
           .then(res => {
             book.pictureUrl = res
           })

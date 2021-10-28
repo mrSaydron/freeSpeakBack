@@ -3,13 +3,13 @@ package ru.mrak.service.dto;
 import java.io.Serializable;
 import java.util.Objects;
 import io.github.jhipster.service.Criteria;
-import ru.mrak.domain.enumeration.ChatTypeEnum;
+import ru.mrak.model.enumeration.ChatTypeEnum;
 import io.github.jhipster.service.filter.Filter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
 
 /**
- * Criteria class for the {@link ru.mrak.domain.Chat} entity. This class is used
+ * Criteria class for the {@link ru.mrak.model.Chat} entity. This class is used
  * in {@link ru.mrak.web.rest.ChatResource} to receive all the possible filtering options from
  * the Http GET request parameters.
  * For example the following could be a valid request:

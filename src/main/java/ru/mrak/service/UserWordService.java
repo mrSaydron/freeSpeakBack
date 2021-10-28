@@ -11,15 +11,15 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.mrak.domain.*;
-import ru.mrak.domain.enumeration.UserWordProgressTypeEnum;
-import ru.mrak.repository.UserDictionaryHasWordRepository;
-import ru.mrak.repository.UserDictionaryRepository;
+import ru.mrak.model.entity.User;
+import ru.mrak.model.entity.Word;
+import ru.mrak.model.entity.userWordProgress.UserWordProgress;
+import ru.mrak.model.entity.userWordProgress.UserWordProgressId;
+import ru.mrak.model.enumeration.UserWordProgressTypeEnum;
 import ru.mrak.repository.UserWordProgressRepository;
 import ru.mrak.repository.WordRepository;
 import ru.mrak.service.dto.userWord.UserWordCriteria;
 
-import javax.persistence.EntityManager;
 import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,12 +38,8 @@ public class UserWordService {
     private final UserService userService;
     private final UserWordQueryService userWordQueryService;
 
-    private final UserDictionaryHasWordRepository userDictionaryHasWordRepository;
-    private final UserDictionaryRepository userDictionaryRepository;
     private final WordRepository wordRepository;
     private final UserWordProgressRepository userWordProgressRepository;
-
-    private final EntityManager entityManager;
 
     @Value("${max-user-hearts}")
     private Integer maxUserHearts;
@@ -58,12 +54,13 @@ public class UserWordService {
     private static final Integer START_BOX_NUMBER = 1;
 
     @Transactional(readOnly = true)
-    public Page<UserDictionaryHasWord> findByCriteria(UserWordCriteria criteria, @NonNull Pageable pageable) {
+    public Page<UserWordProgress> findByCriteria(UserWordCriteria criteria, @NonNull Pageable pageable) {
         log.debug("find by criteria: {}, page: {}", criteria, pageable);
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
-        final Specification<UserDictionaryHasWord> specification
+
+        final Specification<UserWordProgress> specification
             = userWordQueryService.createSpecification(criteria, user);
-        return userDictionaryHasWordRepository.findAll(specification, pageable);
+        return userWordProgressRepository.findAll(specification, pageable);
     }
 
     /**
@@ -79,47 +76,27 @@ public class UserWordService {
      * Добавляет слово в словарь пользователя
      */
     public void addWord(Word word) {
-        UserDictionary userDictionary = getUserDictionary();
+        log.debug("add word to user dictionary, word id: {}", word.getId());
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
-        Optional<UserDictionaryHasWord> userHasWord
-            = userDictionaryHasWordRepository.findByWordAndUser(wordRepository.getOne(word.getId()), user);
 
-        if (!userHasWord.isPresent()) {
-            UserDictionaryHasWord userDictionaryHasWord = newUserDictionaryHasWord(userDictionary, word);
-            userDictionary.getDictionaryWords().add(userDictionaryHasWord);
-            userDictionaryRepository.save(userDictionary);
-            entityManager.flush();
-            userDictionaryHasWordRepository.save(userDictionaryHasWord);
+        Optional<UserWordProgress> progressOptional = userWordProgressRepository.findById(new UserWordProgressId(
+            user.getId(),
+            word.getId(),
+            UserWordProgressTypeEnum.direct
+        ));
+        if (!progressOptional.isPresent()) {
+            UserWordProgress userWordProgress = new UserWordProgress();
+
+            userWordProgress.setUserId(user.getId());
+            userWordProgress.setWordId(word.getId());
+            userWordProgress.setType(UserWordProgressTypeEnum.direct);
+
+            userWordProgress.setWord(word);
+            userWordProgress.setBoxNumber(PRELIMINARY_BOX_NUMBER);
+            userWordProgress.setSuccessfulAttempts(0);
+
+            userWordProgressRepository.save(userWordProgress);
         }
-    }
-
-    /**
-     * Возвращает словарь пользователя, или создает новый если его нет
-     */
-    public UserDictionary getUserDictionary() {
-        log.debug("return user dictionary");
-        User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
-        return userDictionaryRepository.findFirstByUser(user)
-            .orElseGet(() -> new UserDictionary(user, "rus", "eng"));
-    }
-
-    /**
-     * Создает новое привязанное слово пользователя. Настраивает прогресс
-     */
-    private UserDictionaryHasWord newUserDictionaryHasWord(UserDictionary userDictionary, Word word) {
-        UserDictionaryHasWord result = new UserDictionaryHasWord();
-        result.setWord(word);
-        result.setDictionary(userDictionary);
-        result.setPriority(0);
-
-        UserWordProgress userWordProgress = new UserWordProgress();
-        userWordProgress.setBoxNumber(0);
-        userWordProgress.setDictionaryWord(result);
-        userWordProgress.setSuccessfulAttempts(0);
-        userWordProgress.setType(UserWordProgressTypeEnum.direct);
-        result.getWordProgresses().add(userWordProgress);
-
-        return result;
     }
 
     /**
@@ -128,8 +105,8 @@ public class UserWordService {
     public void removeWord(Long wordId) {
         log.debug("remove word from user dictionary, word id: {}", wordId);
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
-        List<UserDictionary> userDictionaries = userDictionaryRepository.findByUser(user);
-        userDictionaryHasWordRepository.deleteByWordAndUserDictionaries(wordRepository.getOne(wordId), userDictionaries);
+
+        userWordProgressRepository.deleteAllByUserIdAndWordId(user.getId(), wordId);
     }
 
     /**
@@ -138,8 +115,8 @@ public class UserWordService {
     public void removeWords(List<Long> wordIds) {
         log.debug("remove words from user dictionary, word ids: {}", wordIds);
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
-        List<UserDictionary> userDictionaries = userDictionaryRepository.findByUser(user);
-        userDictionaryHasWordRepository.deleteByWordIdsAndUserDictionaries(wordIds, userDictionaries);
+
+        userWordProgressRepository.deleteAllByUserIdAndWordIdIn(user.getId(), wordIds);
     }
 
     /**
@@ -148,8 +125,9 @@ public class UserWordService {
     public void removeAllWords(UserWordCriteria criteria) {
         log.debug("remove words from user dictionary by criteria: {}", criteria);
         PageRequest pageRequest = PageRequest.of(0, Integer.MAX_VALUE);
-        List<UserDictionaryHasWord> userDictionaryHasWords = findByCriteria(criteria, pageRequest).getContent();
-        userDictionaryHasWordRepository.deleteAll(userDictionaryHasWords);
+
+        List<UserWordProgress> userWords = findByCriteria(criteria, pageRequest).getContent();
+        userWordProgressRepository.deleteAll(userWords);
     }
 
     /**
@@ -158,10 +136,10 @@ public class UserWordService {
     public void eraseWord(Long wordId) {
         log.debug("erase word progress, word id: {}", wordId);
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
-        UserDictionaryHasWord userDictionaryHasWord = userDictionaryHasWordRepository.findByWordAndUser(wordRepository.getOne(wordId), user)
-            .orElseThrow(RuntimeException::new);
-        for (UserWordProgress wordProgress : userDictionaryHasWord.getWordProgresses()) {
-            wordProgress.setBoxNumber(PRELIMINARY_BOX_NUMBER);
+
+        List<UserWordProgress> userWords = userWordProgressRepository.findAllByUserIdAndWordId(user.getId(), wordId);
+        for (UserWordProgress userWord : userWords) {
+            userWord.setBoxNumber(PRELIMINARY_BOX_NUMBER);
         }
     }
 
@@ -171,11 +149,10 @@ public class UserWordService {
     public void eraseWords(List<Long> wordIds) {
         log.debug("erase word progress, word ids: {}", wordIds);
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
-        List<UserDictionaryHasWord> userDictionaryHasWords = userDictionaryHasWordRepository.findByWordIdsAndUser(wordIds, user);
-        for (UserDictionaryHasWord userDictionaryHasWord : userDictionaryHasWords) {
-            for (UserWordProgress wordProgress : userDictionaryHasWord.getWordProgresses()) {
-                wordProgress.setBoxNumber(PRELIMINARY_BOX_NUMBER);
-            }
+
+        List<UserWordProgress> userWords = userWordProgressRepository.findAllByUserIdAndWordIdIn(user.getId(), wordIds);
+        for (UserWordProgress userWord : userWords) {
+            userWord.setBoxNumber(PRELIMINARY_BOX_NUMBER);
         }
     }
 
@@ -185,11 +162,9 @@ public class UserWordService {
     public void eraseAllWords(UserWordCriteria criteria) {
         log.debug("erase word progress by criteria: {}", criteria);
         PageRequest pageRequest = PageRequest.of(0, Integer.MAX_VALUE);
-        List<UserDictionaryHasWord> userDictionaryHasWords = findByCriteria(criteria, pageRequest).getContent();
-        for (UserDictionaryHasWord userDictionaryHasWord : userDictionaryHasWords) {
-            for (UserWordProgress wordProgress : userDictionaryHasWord.getWordProgresses()) {
-                wordProgress.setBoxNumber(PRELIMINARY_BOX_NUMBER);
-            }
+        List<UserWordProgress> userWords = findByCriteria(criteria, pageRequest).getContent();
+        for (UserWordProgress userWord : userWords) {
+            userWord.setBoxNumber(PRELIMINARY_BOX_NUMBER);
         }
     }
 
@@ -200,9 +175,10 @@ public class UserWordService {
     public int getLeftHearts() {
         log.debug("get user left hearts");
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
+
         LocalDateTime currentDate = LocalDate.now().atStartOfDay();
         Instant instant = currentDate.toInstant(ZoneOffset.UTC);
-        int lastHearts = maxUserHearts - userDictionaryHasWordRepository.getCountFailAnswersByUserAndDate(user, instant);
+        int lastHearts = maxUserHearts - userWordProgressRepository.getCountFailAnswersByUserIdAndDate(user.getId(), instant);
         return Math.max(lastHearts, 0);
     }
 
@@ -210,9 +186,10 @@ public class UserWordService {
      * Возвращает оставшиеся слова для изучения на текущий день
      */
     @Transactional(readOnly = true)
-    public List<UserDictionaryHasWord> getWordsOfDay() {
+    public List<UserWordProgress> getWordsOfDay() {
         log.debug("get words of day");
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
+
         Instant createdDate = user.getCreatedDate();
         LocalDateTime createDay = LocalDateTime.ofInstant(createdDate, ZoneId.systemDefault()).toLocalDate().atStartOfDay();
         LocalDate currentDate = LocalDate.now();
@@ -230,30 +207,41 @@ public class UserWordService {
 
         Instant currentInstant = currentDate.atStartOfDay().toInstant(ZoneOffset.UTC);
 
-        return userDictionaryHasWordRepository.getByUserAndBoxesAndLessFailDateAndLessSuccessDate(user, boxes, currentInstant);
+        return userWordProgressRepository.getByUserIdAndBoxesAndLessFailDateAndLessSuccessDate(user, boxes, currentInstant);
     }
 
     /**
-     * Пользователь не верно ответил
+     * Пользователь ответил неверно
      * Прогресс сбрасывается, слово перемещается в первую коробку
      * Записывается текущее вреся в поле с неправильным ответом
      */
-    public void answerFail(Long progressId) {
+    public void answerFail(Long wordId, UserWordProgressTypeEnum type) {
         log.debug("user fail answer on word progress");
-        UserWordProgress userWordProgress = userWordProgressRepository.findById(progressId).orElseThrow(RuntimeException::new);
+        User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
+
+        UserWordProgress userWordProgress = userWordProgressRepository.findById(new UserWordProgressId(
+            user.getId(),
+            wordId,
+            type
+        )).orElseThrow(RuntimeException::new);
         userWordProgress.setBoxNumber(START_BOX_NUMBER);
         userWordProgress.setFailLastDate(Instant.now());
     }
 
-
     /**
      * Пользователь ответил правильно
-     * Елси сегодня не было не правильных ответов, то слово пееносится в следующую коробку. Но не больше последней коробки + 1
+     * Если сегодня не было неправильных ответов, то слово пееносится в следующую коробку. Но не больше последней коробки + 1
      * Записывается текущее время в поле с правильным ответом
      */
-    public void answerSuccess(Long progressId) {
+    public void answerSuccess(Long wordId, UserWordProgressTypeEnum type) {
         log.debug("user success answer on word progress");
-        UserWordProgress userWordProgress = userWordProgressRepository.findById(progressId).orElseThrow(RuntimeException::new);
+        User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
+
+        UserWordProgress userWordProgress = userWordProgressRepository.findById(new UserWordProgressId(
+            user.getId(),
+            wordId,
+            type
+        )).orElseThrow(RuntimeException::new);
         Instant currentInstant = LocalDate.now().atStartOfDay().toInstant(ZoneOffset.UTC);
 
         if ((userWordProgress.getFailLastDate() == null || userWordProgress.getFailLastDate().compareTo(currentInstant) < 0)
@@ -264,7 +252,7 @@ public class UserWordService {
             }
             userWordProgress.setBoxNumber(userWordProgress.getBoxNumber() + 1);
         }
-        userWordProgress.setSuccessLastDate(Instant.now());
+        userWordProgress.setSuccessfulLastDate(Instant.now());
     }
 
     /**
@@ -273,10 +261,10 @@ public class UserWordService {
     public void knowWord(Long wordId) {
         log.debug("move word to know box. Word id: {}", wordId);
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
-        UserDictionaryHasWord userDictionaryHasWord = userDictionaryHasWordRepository.findByWordAndUser(wordRepository.getOne(wordId), user)
-            .orElseThrow(RuntimeException::new);
-        for (UserWordProgress wordProgress : userDictionaryHasWord.getWordProgresses()) {
-            wordProgress.setBoxNumber(knowBoxNumber);
+
+        List<UserWordProgress> userWords = userWordProgressRepository.findAllByUserIdAndWordId(user.getId(), wordId);
+        for (UserWordProgress userWord : userWords) {
+            userWord.setBoxNumber(knowBoxNumber);
         }
     }
 
@@ -286,11 +274,10 @@ public class UserWordService {
     public void knowWords(List<Long> wordIds) {
         log.debug("move words to know box. Word ids: {}", wordIds);
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
-        List<UserDictionaryHasWord> userDictionaryHasWords = userDictionaryHasWordRepository.findByWordIdsAndUser(wordIds, user);
-        for (UserDictionaryHasWord userDictionaryHasWord : userDictionaryHasWords) {
-            for (UserWordProgress wordProgress : userDictionaryHasWord.getWordProgresses()) {
-                wordProgress.setBoxNumber(knowBoxNumber);
-            }
+
+        List<UserWordProgress> userWords = userWordProgressRepository.findAllByUserIdAndWordIdIn(user.getId(), wordIds);
+        for (UserWordProgress userWord : userWords) {
+            userWord.setBoxNumber(knowBoxNumber);
         }
     }
 
@@ -300,11 +287,9 @@ public class UserWordService {
     public void knowAllWords(UserWordCriteria criteria) {
         log.debug("move words to know box by criteria: {}", criteria);
         PageRequest pageRequest = PageRequest.of(0, Integer.MAX_VALUE);
-        List<UserDictionaryHasWord> userDictionaryHasWords = findByCriteria(criteria, pageRequest).getContent();
-        for (UserDictionaryHasWord userDictionaryHasWord : userDictionaryHasWords) {
-            for (UserWordProgress wordProgress : userDictionaryHasWord.getWordProgresses()) {
-                wordProgress.setBoxNumber(knowBoxNumber);
-            }
+        List<UserWordProgress> userWords = findByCriteria(criteria, pageRequest).getContent();
+        for (UserWordProgress userWord : userWords) {
+            userWord.setBoxNumber(knowBoxNumber);
         }
     }
 }

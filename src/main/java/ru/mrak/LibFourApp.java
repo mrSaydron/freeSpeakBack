@@ -14,19 +14,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.env.Environment;
-import ru.mrak.domain.Word;
-import ru.mrak.domain.abby.AbbyTranslate;
-import ru.mrak.domain.abby.ArticleModel;
-import ru.mrak.domain.enumeration.TagEnum;
-import ru.mrak.service.tarnslate.*;
 
 import javax.annotation.PostConstruct;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
 
 @SpringBootApplication
 @EnableConfigurationProperties({LiquibaseProperties.class, ApplicationProperties.class})

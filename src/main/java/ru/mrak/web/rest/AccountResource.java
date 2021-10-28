@@ -6,7 +6,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import ru.mrak.domain.User;
+import ru.mrak.model.entity.User;
 import ru.mrak.repository.UserRepository;
 import ru.mrak.security.SecurityUtils;
 import ru.mrak.security.jwt.JWTFilter;

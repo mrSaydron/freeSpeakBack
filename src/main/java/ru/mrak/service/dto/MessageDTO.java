@@ -5,10 +5,10 @@ import javax.validation.constraints.*;
 import java.io.Serializable;
 
 /**
- * A DTO for the {@link ru.mrak.domain.Message} entity.
+ * A DTO for the {@link ru.mrak.model.Message} entity.
  */
 public class MessageDTO implements Serializable {
-    
+
     private Long id;
 
     private String message;
@@ -22,7 +22,7 @@ public class MessageDTO implements Serializable {
     private String userLogin;
 
     private Long chatId;
-    
+
     public Long getId() {
         return id;
     }

@@ -1,6 +1,6 @@
 package ru.mrak.config.audit;
 
-import ru.mrak.domain.PersistentAuditEvent;
+import ru.mrak.model.entity.PersistentAuditEvent;
 
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;

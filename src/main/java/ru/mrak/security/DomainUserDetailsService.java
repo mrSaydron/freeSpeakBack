@@ -1,6 +1,6 @@
 package ru.mrak.security;
 
-import ru.mrak.domain.User;
+import ru.mrak.model.entity.User;
 import ru.mrak.repository.UserRepository;
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.slf4j.Logger;

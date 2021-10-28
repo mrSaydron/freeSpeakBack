@@ -2,7 +2,7 @@ package ru.mrak.repository;
 
 import ru.mrak.config.Constants;
 import ru.mrak.config.audit.AuditEventConverter;
-import ru.mrak.domain.PersistentAuditEvent;
+import ru.mrak.model.entity.PersistentAuditEvent;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

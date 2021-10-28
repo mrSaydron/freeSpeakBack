@@ -1,6 +1,6 @@
 package ru.mrak.repository;
 
-import ru.mrak.domain.PersistentAuditEvent;
+import ru.mrak.model.entity.PersistentAuditEvent;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

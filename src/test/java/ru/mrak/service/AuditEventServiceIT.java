@@ -1,6 +1,6 @@
 package ru.mrak.service;
 
-import ru.mrak.domain.PersistentAuditEvent;
+import ru.mrak.model.entity.PersistentAuditEvent;
 import ru.mrak.repository.PersistenceAuditEventRepository;
 import ru.mrak.LibFourApp;
 import io.github.jhipster.config.JHipsterProperties;

@@ -1,6 +1,6 @@
 package ru.mrak.service.mapper;
 
-import ru.mrak.domain.User;
+import ru.mrak.model.entity.User;
 import ru.mrak.service.dto.UserDTO;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;

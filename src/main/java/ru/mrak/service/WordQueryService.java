@@ -1,9 +1,6 @@
 package ru.mrak.service;
 
-import java.util.List;
-
-import javax.persistence.criteria.JoinType;
-
+import io.github.jhipster.service.QueryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -11,15 +8,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import io.github.jhipster.service.QueryService;
-
-import ru.mrak.domain.Word;
-import ru.mrak.domain.*; // for static metamodels
+import ru.mrak.model.entity.Word;
+import ru.mrak.model.entity.Word_;
+import ru.mrak.model.entity.userWordProgress.UserWordProgress;
+import ru.mrak.model.entity.userWordProgress.UserWordProgress_;
 import ru.mrak.repository.WordRepository;
 import ru.mrak.service.dto.WordCriteria;
 import ru.mrak.service.dto.WordDTO;
 import ru.mrak.service.mapper.WordMapper;
+
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.ListJoin;
+import java.util.List;
 
 /**
  * Service for executing complex queries for {@link Word} entities in the database.
@@ -84,26 +84,27 @@ public class WordQueryService extends QueryService<Word> {
      * @param criteria The object which holds all the filters, which the entities should match.
      * @return the matching {@link Specification} of the entity.
      */
-    protected Specification<Word> createSpecification(WordCriteria criteria) {
+    public Specification<Word> createSpecification(WordCriteria criteria) {
         Specification<Word> specification = Specification.where(null);
         if (criteria != null) {
-            // Филтры
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), Word_.id));
             }
             if (criteria.getPartOfSpeechFilter() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getPartOfSpeechFilter(), Word_.partOfSpeech));
+                specification = specification.and(buildSpecification(criteria.getPartOfSpeechFilter(), Word_.partOfSpeech));
             }
             if (criteria.getWordFilter() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getWordFilter(), Word_.word));
-            }
-
-            // Сортировки
-            if (criteria.getStartWord() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getStartWord(), Word_.word));
+                specification = specification.and(buildRangeSpecification(criteria.getWordFilter(), Word_.word));
             }
             if (criteria.getStartAmount() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getStartAmount(), Word_.totalAmount));
+            }
+            if (criteria.getUser() != null && criteria.getUser().getEquals() != null) {
+                Specification<Word> knowSpecification = (root, query, builder) -> {
+                    ListJoin<Word, UserWordProgress> userWordJoin = root.join(Word_.userWords, JoinType.INNER);
+                    return builder.equal(userWordJoin.get(UserWordProgress_.userId), criteria.getUser().getEquals());
+                };
+                specification = specification.and(knowSpecification);
             }
 
         }

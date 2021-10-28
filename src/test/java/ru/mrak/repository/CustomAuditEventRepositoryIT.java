@@ -4,7 +4,7 @@ import ru.mrak.LibFourApp;
 
 import ru.mrak.config.Constants;
 import ru.mrak.config.audit.AuditEventConverter;
-import ru.mrak.domain.PersistentAuditEvent;
+import ru.mrak.model.entity.PersistentAuditEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

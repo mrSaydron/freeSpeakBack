@@ -1,7 +1,7 @@
 package ru.mrak.security;
 
 import ru.mrak.LibFourApp;
-import ru.mrak.domain.User;
+import ru.mrak.model.entity.User;
 import ru.mrak.repository.UserRepository;
 
 import org.apache.commons.lang3.RandomStringUtils;

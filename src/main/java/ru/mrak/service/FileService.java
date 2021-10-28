@@ -4,13 +4,11 @@ import io.minio.errors.*;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.mrak.domain.SoundResult;
-import ru.mrak.domain.enumeration.BucketEnum;
+import ru.mrak.model.SoundResult;
+import ru.mrak.model.enumeration.BucketEnum;
 import ru.mrak.service.s3.IS3Service;
-import ru.mrak.service.s3.S3MinioService;
 import ru.mrak.util.CheckingInputStream;
 import ru.mrak.util.FileUtil;
 

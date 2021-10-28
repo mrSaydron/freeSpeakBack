@@ -69,6 +69,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     "script-src 'self' 'unsafe-inline' 'unsafe-eval'; " +
                     "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; " +
                     "img-src 'self' http://localhost:9100 https://storage.yandexcloud.net data:; " + // todo Сделать через конфигурацию
+                    "media-src 'self' http://localhost:9100 https://storage.yandexcloud.net data:; " + // todo Сделать через конфигурацию
                     "font-src 'self' data: https://cdn.jsdelivr.net https://fonts.gstatic.com"
             )
         .and()

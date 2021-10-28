@@ -2,7 +2,7 @@ package ru.mrak.service;
 
 import ru.mrak.LibFourApp;
 import ru.mrak.config.Constants;
-import ru.mrak.domain.User;
+import ru.mrak.model.entity.User;
 import ru.mrak.repository.UserRepository;
 import ru.mrak.service.dto.UserDTO;
 

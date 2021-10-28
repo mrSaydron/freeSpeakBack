@@ -1,8 +1,8 @@
 package ru.mrak.web.rest;
 
 import ru.mrak.LibFourApp;
-import ru.mrak.domain.Authority;
-import ru.mrak.domain.User;
+import ru.mrak.model.entity.Authority;
+import ru.mrak.model.entity.User;
 import ru.mrak.repository.UserRepository;
 import ru.mrak.security.AuthoritiesConstants;
 import ru.mrak.service.dto.UserDTO;

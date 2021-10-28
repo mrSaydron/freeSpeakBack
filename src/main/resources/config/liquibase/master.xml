@@ -14,35 +14,20 @@
     <property name="uuidType" value="varchar(36)" dbms="h2, mysql, mariadb"/>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20210102143223_added_entity_Book.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20210102143534_added_entity_Dictionary.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20210102144443_added_entity_Word.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20210102145701_added_entity_DictionaryHasWord.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20210103054223_added_entity_Chat.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20210103055434_added_entity_Message.xml" relativeToChangelogFile="false"/>
-    <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
-    <include file="config/liquibase/changelog/20210102143223_added_entity_constraints_Book.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20210102145701_added_entity_constraints_DictionaryHasWord.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20210103054223_added_entity_constraints_Chat.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20210103055434_added_entity_constraints_Message.xml" relativeToChangelogFile="false"/>
-    <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
-    <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
-    <include file="config/liquibase/changelog/20210114000000_change_field_type_in_book.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20210320000000_added_field_last_open_Boor_User.sql" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20210327000000_T-25_add_field_to_word.sql" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20210327154900_T-25_add_tables.sql" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20210328193200_T-23_change_table_name.sql" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20210328230900_T-26_add_service_data_table.sql" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20210404205300_T-31_add_word_to_dictionary.sql" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20210420230200_T-29_add_answer_date_to_word_process.sql" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20210501231400_T-47_add_view_book_user_know.sql" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20210519115400_T-62_add_picture_name_to_book.sql" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20210529100800_T-45_add_audio_to_words.sql" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20210820100900_T-76_add_table_with_level_knowledge.sql" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20210820100900_T-76_edit_book_user_know_view.sql" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20210918000000_added_field_in_processing_to_book.sql" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20210919000000_add_table_word_exception.sql" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20210920000000_fill_exception_word.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20210920000001_add_table_token_rule.sql" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20210920000002_fill_token_rule.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/00000000000001_create_table_book.sql" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/00000000000002_create_table_book_user.sql" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/00000000000003_create_table_word.sql" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/00000000000004_create_table_service_data.sql" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/00000000000005_fill_service_data.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/00000000000007_create_table_user_word_progress.sql" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/00000000000008_create_table_knowledge_progress.sql" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/00000000000009_fill_knowlege_progress.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/00000000000010_create_table_exception_word.sql" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/00000000000011_fill_exception_word.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/00000000000012_create_table_token_rule.sql" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/00000000000013_fill_token_rule.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/00000000000014_create_table_book_sentence.sql" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/00000000000015_create_table_book_sentence_has_word.sql" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/00000000000016_create_view_book_user_know.sql" relativeToChangelogFile="false"/>
+
 </databaseChangeLog>

@@ -4,10 +4,10 @@ import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import ru.mrak.domain.enumeration.ChatTypeEnum;
+import ru.mrak.model.enumeration.ChatTypeEnum;
 
 /**
- * A DTO for the {@link ru.mrak.domain.Chat} entity.
+ * A DTO for the {@link ru.mrak.model.Chat} entity.
  */
 public class ChatDTO implements Serializable {
 

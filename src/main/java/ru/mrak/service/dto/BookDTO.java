@@ -1,36 +1,23 @@
 package ru.mrak.service.dto;
 
+import ru.mrak.model.entity.Book;
+
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
- * A DTO for the {@link ru.mrak.domain.Book} entity.
+ * A DTO for the {@link Book} entity.
  */
 public class BookDTO implements Serializable {
 
     private Long id;
-
-    @NotNull
     private String title;
-
     private String author;
-    private String source;
+    private String pictureId;
 
-    @NotNull
-    private String text;
-
-    @NotNull
-    private Boolean publicBook;
-
-    private Long dictionaryId;
-    private Long loadedUserId;
-    private String loadedUserLogin;
-    private Set<UserDTO> users = new HashSet<>();
     private Double know;
-    private String pictureName;
-    private Boolean inProcessing;
 
     public Long getId() {
         return id;
@@ -56,66 +43,6 @@ public class BookDTO implements Serializable {
         this.author = author;
     }
 
-    public String getSource() {
-        return source;
-    }
-
-    public void setSource(String source) {
-        this.source = source;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public Boolean isPublicBook() {
-        return publicBook;
-    }
-
-    public void setPublicBook(Boolean publicBook) {
-        this.publicBook = publicBook;
-    }
-
-    public Long getDictionaryId() {
-        return dictionaryId;
-    }
-
-    public void setDictionaryId(Long dictionaryId) {
-        this.dictionaryId = dictionaryId;
-    }
-
-    public Long getLoadedUserId() {
-        return loadedUserId;
-    }
-
-    public void setLoadedUserId(Long userId) {
-        this.loadedUserId = userId;
-    }
-
-    public String getLoadedUserLogin() {
-        return loadedUserLogin;
-    }
-
-    public void setLoadedUserLogin(String userLogin) {
-        this.loadedUserLogin = userLogin;
-    }
-
-    public Set<UserDTO> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<UserDTO> users) {
-        this.users = users;
-    }
-
-    public Boolean getPublicBook() {
-        return publicBook;
-    }
-
     public Double getKnow() {
         return know;
     }
@@ -124,20 +51,12 @@ public class BookDTO implements Serializable {
         this.know = know;
     }
 
-    public String getPictureName() {
-        return pictureName;
+    public String getPictureId() {
+        return pictureId;
     }
 
-    public void setPictureName(String pictureName) {
-        this.pictureName = pictureName;
-    }
-
-    public Boolean getInProcessing() {
-        return inProcessing;
-    }
-
-    public void setInProcessing(Boolean inProcessing) {
-        this.inProcessing = inProcessing;
+    public void setPictureId(String pictureId) {
+        this.pictureId = pictureId;
     }
 
     @Override
@@ -164,17 +83,7 @@ public class BookDTO implements Serializable {
             "id=" + getId() +
             ", title='" + getTitle() + "'" +
             ", author='" + getAuthor() + "'" +
-            ", source='" + getSource() + "'" +
-            ", text='" + getText() + "'" +
-            ", publicBook='" + isPublicBook() + "'" +
-            ", dictionaryId=" + getDictionaryId() +
-            ", loadedUserId=" + getLoadedUserId() +
-            ", loadedUserLogin='" + getLoadedUserLogin() + "'" +
-            ", users='" + getUsers() + "'" +
-            ", publicBook='" + getPublicBook() + "'" +
             ", know='" + getKnow() + "'" +
-            ", pictureName='" + getPictureName() + "'" +
-            ", inProcessing='" + getInProcessing() + "'" +
             "}";
     }
 }

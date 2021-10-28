@@ -1,6 +1,6 @@
 package ru.mrak.service.dto.userWord;
 
-import ru.mrak.domain.enumeration.UserWordProgressTypeEnum;
+import ru.mrak.model.enumeration.UserWordProgressTypeEnum;
 
 import java.time.Instant;
 import java.util.Objects;

@@ -3,15 +3,12 @@ package ru.mrak.service.tarnslate;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.mrak.domain.Word;
-import ru.mrak.domain.enumeration.TagEnum;
-import ru.mrak.domain.yndex.PosEnum;
-import ru.mrak.domain.yndex.WordDef;
-import ru.mrak.domain.yndex.WordHead;
+import ru.mrak.model.entity.Word;
+import ru.mrak.model.yndex.PosEnum;
+import ru.mrak.model.yndex.WordDef;
+import ru.mrak.model.yndex.WordHead;
 import ru.mrak.repository.WordRepository;
 import ru.mrak.service.FileService;
 
@@ -55,7 +52,7 @@ public class TranslateService implements TranslateServiceInterface {
         log.debug("Update word: {}", word);
         try {
             WordHead lookup = yandexTranslateService.requestWord(word.getWord());
-            Set<PosEnum> posEnums = PosEnum.tagToPos.get(TagEnum.getByTag(word.getPartOfSpeech()));
+            Set<PosEnum> posEnums = PosEnum.tagToPos.get(word.getPartOfSpeech());
             if (posEnums != null) {
                 WordDef chooseWord = null;
                 if (lookup.getDef().size() > 0) {

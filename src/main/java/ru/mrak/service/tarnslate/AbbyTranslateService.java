@@ -8,8 +8,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import ru.mrak.domain.abby.AbbyTranslate;
-import ru.mrak.domain.abby.ArticleModel;
+import ru.mrak.model.abby.ArticleModel;
 
 import java.io.InputStream;
 import java.time.LocalDateTime;

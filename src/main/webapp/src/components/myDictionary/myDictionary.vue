@@ -91,7 +91,7 @@ export default class MyDictionary extends Vue {
   public sortDesc: boolean[] = [false]
 
   public searchString = ''
-  public wordSort?: SortValue<string | undefined> = new SortValue(undefined, asc)
+  public wordSort?: SortValue<string | undefined>
   public startPriority?: SortValue<number | undefined>
 
   public headers = [
@@ -185,11 +185,11 @@ export default class MyDictionary extends Vue {
   public async updateSortBy (value: string[]): Promise<void> {
     const item = value[0]
     if (item === 'word.word') {
-      this.wordSort = new SortValue(undefined, asc)
+      // this.wordSort = new SortValue(undefined, asc)
       this.startPriority = undefined
     } else if (item === 'word.priority') {
       this.wordSort = undefined
-      this.startPriority = new SortValue(undefined, asc)
+      // this.startPriority = new SortValue(undefined, asc)
     }
 
     this.words = await this.retrieve()

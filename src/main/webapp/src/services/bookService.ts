@@ -58,20 +58,6 @@ export default class BookService {
    */
   private static fillRequestQuery (params: URLSearchParams, bookFilter: BookFilter): void {
     bookFilter.addAppend(params)
-
-    // sorts
-    if (bookFilter.titleSort && bookFilter.titleSort.sortDirection) {
-      params.append('sort', `title,${bookFilter.titleSort.sortDirection.direction}`)
-      if (bookFilter.titleSort.maxValue) {
-        params.append(`startTitle.${bookFilter.titleSort.sortDirection.compare}`, `${bookFilter.titleSort.maxValue}`)
-      }
-    }
-    if (bookFilter.authorSort && bookFilter.authorSort.sortDirection) {
-      params.append('sort', `author,${bookFilter.authorSort.sortDirection.direction}`)
-      if (bookFilter.authorSort.maxValue) {
-        params.append(`startAuthor.${bookFilter.authorSort.sortDirection.compare}`, `${bookFilter.authorSort.maxValue}`)
-      }
-    }
   }
 
   public delete (id: number): Promise<any> {

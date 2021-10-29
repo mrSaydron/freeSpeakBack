@@ -8,7 +8,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.mrak.model.*;
 import ru.mrak.model.entity.Book;
 import ru.mrak.model.entity.Book_;
 import ru.mrak.model.entity.bookUserKnow.BookUserKnow;
@@ -19,7 +18,6 @@ import ru.mrak.service.dto.BookCriteria;
 import ru.mrak.service.dto.BookDTO;
 import ru.mrak.service.mapper.BookMapper;
 
-import javax.persistence.EntityManager;
 import javax.persistence.criteria.*;
 import java.util.List;
 
@@ -105,28 +103,28 @@ public class BookQueryService extends QueryService<Book> {
             if (criteria.getAuthor() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getAuthor(), Book_.author));
             }
-            if (criteria.getTitleAuthorFilter() != null) {
+            if (criteria.getTitleAuthor() != null) {
                 Specification<Book> commonSpecification =
-                    Specification.where(buildStringSpecification(criteria.getTitleAuthorFilter(), Book_.author))
-                    .or(buildStringSpecification(criteria.getTitleAuthorFilter(), Book_.title));
+                    Specification.where(buildStringSpecification(criteria.getTitleAuthor(), Book_.author))
+                    .or(buildStringSpecification(criteria.getTitleAuthor(), Book_.title));
 
                 specification = specification.and(commonSpecification);
             }
-            if (criteria.getKnowFilter() != null) {
+            if (criteria.getKnow() != null) {
                 Specification<Book> knowSpecification = (root, query, builder)
                     -> {
                     CollectionJoin<Book, BookUserKnow> userKnowJoin = root.join(Book_.userKnows, JoinType.LEFT);
 
                     Predicate less;
-                    if (criteria.getKnowFilter().getLessThan() != null) {
-                        less = builder.lessThan(userKnowJoin.get(BookUserKnow_.know), criteria.getKnowFilter().getLessThan());
-                    } else if (criteria.getKnowFilter().getGreaterThanOrEqual() != null){
-                        less = builder.lessThan(userKnowJoin.get(BookUserKnow_.know), criteria.getKnowFilter().getLessThanOrEqual());
+                    if (criteria.getKnow().getLessThan() != null) {
+                        less = builder.lessThan(userKnowJoin.get(BookUserKnow_.know), criteria.getKnow().getLessThan());
+                    } else if (criteria.getKnow().getGreaterThanOrEqual() != null){
+                        less = builder.lessThan(userKnowJoin.get(BookUserKnow_.know), criteria.getKnow().getLessThanOrEqual());
                     } else {
                         throw new RuntimeException("Нет такого условия");
                     }
                     Predicate greaterThanOrEqualToKnow
-                        = builder.greaterThanOrEqualTo(userKnowJoin.get(BookUserKnow_.know), criteria.getKnowFilter().getGreaterThanOrEqual());
+                        = builder.greaterThanOrEqualTo(userKnowJoin.get(BookUserKnow_.know), criteria.getKnow().getGreaterThanOrEqual());
                     Predicate equalUser = builder.equal(userKnowJoin.get(BookUserKnow_.userId), user.getId());
 
                     return builder.and(less, greaterThanOrEqualToKnow, equalUser);

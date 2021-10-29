@@ -4,7 +4,7 @@
       <sort-button
         text="Название"
         :direction="nameDirection"
-        @update:direction="nameClick"
+        @update:direction="titleClick"
       >
       </sort-button>
       <sort-button
@@ -62,8 +62,8 @@ import { Inject, Vue, Watch } from 'vue-property-decorator'
 import BookCard from '@/common/bookCard.vue'
 import BookService from '@/services/bookService'
 import { BookDto } from '@/model/bookDto'
-import { BookFilter } from '@/services/filters/bookFilter'
-import { SortValue, asc, desc, SortDirection } from '@/util/sortValue'
+import { BookFilter, BookSortFields } from '@/services/filters/bookFilter'
+import { asc, SortDirection } from '@/util/sortValue'
 import SortButton from '@/common/sortButton.vue'
 import SelectButton from '@/common/selectButton.vue'
 import FileService from '@/services/fileService'
@@ -84,14 +84,7 @@ export default class Library extends Vue {
   public allElements = false
   public searchString = ''
   public books: BookDto[] = []
-  public bookFilter = new BookFilter(
-    undefined,
-    true,
-    undefined,
-    new SortValue<string>(undefined, asc),
-    undefined,
-    this.requestCount
-  )
+  public bookFilter = new BookFilter(this.requestCount)
 
   public nameDirection: SortDirection | null = asc
   public authorDirection: SortDirection | null = null
@@ -100,21 +93,24 @@ export default class Library extends Vue {
   public knowRed = false
 
   public async mounted () {
-    await this.retrieve(true)
+    await this.retrieve()
   }
 
   @Watch('searchString')
   public async searchChange (common: string, oldCommon: string) {
     if (common && common !== '' && common.length >= 3) {
-      this.bookFilter.titleAuthorFilter = common
-      await this.retrieve(false)
+      this.bookFilter.titleAuthor.contains = common
+
+      this.books = []
+      await this.retrieve()
     } else if (oldCommon && oldCommon !== '' && oldCommon.length >= 3) {
-      this.bookFilter.titleAuthorFilter = undefined
-      await this.retrieve(false)
+      this.bookFilter.titleAuthor.contains = undefined
+      this.books = []
+      await this.retrieve()
     }
   }
 
-  public async retrieve (add: boolean): Promise<void> {
+  public async retrieve (): Promise<void> {
     const nextBooks: BookDto[] = await this.bookService.retrieve(this.bookFilter)
     nextBooks.forEach(book => {
       if (book.pictureId) {
@@ -124,45 +120,43 @@ export default class Library extends Vue {
           })
       }
     })
-    if (add) {
-      this.books = this.books.concat(nextBooks)
-    } else {
-      this.books = nextBooks
-    }
+    this.books = this.books.concat(nextBooks)
     this.allElements = this.books.length < this.requestCount
   }
 
   public async next () {
     if (!this.allElements && this.books.length > 0) {
       const lastBook = this.books[this.books.length - 1]
-      if (this.bookFilter.titleSort) {
-        this.bookFilter.titleSort.maxValue = lastBook.title
+      if (this.bookFilter.sort.sortField === BookSortFields.Title) {
+        this.bookFilter.sort.maxValue = lastBook.title
       }
-      if (this.bookFilter.authorSort) {
-        this.bookFilter.authorSort.maxValue = lastBook.author
+      if (this.bookFilter.sort.sortField === BookSortFields.Author) {
+        this.bookFilter.sort.maxValue = lastBook.author
       }
-      await this.retrieve(true)
+      await this.retrieve()
     }
   }
 
-  public nameClick (direction: SortDirection): void {
+  public titleClick (direction: SortDirection): void {
     this.nameDirection = direction
     this.authorDirection = null
 
-    this.bookFilter.titleSort = new SortValue<string>(undefined, direction)
-    this.bookFilter.authorSort = undefined
+    this.bookFilter.sort.sortDirection = direction
+    this.bookFilter.sort.sortField = BookSortFields.Title
 
-    this.retrieve(false)
+    this.books = []
+    this.retrieve()
   }
 
   public authorClick (direction: SortDirection): void {
     this.authorDirection = direction
     this.nameDirection = null
 
-    this.bookFilter.titleSort = undefined
-    this.bookFilter.authorSort = new SortValue<string>(undefined, direction)
+    this.bookFilter.sort.sortDirection = direction
+    this.bookFilter.sort.sortField = BookSortFields.Author
 
-    this.retrieve(false)
+    this.books = []
+    this.retrieve()
   }
 
   public knowGreenClick (select: boolean): void {
@@ -170,19 +164,19 @@ export default class Library extends Vue {
     if (select) {
       this.knowYellow = false
       this.knowRed = false
-      this.bookFilter.knowFilter!.lessThan = undefined
-      this.bookFilter.knowFilter!.lessThanOrEqual = 1.0
-      this.bookFilter.knowFilter!.greaterThanOrEqual = knowLevels[2].know
+      this.bookFilter.know.lessThan = undefined
+      this.bookFilter.know.lessThanOrEqual = 1.0
+      this.bookFilter.know.greaterThanOrEqual = knowLevels[2].know
     } else {
-      this.bookFilter.knowFilter!.lessThan = undefined
-      this.bookFilter.knowFilter!.lessThanOrEqual = undefined
-      this.bookFilter.knowFilter!.greaterThanOrEqual = undefined
+      this.bookFilter.know.lessThan = undefined
+      this.bookFilter.know.lessThanOrEqual = undefined
+      this.bookFilter.know.greaterThanOrEqual = undefined
     }
 
-    if (this.bookFilter.titleSort) this.bookFilter.titleSort.maxValue = undefined
-    if (this.bookFilter.authorSort) this.bookFilter.authorSort.maxValue = undefined
+    this.bookFilter.sort.maxValue = undefined
 
-    this.retrieve(false)
+    this.books = []
+    this.retrieve()
   }
 
   public knowYellowClick (select: boolean): void {
@@ -190,19 +184,19 @@ export default class Library extends Vue {
     if (select) {
       this.knowGreen = false
       this.knowRed = false
-      this.bookFilter.knowFilter!.lessThan = knowLevels[2].know
-      this.bookFilter.knowFilter!.lessThanOrEqual = undefined
-      this.bookFilter.knowFilter!.greaterThanOrEqual = knowLevels[1].know
+      this.bookFilter.know.lessThan = knowLevels[2].know
+      this.bookFilter.know.lessThanOrEqual = undefined
+      this.bookFilter.know.greaterThanOrEqual = knowLevels[1].know
     } else {
-      this.bookFilter.knowFilter!.lessThan = undefined
-      this.bookFilter.knowFilter!.lessThanOrEqual = undefined
-      this.bookFilter.knowFilter!.greaterThanOrEqual = undefined
+      this.bookFilter.know.lessThan = undefined
+      this.bookFilter.know.lessThanOrEqual = undefined
+      this.bookFilter.know.greaterThanOrEqual = undefined
     }
 
-    if (this.bookFilter.titleSort) this.bookFilter.titleSort.maxValue = undefined
-    if (this.bookFilter.authorSort) this.bookFilter.authorSort.maxValue = undefined
+    this.bookFilter.sort.maxValue = undefined
 
-    this.retrieve(false)
+    this.books = []
+    this.retrieve()
   }
 
   public knowRedClick (select: boolean): void {
@@ -210,19 +204,19 @@ export default class Library extends Vue {
     if (select) {
       this.knowGreen = false
       this.knowYellow = false
-      this.bookFilter.knowFilter!.lessThan = knowLevels[1].know
-      this.bookFilter.knowFilter!.lessThanOrEqual = undefined
-      this.bookFilter.knowFilter!.greaterThanOrEqual = knowLevels[0].know
+      this.bookFilter.know.lessThan = knowLevels[1].know
+      this.bookFilter.know.lessThanOrEqual = undefined
+      this.bookFilter.know.greaterThanOrEqual = knowLevels[0].know
     } else {
-      this.bookFilter.knowFilter!.lessThan = undefined
-      this.bookFilter.knowFilter!.lessThanOrEqual = undefined
-      this.bookFilter.knowFilter!.greaterThanOrEqual = undefined
+      this.bookFilter.know.lessThan = undefined
+      this.bookFilter.know.lessThanOrEqual = undefined
+      this.bookFilter.know.greaterThanOrEqual = undefined
     }
 
-    if (this.bookFilter.titleSort) this.bookFilter.titleSort.maxValue = undefined
-    if (this.bookFilter.authorSort) this.bookFilter.authorSort.maxValue = undefined
+    this.bookFilter.sort.maxValue = undefined
 
-    this.retrieve(false)
+    this.books = []
+    this.retrieve()
   }
 }
 </script>

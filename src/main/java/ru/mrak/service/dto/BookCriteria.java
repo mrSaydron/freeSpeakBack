@@ -11,7 +11,7 @@ import ru.mrak.web.rest.filter.StringRangeFilter;
 
 /**
  * Criteria class for the {@link Book} entity. This class is used
- * in {@link ru.mrak.web.rest.BookResource} to receive all the possible filtering options from
+ * in {@link ru.mrak.web.rest.BookController} to receive all the possible filtering options from
  * the Http GET request parameters.
  * For example the following could be a valid request:
  * {@code /books?id.greaterThan=5&attr1.contains=something&attr2.specified=false}
@@ -28,8 +28,8 @@ public class BookCriteria implements Serializable, Criteria {
     private StringRangeFilter title;
     private StringRangeFilter author;
 
-    private StringFilter titleAuthorFilter; // Строка для поиска по названию и автору
-    private DoubleFilter knowFilter;
+    private StringFilter titleAuthor; // Строка для поиска по названию и автору
+    private DoubleFilter know;
 
     public BookCriteria() {
     }
@@ -39,8 +39,8 @@ public class BookCriteria implements Serializable, Criteria {
         this.title = other.title == null ? null : other.title.copy();
         this.author = other.author == null ? null : other.author.copy();
 
-        this.titleAuthorFilter = other.titleAuthorFilter == null ? null : other.titleAuthorFilter.copy();
-        this.knowFilter = other.knowFilter == null ? null : other.knowFilter.copy();
+        this.titleAuthor = other.titleAuthor == null ? null : other.titleAuthor.copy();
+        this.know = other.know == null ? null : other.know.copy();
     }
 
     @Override
@@ -61,8 +61,8 @@ public class BookCriteria implements Serializable, Criteria {
                 Objects.equals(id, that.id) &&
                 Objects.equals(title, that.title) &&
                 Objects.equals(author, that.author) &&
-                Objects.equals(titleAuthorFilter, that.titleAuthorFilter) &&
-                Objects.equals(knowFilter, that.knowFilter);
+                Objects.equals(titleAuthor, that.titleAuthor) &&
+                Objects.equals(know, that.know);
     }
 
     @Override
@@ -71,8 +71,8 @@ public class BookCriteria implements Serializable, Criteria {
             id,
             title,
             author,
-            titleAuthorFilter,
-            knowFilter
+            titleAuthor,
+            know
         );
     }
 
@@ -83,8 +83,8 @@ public class BookCriteria implements Serializable, Criteria {
                 (id != null ? "id=" + id + ", " : "") +
                 (title != null ? "title=" + title + ", " : "") +
                 (author != null ? "author=" + author + ", " : "") +
-                (titleAuthorFilter != null ? "titleAuthor=" + titleAuthorFilter + ", " : "") +
-                (knowFilter != null ? "orPublicBook=" + knowFilter + ", " : "") +
+                (titleAuthor != null ? "titleAuthor=" + titleAuthor + ", " : "") +
+                (know != null ? "orPublicBook=" + know + ", " : "") +
             "}";
     }
 

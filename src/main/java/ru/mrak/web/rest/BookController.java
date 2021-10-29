@@ -3,7 +3,6 @@ package ru.mrak.web.rest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import ru.mrak.model.entity.BookSentence;
-import ru.mrak.model.entity.User;
 import ru.mrak.model.entity.Book;
 import ru.mrak.service.BookService;
 import ru.mrak.service.UserService;
@@ -11,7 +10,6 @@ import ru.mrak.service.dto.BookCreateDTO;
 import ru.mrak.service.dto.BookSentenceDTO;
 import ru.mrak.service.mapper.BookMapper;
 import ru.mrak.service.mapper.BookSentenceMapper;
-import ru.mrak.web.rest.errors.BadRequestAlertException;
 import ru.mrak.service.dto.BookDTO;
 import ru.mrak.service.dto.BookCriteria;
 import ru.mrak.service.BookQueryService;
@@ -40,9 +38,9 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/book")
 @RequiredArgsConstructor
-public class BookResource {
+public class BookController {
 
-    private final Logger log = LoggerFactory.getLogger(BookResource.class);
+    private final Logger log = LoggerFactory.getLogger(BookController.class);
 
     private static final String ENTITY_NAME = "book";
 

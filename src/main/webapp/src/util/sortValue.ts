@@ -1,6 +1,7 @@
-export class SortValue<T> {
+export class SortValue<E> {
   constructor (
-    public maxValue?: T,
+    public sortField?: E,
+    public maxValue?: any,
     public sortDirection?: SortDirection
   ) {
     this.maxValue = maxValue

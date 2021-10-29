@@ -9,7 +9,8 @@ export class FilterValues<T> {
     public greaterThan?: T,
     public lessThan?: T,
     public greaterThanOrEqual?: T,
-    public lessThanOrEqual?: T
+    public lessThanOrEqual?: T,
+    public contains?: T
   ) {
   }
 

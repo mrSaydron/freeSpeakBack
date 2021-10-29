@@ -83,7 +83,7 @@ export default class CardsLearn extends Vue {
 
   public requestCount = 20
   public allElements = false
-  public wordSort = new SortValue<string>(undefined, asc)
+  public wordSort?: SortValue<string>
 
   public async mounted () {
     this.leftHearts = await this.userWordService.getLeftHearts()
@@ -173,7 +173,7 @@ export default class CardsLearn extends Vue {
       )
       this.allElements = words.length < this.requestCount
 
-      if (words.length > 0) {
+      if (words.length > 0 && this.wordSort) {
         this.wordSort.maxValue = words[words.length - 1].word?.word
         this.cards = this.cards.concat(Card.transform(words))
       }

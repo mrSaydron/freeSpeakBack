@@ -25,8 +25,8 @@ public class WordCriteria implements Serializable, Criteria {
 
     // Фильтры
     private LongFilter id;
-    private StringRangeFilter wordFilter;
-    private Filter<PartOfSpeechEnum> partOfSpeechFilter;
+    private StringRangeFilter word;
+    private Filter<PartOfSpeechEnum> partOfSpeech;
     private LongFilter startAmount;
     private Filter<Long> user;
 
@@ -35,8 +35,8 @@ public class WordCriteria implements Serializable, Criteria {
 
     public WordCriteria(WordCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
-        this.wordFilter = other.wordFilter == null ? null : other.wordFilter.copy();
-        this.partOfSpeechFilter = other.partOfSpeechFilter == null ? null : other.partOfSpeechFilter.copy();
+        this.word = other.word == null ? null : other.word.copy();
+        this.partOfSpeech = other.partOfSpeech == null ? null : other.partOfSpeech.copy();
         this.startAmount = other.startAmount == null ? null : other.startAmount.copy();
         this.user = other.user;
     }
@@ -54,20 +54,20 @@ public class WordCriteria implements Serializable, Criteria {
         this.id = id;
     }
 
-    public StringRangeFilter getWordFilter() {
-        return wordFilter;
+    public StringRangeFilter getWord() {
+        return word;
     }
 
-    public void setWordFilter(StringRangeFilter wordFilter) {
-        this.wordFilter = wordFilter;
+    public void setWord(StringRangeFilter word) {
+        this.word = word;
     }
 
-    public Filter<PartOfSpeechEnum> getPartOfSpeechFilter() {
-        return partOfSpeechFilter;
+    public Filter<PartOfSpeechEnum> getPartOfSpeech() {
+        return partOfSpeech;
     }
 
-    public void setPartOfSpeechFilter(Filter<PartOfSpeechEnum> partOfSpeechFilter) {
-        this.partOfSpeechFilter = partOfSpeechFilter;
+    public void setPartOfSpeech(Filter<PartOfSpeechEnum> partOfSpeech) {
+        this.partOfSpeech = partOfSpeech;
     }
 
     public LongFilter getStartAmount() {
@@ -92,23 +92,23 @@ public class WordCriteria implements Serializable, Criteria {
         if (o == null || getClass() != o.getClass()) return false;
         WordCriteria that = (WordCriteria) o;
         return Objects.equals(id, that.id) &&
-            Objects.equals(wordFilter, that.wordFilter) &&
-            Objects.equals(partOfSpeechFilter, that.partOfSpeechFilter) &&
+            Objects.equals(word, that.word) &&
+            Objects.equals(partOfSpeech, that.partOfSpeech) &&
             Objects.equals(startAmount, that.startAmount) &&
             Objects.equals(user, that.user);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, wordFilter, partOfSpeechFilter, startAmount, user);
+        return Objects.hash(id, word, partOfSpeech, startAmount, user);
     }
 
     @Override
     public String toString() {
         return "WordCriteria{" +
             "id=" + id +
-            ", wordFilter=" + wordFilter +
-            ", partOfSpeechFilter=" + partOfSpeechFilter +
+            ", wordFilter=" + word +
+            ", partOfSpeechFilter=" + partOfSpeech +
             ", startAmount=" + startAmount +
             ", user=" + user +
             '}';

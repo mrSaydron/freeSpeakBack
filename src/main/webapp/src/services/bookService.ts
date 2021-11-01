@@ -36,7 +36,7 @@ export default class BookService {
   public async retrieve (bookFilter: BookFilter): Promise<BookDto[]> {
     const params = new URLSearchParams()
     params.append('size', '' + (bookFilter.requestCount || BookService.REQUEST_COUNT_DEFAULT))
-    BookService.fillRequestQuery(params, bookFilter)
+    bookFilter.addAppend(params)
     return new Promise<BookCreateDto[]>((resolve, reject) => {
       axios
         .get(`${baseApiUrl}?${params.toString()}`)
@@ -48,16 +48,6 @@ export default class BookService {
           reject(err)
         })
     })
-  }
-
-  /**
-   * Формирует запрос с сортировкой и фильтрами
-   * @param params
-   * @param bookFilter
-   * @private
-   */
-  private static fillRequestQuery (params: URLSearchParams, bookFilter: BookFilter): void {
-    bookFilter.addAppend(params)
   }
 
   public delete (id: number): Promise<any> {

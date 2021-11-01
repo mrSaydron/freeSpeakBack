@@ -65,8 +65,8 @@ export default class Dictionary extends Vue {
   public sortDesc: boolean[] = [false]
 
   public searchString = ''
-  public wordSort?: SortValue<string | undefined>
-  public amountSort?: SortValue<number | undefined>
+  public wordSort?: SortValue
+  public amountSort?: SortValue
 
   public headers = [
     {

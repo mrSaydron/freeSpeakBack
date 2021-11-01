@@ -5,25 +5,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.mrak.model.entity.Book;
 import ru.mrak.model.entity.BookSentence;
-import ru.mrak.model.entity.bookUser.BookUser;
-import ru.mrak.model.entity.bookUser.BookUserId;
 import ru.mrak.model.entity.User;
 import ru.mrak.repository.BookRepository;
 import ru.mrak.repository.BookSentenceRepository;
-import ru.mrak.repository.BookUserRepository;
 import ru.mrak.service.dto.BookCreateDTO;
 import ru.mrak.service.dto.BookDTO;
 import ru.mrak.service.mapper.BookMapper;
 
 import javax.persistence.EntityManager;
-import java.time.LocalDateTime;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,7 +57,7 @@ public class BookService {
 
         List<BookSentence> bookSentences = textService.createByText(bookDTO.getText());
         for (BookSentence bookSentence : bookSentences) {
-            bookSentence.setBookId(book.getId());
+            bookSentence.setBook(book);
             bookSentenceRepository.save(bookSentence);
         }
 
@@ -121,7 +115,7 @@ public class BookService {
      */
     public boolean checkUserLibrary(Long bookId) {
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
-        return bookRepository.getMissingWords(user.getId(), bookId).isEmpty();
+        return bookRepository.getMissingWords(user, bookRepository.getOne(bookId)).isEmpty();
     }
 
     /**
@@ -130,7 +124,7 @@ public class BookService {
     @Transactional
     public void addWordsToDictionary(Long bookId) {
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
-        List<Long> wordIds = bookRepository.getMissingWords(user.getId(), bookId);
+        List<Long> wordIds = bookRepository.getMissingWords(user, bookRepository.getOne(bookId));
         wordIds.forEach(userWordService::addWord);
     }
 

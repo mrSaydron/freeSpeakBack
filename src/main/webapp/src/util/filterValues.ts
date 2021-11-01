@@ -2,6 +2,7 @@ export class FilterValues<T> {
   /* eslint no-useless-constructor: "off" */
   constructor (
     public filterName: string,
+    public sortName?: string,
     public equals?: T,
     public notEquals?: T,
     public inValues?: [T],
@@ -16,7 +17,12 @@ export class FilterValues<T> {
 
   addAppends (params: URLSearchParams): void {
     for (const key in this) {
-      if (key !== 'filterName' && this[key] !== undefined && this[key] !== null) {
+      if (
+        key !== 'filterName' &&
+        key !== 'sortName' &&
+        this[key] !== undefined &&
+        this[key] !== null
+      ) {
         params.append(`${this.filterName}.${key}`, `${this[key]}`)
       }
     }

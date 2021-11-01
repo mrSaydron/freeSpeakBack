@@ -1,18 +1,18 @@
 import { asc, SortValue } from '@/util/sortValue'
 import { FilterValues } from '@/util/filterValues'
+import loginForm from '@/components/account/loginForm.vue'
 
-export class BookFilter {
-  public titleAuthor = new FilterValues<string>('titleAuthor')
-  public know = new FilterValues<number>('know')
-  public title = new FilterValues<string>('title', 'title')
-  public author = new FilterValues<string>('author', 'author')
+export class UserWordFilter {
+  public word = new FilterValues<string>('word', 'word.word')
+  public wordOrTranslate = new FilterValues<string>('wordOfTranslate')
 
-  public sort = new SortValue(this.title, undefined, asc)
+  public sort = new SortValue(this.word, undefined, asc)
 
   /* eslint no-useless-constructor: "off" */
   constructor (
-    public requestCount = 20
+    public requestCount?: number
   ) {
+    this.requestCount = 20
   }
 
   addAppend (params: URLSearchParams): void {

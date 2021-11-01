@@ -11,7 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import ru.mrak.model.entity.userWordProgress.UserWordProgress;
+import ru.mrak.model.entity.userWordProgress.UserWord;
+import ru.mrak.model.entity.userWordProgress.UserWordHasProgress;
 import ru.mrak.service.UserWordService;
 import ru.mrak.service.dto.userWord.UserWordCriteria;
 import ru.mrak.service.dto.userWord.UserWordDTO;
@@ -40,7 +41,7 @@ public class UserWordResource {
     @Transactional(readOnly = true)
     public ResponseEntity<List<UserWordDTO>> getUserWords(UserWordCriteria criteria, Pageable pageable) {
         log.debug("REST request to get words for user by criteria: {}", criteria);
-        Page<UserWordProgress> userWords = userWordService.findByCriteria(criteria, pageable);
+        Page<UserWord> userWords = userWordService.findByCriteria(criteria, pageable);
         Page<UserWordDTO> page = userWords.map(userWordMapper::toDto);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());

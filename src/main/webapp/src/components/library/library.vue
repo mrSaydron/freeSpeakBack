@@ -62,7 +62,7 @@ import { Inject, Vue, Watch } from 'vue-property-decorator'
 import BookCard from '@/common/bookCard.vue'
 import BookService from '@/services/bookService'
 import { BookDto } from '@/model/bookDto'
-import { BookFilter, BookSortFields } from '@/services/filters/bookFilter'
+import { BookFilter } from '@/services/filters/bookFilter'
 import { asc, SortDirection } from '@/util/sortValue'
 import SortButton from '@/common/sortButton.vue'
 import SelectButton from '@/common/selectButton.vue'
@@ -127,10 +127,10 @@ export default class Library extends Vue {
   public async next () {
     if (!this.allElements && this.books.length > 0) {
       const lastBook = this.books[this.books.length - 1]
-      if (this.bookFilter.sort.sortField === BookSortFields.Title) {
+      if (this.bookFilter.sort.sortField === this.bookFilter.title) {
         this.bookFilter.sort.maxValue = lastBook.title
       }
-      if (this.bookFilter.sort.sortField === BookSortFields.Author) {
+      if (this.bookFilter.sort.sortField === this.bookFilter.author) {
         this.bookFilter.sort.maxValue = lastBook.author
       }
       await this.retrieve()
@@ -142,7 +142,7 @@ export default class Library extends Vue {
     this.authorDirection = null
 
     this.bookFilter.sort.sortDirection = direction
-    this.bookFilter.sort.sortField = BookSortFields.Title
+    this.bookFilter.sort.sortField = this.bookFilter.title
 
     this.books = []
     this.retrieve()
@@ -153,7 +153,7 @@ export default class Library extends Vue {
     this.nameDirection = null
 
     this.bookFilter.sort.sortDirection = direction
-    this.bookFilter.sort.sortField = BookSortFields.Author
+    this.bookFilter.sort.sortField = this.bookFilter.author
 
     this.books = []
     this.retrieve()

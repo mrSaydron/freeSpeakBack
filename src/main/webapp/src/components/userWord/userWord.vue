@@ -70,14 +70,14 @@ import Component from 'vue-class-component'
 import { Inject, Vue, Watch } from 'vue-property-decorator'
 import UserWordService from '@/services/userWordService'
 import { UserWordDto } from '@/model/userWordDto'
-import { asc, desc, SortValue } from '@/util/sortValue'
-import { WordDto } from '@/model/wordDto'
+import { asc, desc } from '@/util/sortValue'
 import FileService from '@/services/fileService'
+import { UserWordFilter } from '@/services/filters/userWordFilter'
 
 @Component({
   components: {}
 })
-export default class MyDictionary extends Vue {
+export default class UserWord extends Vue {
   @Inject() readonly userWordService!: UserWordService
   @Inject() readonly fileService!: FileService
 
@@ -87,12 +87,12 @@ export default class MyDictionary extends Vue {
   public selectWords: UserWordDto[] = []
   public selectAll = false
 
-  public sortBy: string[] = ['word']
+  public userWordFilter = new UserWordFilter()
+
+  public sortBy: string[] = ['word.word']
   public sortDesc: boolean[] = [false]
 
   public searchString = ''
-  public wordSort?: SortValue<string | undefined>
-  public startPriority?: SortValue<number | undefined>
 
   public headers = [
     {
@@ -109,11 +109,6 @@ export default class MyDictionary extends Vue {
       text: 'Часть речи',
       value: 'word.partOfSpeechNote',
       sortable: false
-    },
-    {
-      text: 'Приоритет',
-      value: 'word.priority',
-      sortable: true
     },
     {
       text: 'Коробка',
@@ -151,14 +146,11 @@ export default class MyDictionary extends Vue {
   }
 
   @Watch('searchString')
-  public async searchChange (wordFilter: string, oldWordFilter: string) {
-    if (this.wordSort) {
-      this.wordSort.maxValue = undefined
-    }
-    if (this.startPriority) {
-      this.startPriority.maxValue = undefined
-    }
-    this.words = await this.retrieve()
+  public async searchChange (wordOrTranslate: string) {
+    this.userWordFilter.sort.maxValue = undefined
+    this.userWordFilter.wordOrTranslate.contains = wordOrTranslate
+
+    this.retrieve()
   }
 
   /**
@@ -167,15 +159,11 @@ export default class MyDictionary extends Vue {
   public async next () {
     if (!this.allElements && this.words.length > 0) {
       const wordDto: UserWordDto = this.words[this.words.length - 1]
-      if (this.wordSort) {
-        this.wordSort.maxValue = wordDto.word?.word
+      if (this.userWordFilter.sort.sortField === this.userWordFilter.word) {
+        this.userWordFilter.sort.maxValue = wordDto.word?.word
       }
-      if (this.startPriority) {
-        this.startPriority.maxValue = wordDto.priority
-      }
-      const nextWords = await this.retrieve()
-      this.words = this.words.concat(nextWords)
 
+      const nextWords = await this.retrieve()
       if (this.selectAll) {
         this.selectWords = this.selectWords.concat(nextWords)
       }
@@ -185,11 +173,8 @@ export default class MyDictionary extends Vue {
   public async updateSortBy (value: string[]): Promise<void> {
     const item = value[0]
     if (item === 'word.word') {
-      // this.wordSort = new SortValue(undefined, asc)
-      this.startPriority = undefined
-    } else if (item === 'word.priority') {
-      this.wordSort = undefined
-      // this.startPriority = new SortValue(undefined, asc)
+      this.userWordFilter.sort.sortField = this.userWordFilter.word
+      this.userWordFilter.sort.sortDirection = asc
     }
 
     this.words = await this.retrieve()
@@ -197,26 +182,17 @@ export default class MyDictionary extends Vue {
 
   public async updateSortDesc (value: boolean[]): Promise<void> {
     const direction = value[0]
-    if (this.wordSort) {
-      this.wordSort.sortDirection = direction ? desc : asc
-    }
-    if (this.startPriority) {
-      this.startPriority.sortDirection = direction ? desc : asc
-    }
+    this.userWordFilter.sort.sortDirection = direction ? desc : asc
+    this.userWordFilter.sort.maxValue = undefined
+    this.allElements = false
 
     this.words = await this.retrieve()
   }
 
   private async retrieve (): Promise<UserWordDto[]> {
-    const words = await this.userWordService.retrieve(
-      this.searchString,
-      undefined,
-      undefined,
-      this.wordSort,
-      this.startPriority,
-      this.requestCount
-    )
+    const words = await this.userWordService.retrieve(this.userWordFilter)
     this.allElements = words.length < this.requestCount
+    this.words = this.words.concat(words)
     return words
   }
 
@@ -246,10 +222,7 @@ export default class MyDictionary extends Vue {
       })
     }
     if (this.selectAll) {
-      this.userWordService.eraseAllWords(
-        this.searchString,
-        undefined
-      )
+      this.userWordService.eraseAllWords(this.userWordFilter)
     } else {
       if (this.selectWords) {
         this.userWordService.eraseWords(this.selectWords.map(word => word.word!.id))
@@ -272,10 +245,7 @@ export default class MyDictionary extends Vue {
    */
   public removeSelectWords (): void {
     if (this.selectAll) {
-      this.userWordService.removeAllWords(
-        this.searchString,
-        undefined
-      )
+      this.userWordService.removeAllWords(this.userWordFilter)
       this.words = []
     } else {
       if (this.words && this.selectWords) {
@@ -311,10 +281,8 @@ export default class MyDictionary extends Vue {
       })
     }
     if (this.selectAll) {
-      this.userWordService.knowAllWords(
-        this.searchString,
-        undefined
-      )
+      const filter = new UserWordFilter()
+      this.userWordService.knowAllWords(this.userWordFilter)
     } else {
       if (this.selectWords) {
         this.userWordService.knowWords(this.selectWords.map(word => word.word!.id))

@@ -3,7 +3,6 @@ import { WordProgressDto } from '@/model/wordProgressDto'
 
 export interface UserWord {
   id?: number;
-  priority?: number;
   word?: WordDto;
   wordProgresses?: WordProgressDto[];
 }
@@ -11,7 +10,6 @@ export interface UserWord {
 export class UserWordDto implements UserWord {
   constructor (
     public id?: number,
-    public priority?: number,
     public word?: WordDto,
     public wordProgresses?: WordProgressDto[],
     public averageBox?: number,

@@ -1,29 +1,17 @@
 import axios from 'axios'
 import { UserWordDto } from '@/model/userWordDto.ts'
 import { SortValue } from '@/util/sortValue'
+import { UserWordFilter } from '@/services/filters/userWordFilter'
+import { User } from '@/model/userDto'
 
 const baseApiUrl = '/api/user-word'
 
 export default class UserWordService {
   private static REQUEST_COUNT_DEFAULT = 10;
 
-  public async retrieve (
-    wordFilter?: string,
-    partOfSpeechFilter?: string,
-    boxNumberFilter?: number,
-    wordSort?: SortValue<string | undefined>,
-    startPriority?: SortValue<number | undefined>,
-    requestCount?: number
-  ): Promise<UserWordDto[]> {
+  public async retrieve (filter: UserWordFilter): Promise<UserWordDto[]> {
     const params = new URLSearchParams()
-    params.append('size', '' + (requestCount || UserWordService.REQUEST_COUNT_DEFAULT))
-    UserWordService.fillRequestQuery(
-      params,
-      wordFilter,
-      boxNumberFilter,
-      partOfSpeechFilter,
-      wordSort,
-      startPriority)
+    filter.addAppend(params)
 
     return new Promise<UserWordDto[]>((resolve, reject) => {
       axios
@@ -36,37 +24,6 @@ export default class UserWordService {
           reject(err)
         })
     })
-  }
-
-  private static fillRequestQuery (
-    params: URLSearchParams,
-    wordFilter?: string,
-    boxNumberFilter?: number,
-    partOfSpeechFilter?: string,
-    wordSort?: SortValue<string | undefined>,
-    startPriority?: SortValue<number | undefined>
-  ): void {
-    if (wordFilter) {
-      params.append('wordFilter.contains', wordFilter)
-    }
-    if (partOfSpeechFilter) {
-      params.append('partOfSpeechFilter.contains', partOfSpeechFilter)
-    }
-    if (boxNumberFilter !== undefined) {
-      params.append('boxNumber.equals', boxNumberFilter + '')
-    }
-    if (wordSort && wordSort.sortDirection) {
-      params.append('sort', `word.word,${wordSort.sortDirection.direction}`)
-      if (wordSort.maxValue) {
-        params.append(`startWord.${wordSort.sortDirection.compare}`, wordSort.maxValue)
-      }
-    }
-    if (startPriority && startPriority.sortDirection) {
-      params.append('sort', `priority,${startPriority.sortDirection.direction}`)
-      if (startPriority.maxValue) {
-        params.append(`startPriority.${startPriority.sortDirection.compare}`, `${startPriority.maxValue}`)
-      }
-    }
   }
 
   /**
@@ -108,17 +65,14 @@ export default class UserWordService {
   /**
    * Сброс прогресса слов по условию
    */
-  public async eraseAllWords (
-    wordFilter?: string,
-    partOfSpeechFilter?: string
-  ): Promise<any> {
+  public async eraseAllWords (filter: UserWordFilter): Promise<any> {
     const params = new URLSearchParams()
-    UserWordService.fillRequestQuery(
-      params,
-      wordFilter,
-      undefined,
-      partOfSpeechFilter
-    )
+    const knowFilter = new UserWordFilter()
+    Object.assign(knowFilter, filter)
+    knowFilter.requestCount = undefined
+    knowFilter.sort.sortField = undefined
+
+    knowFilter.addAppend(params)
     return new Promise<any>((resolve, reject) => {
       axios.put(`${baseApiUrl}/erase-all-words?${params.toString()}`)
         .catch(err => {
@@ -154,17 +108,14 @@ export default class UserWordService {
   /**
    * Отмечает слова выученнми по условию
    */
-  public async knowAllWords (
-    wordFilter?: string,
-    partOfSpeechFilter?: string
-  ): Promise<any> {
+  public async knowAllWords (filter: UserWordFilter): Promise<any> {
     const params = new URLSearchParams()
-    UserWordService.fillRequestQuery(
-      params,
-      wordFilter,
-      undefined,
-      partOfSpeechFilter
-    )
+    const knowFilter = new UserWordFilter()
+    Object.assign(knowFilter, filter)
+    knowFilter.requestCount = undefined
+    knowFilter.sort.sortField = undefined
+
+    knowFilter.addAppend(params)
     return new Promise<any>((resolve, reject) => {
       axios.put(`${baseApiUrl}/know-all-words?${params.toString()}`)
         .catch(err => {
@@ -200,17 +151,14 @@ export default class UserWordService {
   /**
    * Удаление слов из словаря пользователя по условию
    */
-  public async removeAllWords (
-    wordFilter?: string,
-    partOfSpeechFilter?: string
-  ): Promise<any> {
+  public async removeAllWords (filter: UserWordFilter): Promise<any> {
     const params = new URLSearchParams()
-    UserWordService.fillRequestQuery(
-      params,
-      wordFilter,
-      undefined,
-      partOfSpeechFilter
-    )
+    const knowFilter = new UserWordFilter()
+    Object.assign(knowFilter, filter)
+    knowFilter.requestCount = undefined
+    knowFilter.sort.sortField = undefined
+
+    knowFilter.addAppend(params)
     return new Promise<any>((resolve, reject) => {
       axios.put(`${baseApiUrl}/remove-all-words?${params.toString()}`)
         .catch(err => {

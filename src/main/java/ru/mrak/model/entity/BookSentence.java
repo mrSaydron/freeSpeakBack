@@ -17,8 +17,9 @@ public class BookSentence {
     @SequenceGenerator(name = "book_sentence_seq", sequenceName = "book_sentence_seq", allocationSize = 1)
     private Long id;
 
-    @Column(name = "book_id")
-    private Long bookId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_id")
+    private Book book;
 
     @ElementCollection
     @CollectionTable(
@@ -49,11 +50,11 @@ public class BookSentence {
         this.words = words;
     }
 
-    public Long getBookId() {
-        return bookId;
+    public Book getBook() {
+        return book;
     }
 
-    public void setBookId(Long bookId) {
-        this.bookId = bookId;
+    public void setBook(Book book) {
+        this.book = book;
     }
 }

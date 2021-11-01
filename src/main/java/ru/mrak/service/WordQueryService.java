@@ -10,8 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.mrak.model.entity.Word;
 import ru.mrak.model.entity.Word_;
-import ru.mrak.model.entity.userWordProgress.UserWordProgress;
-import ru.mrak.model.entity.userWordProgress.UserWordProgress_;
+import ru.mrak.model.entity.userWordProgress.UserWordHasProgress;
 import ru.mrak.repository.WordRepository;
 import ru.mrak.service.dto.WordCriteria;
 import ru.mrak.service.dto.WordDTO;
@@ -90,22 +89,23 @@ public class WordQueryService extends QueryService<Word> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), Word_.id));
             }
-            if (criteria.getPartOfSpeechFilter() != null) {
-                specification = specification.and(buildSpecification(criteria.getPartOfSpeechFilter(), Word_.partOfSpeech));
+            if (criteria.getPartOfSpeech() != null) {
+                specification = specification.and(buildSpecification(criteria.getPartOfSpeech(), Word_.partOfSpeech));
             }
-            if (criteria.getWordFilter() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getWordFilter(), Word_.word));
+            if (criteria.getWord() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getWord(), Word_.word));
             }
             if (criteria.getStartAmount() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getStartAmount(), Word_.totalAmount));
             }
-            if (criteria.getUser() != null && criteria.getUser().getEquals() != null) {
-                Specification<Word> knowSpecification = (root, query, builder) -> {
-                    ListJoin<Word, UserWordProgress> userWordJoin = root.join(Word_.userWords, JoinType.INNER);
-                    return builder.equal(userWordJoin.get(UserWordProgress_.userId), criteria.getUser().getEquals());
-                };
-                specification = specification.and(knowSpecification);
-            }
+            // todo
+//            if (criteria.getUser() != null && criteria.getUser().getEquals() != null) {
+//                Specification<Word> knowSpecification = (root, query, builder) -> {
+//                    ListJoin<Word, UserWordHasProgress> userWordJoin = root.join(Word_.userWords, JoinType.INNER);
+//                    return builder.equal(userWordJoin.get(UserWordProgress_.userId), criteria.getUser().getEquals());
+//                };
+//                specification = specification.and(knowSpecification);
+//            }
 
         }
         return specification;

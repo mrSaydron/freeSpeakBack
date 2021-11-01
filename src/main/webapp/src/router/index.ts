@@ -6,7 +6,7 @@ import { Authority } from '@/shared/authority'
 import Library from '@/components/library/library.vue'
 import NewBook from '@/components/bookCreate/bookCreate.vue'
 import Book from '@/components/book/book.vue'
-import MyDictionary from '@/components/myDictionary/myDictionary.vue'
+import UserWord from '@/components/userWord/userWord.vue'
 import CardsLearn from '@/components/cardsLearn/cardsLearn.vue'
 import account from '@/router/account'
 
@@ -45,7 +45,7 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '/my-dictionary',
-    component: MyDictionary,
+    component: UserWord,
     meta: {
       authorities: [Authority.USER],
       backPage: () => {

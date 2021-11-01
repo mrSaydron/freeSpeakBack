@@ -19,7 +19,8 @@
     <include file="config/liquibase/changelog/00000000000003_create_table_word.sql" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/00000000000004_create_table_service_data.sql" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/00000000000005_fill_service_data.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/00000000000007_create_table_user_word_progress.sql" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/00000000000006_create_table_user_word.sql" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/00000000000007_create_table_user_word_has_progress.sql" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/00000000000008_create_table_knowledge_progress.sql" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/00000000000009_fill_knowlege_progress.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/00000000000010_create_table_exception_word.sql" relativeToChangelogFile="false"/>

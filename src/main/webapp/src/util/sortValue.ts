@@ -1,11 +1,22 @@
-export class SortValue<E> {
+import { FilterValues } from '@/util/filterValues'
+
+export class SortValue {
   constructor (
-    public sortField?: E,
+    public sortField?: FilterValues<any>,
     public maxValue?: any,
     public sortDirection?: SortDirection
   ) {
     this.maxValue = maxValue
     this.sortDirection = sortDirection
+  }
+
+  addAppends (params: URLSearchParams): void {
+    if (this.sortDirection && this.sortField) {
+      params.append('sort', `${this.sortField.sortName},${this.sortDirection.direction}`)
+      if (this.maxValue && this.sortField) {
+        params.append(`${this.sortField.filterName}.${this.sortDirection.compare}`, `${this.maxValue}`)
+      }
+    }
   }
 }
 

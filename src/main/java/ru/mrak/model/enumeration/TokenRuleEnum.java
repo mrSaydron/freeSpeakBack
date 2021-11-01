@@ -13,19 +13,19 @@ import java.util.function.BiConsumer;
 @Getter
 public enum TokenRuleEnum {
     LEMMA((tokenLight, targetPOS) -> {
-        tokenLight.setTag(PartOfSpeechEnum.getByTag(tokenLight.getToken().tag()));
-        tokenLight.setWord(tokenLight.getToken().lemma());
+        tokenLight.setTag(targetPOS);
+        tokenLight.setWord(tokenLight.getToken().lemma().toLowerCase());
     }),
     NO_LEMMA((tokenLight, targetPOS) -> {
-        tokenLight.setTag(PartOfSpeechEnum.getByTag(tokenLight.getToken().tag()));
-        tokenLight.setWord(tokenLight.getToken().word());
+        tokenLight.setTag(targetPOS);
+        tokenLight.setWord(tokenLight.getToken().word().toLowerCase());
     }),
     NUMBER((tokenLight, targetPOS) -> {
         if (tokenLight.getToken().word().matches("[0-9]*")) {
             tokenLight.setTag(PartOfSpeechEnum.REMOVE);
         } else {
-            tokenLight.setTag(PartOfSpeechEnum.getByTag(tokenLight.getToken().tag()));
-            tokenLight.setWord(tokenLight.getToken().word());
+            tokenLight.setTag(targetPOS);
+            tokenLight.setWord(tokenLight.getToken().word().toLowerCase());
         }
     }),
     REMOVE((tokenLight, targetPOS) -> {

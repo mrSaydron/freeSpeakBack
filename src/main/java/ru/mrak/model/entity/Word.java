@@ -2,16 +2,11 @@ package ru.mrak.model.entity;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import ru.mrak.config.Constants;
-import ru.mrak.model.entity.userWordProgress.UserWordProgress;
 import ru.mrak.model.enumeration.PartOfSpeechEnum;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
-
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A Word.
@@ -51,9 +46,6 @@ public class Word implements Serializable {
     @NotNull
     @Column(name = "audio_file_requested")
     private boolean audioFileRequested;
-
-    @OneToMany(mappedBy = "word")
-    private List<UserWordProgress> userWords = new ArrayList<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -138,14 +130,6 @@ public class Word implements Serializable {
 
     public void setAudioFileRequested(boolean audioFileRequested) {
         this.audioFileRequested = audioFileRequested;
-    }
-
-    public List<UserWordProgress> getUserWords() {
-        return userWords;
-    }
-
-    public void setUserWords(List<UserWordProgress> userWords) {
-        this.userWords = userWords;
     }
 
     @Override

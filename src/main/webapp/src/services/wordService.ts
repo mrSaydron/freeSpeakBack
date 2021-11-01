@@ -23,8 +23,8 @@ export default class WordService {
   public async retrieve (
     wordFilter?: string,
     partOfSpeechFilter?: string,
-    wordSort?: SortValue<string | undefined>,
-    amountSort?: SortValue<number | undefined>,
+    wordSort?: SortValue,
+    amountSort?: SortValue,
     requestCount?: number
   ): Promise<WordDto[]> {
     return new Promise<WordDto[]>((resolve, reject) => {
@@ -48,8 +48,8 @@ export default class WordService {
   private static requestQuery (
     wordFilter?: string,
     partOfSpeechFilter?: string,
-    wordSort?: SortValue<string | undefined>,
-    amountSort?: SortValue<number | undefined>,
+    wordSort?: SortValue,
+    amountSort?: SortValue,
     requestCount?: number
   ): string {
     let result = `?size=${requestCount || WordService.REQUEST_COUNT_DEFAULT}`

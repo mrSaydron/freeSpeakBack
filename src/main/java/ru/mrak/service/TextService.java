@@ -106,8 +106,10 @@ public class TextService {
      */
     private void exceptionWord(TokenLight tokenLight) {
         if (tokenLight.isDone()) return;
-        exceptionWordRepository.findByWordAndPartOfSpeech(tokenLight.getToken().word(), PartOfSpeechEnum.getByTag(tokenLight.getToken().tag()))
-            .ifPresent(exceptionWord -> {
+        exceptionWordRepository.findByWordAndPartOfSpeech(
+            tokenLight.getToken().word().toLowerCase(),
+            PartOfSpeechEnum.getByTag(tokenLight.getToken().tag())
+        ).ifPresent(exceptionWord -> {
                 tokenLight.setDone(true);
                 tokenLight.setWord(exceptionWord.getWord());
                 tokenLight.setTag(exceptionWord.getPartOfSpeech());
@@ -119,8 +121,10 @@ public class TextService {
      */
     private void exceptionWordAnyPOS(TokenLight tokenLight) {
         if (tokenLight.isDone()) return;
-        exceptionWordRepository.findByWordAndPartOfSpeech(tokenLight.getToken().word(), PartOfSpeechEnum.ANY)
-            .ifPresent(exceptionWord -> {
+        exceptionWordRepository.findByWordAndPartOfSpeech(
+            tokenLight.getToken().word().toLowerCase(),
+            PartOfSpeechEnum.ANY
+        ).ifPresent(exceptionWord -> {
                 tokenLight.setDone(true);
                 tokenLight.setWord(exceptionWord.getWord());
                 tokenLight.setTag(exceptionWord.getPartOfSpeech());

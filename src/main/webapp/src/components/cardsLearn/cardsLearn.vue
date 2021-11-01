@@ -44,6 +44,7 @@ import { UserWordDto } from '@/model/userWordDto'
 import { WordProgressDto } from '@/model/wordProgressDto'
 import { CardTypeEnum } from '@/model/enums/cardTypeEnum'
 import { asc, SortValue } from '@/util/sortValue'
+import { UserWordFilter } from '@/services/filters/userWordFilter'
 
 class Card {
   id: number
@@ -83,7 +84,7 @@ export default class CardsLearn extends Vue {
 
   public requestCount = 20
   public allElements = false
-  public wordSort?: SortValue<string>
+  public wordSort?: SortValue
 
   public async mounted () {
     this.leftHearts = await this.userWordService.getLeftHearts()
@@ -163,14 +164,7 @@ export default class CardsLearn extends Vue {
    */
   public async nextNewWords (): Promise<void> {
     if (!this.allElements && this.leftHearts > 0) {
-      const words = await this.userWordService.retrieve(
-        undefined,
-        undefined,
-        0,
-        this.wordSort,
-        undefined,
-        this.requestCount
-      )
+      const words = await this.userWordService.retrieve(new UserWordFilter())
       this.allElements = words.length < this.requestCount
 
       if (words.length > 0 && this.wordSort) {

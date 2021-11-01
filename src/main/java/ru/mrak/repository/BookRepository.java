@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import ru.mrak.model.entity.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,13 +32,13 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
      * Возвращает идентификаторы слов из книги, которых нет в словаре пользователя
      */
     @Query(value = "select w.id " +
-        "from book_sentence bs " +
-        "join book_sentence_has_word bshw on bs.id = bshw.book_sentence_id " +
-        "join word w on w.id = bshw.word_id " +
-        "left join user_word_progress uwp on uwp.word_id = bshw.word_id and uwp.user_id = :userId " +
-        "where bs.book_id = :bookId " +
+        "from BookSentence bs " +
+        "join bs.words bshw " +
+        "join Word w on w = bshw.translate " +
+        "left join UserWord uw on uw.word = bshw.translate and uw.user = :user " +
+        "where bs.book = :book " +
         "and w.translate is not null " +
-        "and uwp.word_id is null", nativeQuery = true)
-    List<Long> getMissingWords(@Param("userId") Long userId, @Param("bookId") Long bookId);
+        "and uw.word is null")
+    List<Long> getMissingWords(@Param("user") User user, @Param("book") Book book);
 
 }

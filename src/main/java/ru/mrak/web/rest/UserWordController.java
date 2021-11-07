@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.mrak.model.entity.userWordProgress.UserWord;
-import ru.mrak.model.entity.userWordProgress.UserWordHasProgress;
+import ru.mrak.model.enumeration.UserWordProgressTypeEnum;
 import ru.mrak.service.UserWordService;
 import ru.mrak.service.dto.userWord.UserWordCriteria;
 import ru.mrak.service.dto.userWord.UserWordDTO;
@@ -26,9 +26,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/user-word")
 @RequiredArgsConstructor
-public class UserWordResource {
+public class UserWordController {
 
-    private final Logger log = LoggerFactory.getLogger(UserWordResource.class);
+    private final Logger log = LoggerFactory.getLogger(UserWordController.class);
 
     private final UserWordService userWordService;
 
@@ -153,32 +153,31 @@ public class UserWordResource {
     @Transactional(readOnly = true)
     public List<UserWordDTO> getWordsOfDay() {
         log.debug("REST request words of day");
-//        List<UserHasWord> userWords = userWordService.getWordsOfDay();
-//        return userWordMapper.toDto(userWords);
-
-        // todo
-        return null;
+        List<UserWord> userWords = userWordService.getWordsOfDay();
+        return userWordMapper.toDto(userWords);
     }
 
     /**
      * Пользователь ответил на слово не верно
      */
-    @PutMapping("/answer-fail/{progressId}")
-    public void answerFail(@PathVariable Long progressId) {
-        log.debug("REST request word fail, progress id: {}", progressId);
-//        userWordService.answerFail(progressId);
-
-        // todo
+    @PutMapping("/answer-fail")
+    public void answerFail(
+        @RequestParam Long userWordId,
+        @RequestParam UserWordProgressTypeEnum type
+    ) {
+        log.debug("REST request word fail, word id: {}, type: {}", userWordId, type);
+        userWordService.answerFail(userWordId, type);
     }
 
     /**
      * Пользователь ответил верно
      */
-    @PutMapping("/answer-success/{progressId}")
-    public void answerSuccess(@PathVariable Long progressId) {
-        log.debug("REST request word success, progress id: {}", progressId);
-//        userWordService.answerSuccess(progressId);
-
-        // todo
+    @PutMapping("/answer-success")
+    public void answerSuccess(
+        @RequestParam Long userWordId,
+        @RequestParam UserWordProgressTypeEnum type
+    ) {
+        log.debug("REST request word success, word id: {}, type: {}", userWordId, type);
+        userWordService.answerSuccess(userWordId, type);
     }
 }

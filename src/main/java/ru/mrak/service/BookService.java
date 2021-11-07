@@ -128,13 +128,4 @@ public class BookService {
         wordIds.forEach(userWordService::addWord);
     }
 
-    /**
-     * Возвращает предложения указанной книги
-     */
-    @Transactional(readOnly = true)
-    public List<BookSentence> getSentences(Long bookId) {
-        List<BookSentence> bookSentences = bookSentenceRepository.findAllByBookId(bookId);
-        bookSentences.sort(Comparator.comparing(BookSentence::getId));
-        return bookSentences;
-    }
 }

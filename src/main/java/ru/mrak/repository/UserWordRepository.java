@@ -30,33 +30,44 @@ public interface UserWordRepository extends JpaRepository<UserWord, Long>, JpaSp
      * @return
      */
     @Query(
-        "select count(uwp) " +
+        "select count(uw.id) " +
         "from UserWord uw " +
-        "join uw.userWordHasProgresses uwp " +
-        "where uw.user = :userId " +
+        "join uw.wordProgresses uwp " +
+        "where uw.user = :user " +
         "and uwp.failLastDate >= :currentDay"
     )
     Integer getCountFailAnswersByUserAndDate(User user, Instant currentDay);
 
     /**
      * Возвращает слова для изучения на указанный день
-     * @param user
-     * @param boxes
-     * @param currentDay
-     * @return
      */
     @Query(
         "select uw " +
         "from UserWord uw " +
-        "join uw.userWordHasProgresses uwp " +
+        "join uw.wordProgresses uwp " +
         "where uw.user = :user " +
         "and uwp.boxNumber in :boxes " +
         "and (uwp.successfulLastDate < :currentDay or uwp.successfulLastDate is null) " +
         "and (uwp.failLastDate < :currentDay or uwp.failLastDate is null)"
     )
-    List<UserWord> getByUserAndBoxesAndLessFailDateAndLessSuccessDate(
+    List<UserWord> findByAllByUserAndBoxesAndLessFailDateAndLessSuccessDate(
         User user,
         List<Integer> boxes,
         Instant currentDay
+    );
+
+    /**
+     * Слова изученные сегодня
+     */
+    @Query(
+        "select uw " +
+            "from UserWord uw " +
+            "join uw.wordProgresses uwp " +
+            "where uw.user = :user " +
+            "and uwp.successfulLastDate >= :greaterDay"
+    )
+    List<UserWord> findAllByUserAndGreaterThanSuccessDate(
+        User user,
+        Instant greaterDay
     );
 }

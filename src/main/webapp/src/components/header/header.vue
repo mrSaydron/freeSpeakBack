@@ -17,6 +17,11 @@
         ИЗУЧИТЬ СЛОВА
       </v-btn>
       <v-btn
+        to="/sentence-read"
+      >
+        ПЕРЕВОД ПРЕДЛОЖЕНИЙ
+      </v-btn>
+      <v-btn
         to="/my-dictionary"
       >
         СЛОВАРЬ

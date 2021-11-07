@@ -30,5 +30,6 @@
     <include file="config/liquibase/changelog/00000000000014_create_table_book_sentence.sql" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/00000000000015_create_table_book_sentence_has_word.sql" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/00000000000016_create_view_book_user_know.sql" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/00000000000020_create_table_user_has_sentence.sql" relativeToChangelogFile="false"/>
 
 </databaseChangeLog>

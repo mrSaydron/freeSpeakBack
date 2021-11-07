@@ -40,35 +40,10 @@ import { Inject, Vue } from 'vue-property-decorator'
 import WordCardDirect from '@/common/wordCard/wordCardDirect.vue'
 import { WordDto } from '@/model/wordDto'
 import UserWordService from '@/services/userWordService'
-import { UserWordDto } from '@/model/userWordDto'
-import { WordProgressDto } from '@/model/wordProgressDto'
 import { CardTypeEnum } from '@/model/enums/cardTypeEnum'
-import { asc, SortValue } from '@/util/sortValue'
+import { SortValue } from '@/util/sortValue'
 import { UserWordFilter } from '@/services/filters/userWordFilter'
-
-class Card {
-  id: number
-  answerFailCount: number
-
-  constructor (
-    public wordProgress: WordProgressDto,
-    public userWord: UserWordDto
-  ) {
-    this.id = wordProgress.id
-    this.answerFailCount = 0
-  }
-
-  public static transform (userWords: UserWordDto[]): Card[] {
-    let result: Card[] = []
-    userWords.forEach(userWord => {
-      if (userWord.wordProgresses) {
-        const cards = userWord.wordProgresses.map(progress => new Card(progress, userWord))
-        result = result.concat(cards)
-      }
-    })
-    return result
-  }
-}
+import { Card } from '@/model/card'
 
 @Component({
   components: {
@@ -121,7 +96,7 @@ export default class CardsLearn extends Vue {
    * - если закончились "жизни" то все новые слова отбрасываются
    */
   public async answerFail (): Promise<void> {
-    this.userWordService.answerFail(this.card!.id!)
+    this.userWordService.answerFail(this.card!)
     const currentCard = this.cards.shift()
     if (this.cards.length < 10) {
       await this.nextNewWords()
@@ -149,7 +124,7 @@ export default class CardsLearn extends Vue {
    * - проверяем остались ли слова
    */
   public async answerSuccess (): Promise<void> {
-    this.userWordService.answerSuccess(this.card!.id!)
+    this.userWordService.answerSuccess(this.card!)
     this.cards.shift()
     if (this.cards.length > 0) {
       this.card = this.cards[0]

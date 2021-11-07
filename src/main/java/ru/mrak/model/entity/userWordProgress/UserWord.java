@@ -37,7 +37,7 @@ public class UserWord {
         generator = "user_word_has_progress_seq"
     )
     @SequenceGenerator(name = "user_word_has_progress_seq", sequenceName = "user_word_has_progress_seq", allocationSize = 1)
-    private List<UserWordHasProgress> userWordHasProgresses = new ArrayList<>();
+    private List<UserWordHasProgress> wordProgresses = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -63,12 +63,12 @@ public class UserWord {
         this.word = word;
     }
 
-    public List<UserWordHasProgress> getUserWordHasProgresses() {
-        return userWordHasProgresses;
+    public List<UserWordHasProgress> getWordProgresses() {
+        return wordProgresses;
     }
 
-    public void setUserWordHasProgresses(List<UserWordHasProgress> userWordHasProgresses) {
-        this.userWordHasProgresses = userWordHasProgresses;
+    public void setWordProgresses(List<UserWordHasProgress> wordProgresses) {
+        this.wordProgresses = wordProgresses;
     }
 
     @Override

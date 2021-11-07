@@ -92,7 +92,7 @@ export default class BookService {
   public async findBookSentences (id: number): Promise<BookSentenceDto[]> {
     return new Promise<BookSentenceDto[]>((resolve, reject) => {
       axios
-        .get(`${baseApiUrl}/words/${id}`)
+        .get(`${baseApiUrl}/sentence&bookId=${id}`)
         .then(res => {
           resolve(res.data)
         })

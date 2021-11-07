@@ -11,7 +11,7 @@ import BookDictionaryService from '@/services/bookDictionaryService'
 import WordService from '@/services/wordService'
 import UserWordService from '@/services/userWordService'
 import FileService from '@/services/fileService'
-import { Authority } from '@/shared/authority'
+import BookSentenceService from '@/services/bookSentenceService'
 
 Vue.config.productionTip = false
 
@@ -23,6 +23,7 @@ const dictionaryService = new BookDictionaryService()
 const wordService = new WordService()
 const userWordService = new UserWordService()
 const fileService = new FileService()
+const bookSentenceService = new BookSentenceService()
 
 router.beforeEach(async (to, from, next) => {
   // if (!accountService.authenticated) {
@@ -59,6 +60,7 @@ new Vue({
     dictionaryService,
     wordService,
     userWordService,
-    fileService
+    fileService,
+    bookSentenceService
   }
 }).$mount('#app')

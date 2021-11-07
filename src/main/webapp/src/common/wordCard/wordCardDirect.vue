@@ -1,20 +1,18 @@
 <template>
   <v-card>
     <v-card-title class="justify-center">
-      <div v-if="!isTurn">
-        {{ word.word }}
-        <v-icon
-          class="mr-1"
-          @click="play"
-        >
-          mdi-volume-high
-        </v-icon>
-      </div>
-      <div v-else>
-        {{ word.translate }}
-      </div>
+      {{ word.word }}
+      <v-icon
+        class="mr-1"
+        @click="play"
+      >
+        mdi-volume-high
+      </v-icon>
     </v-card-title>
     <v-card-text class="text-center">
+      <div v-if="isTurn">
+        {{ word.translate }}
+      </div>
       {{ word.partOfSpeechNote }}
     </v-card-text>
     <v-card-actions class="justify-center">

@@ -54,6 +54,7 @@ import { DictionaryDto } from '@/model/dictionaryDto'
 import BookDictionaryService from '@/services/bookDictionaryService'
 import FileService from '@/services/fileService'
 import { BookSentenceDto } from '@/model/bookSentenceDto'
+import BookSentenceService from '@/services/bookSentenceService'
 
 @Component({
   components: {
@@ -65,6 +66,7 @@ export default class Book extends Vue {
   @Prop(String) readonly id?: string
 
   @Inject() readonly bookService!: BookService
+  @Inject() readonly bookSentenceService!: BookSentenceService
   @Inject() readonly dictionaryService!: BookDictionaryService
   @Inject() readonly fileService!: FileService
 
@@ -78,7 +80,7 @@ export default class Book extends Vue {
     if (this.id) {
       const bookId = Number(this.id)
 
-      this.bookService.findBookSentences(bookId)
+      this.bookSentenceService.findByBook(bookId)
         .then(data => {
           this.bookSentences = data
         })
@@ -93,13 +95,6 @@ export default class Book extends Vue {
                 this.book.pictureUrl = res
               })
           }
-          // todo запрос слов книги
-          // if (this.book && this.book.dictionaryId) {
-          //   this.dictionaryService.find(this.book.dictionaryId)
-          //     .then(dictionary => {
-          //       this.dictionary = dictionary
-          //     })
-          // }
         })
 
       this.bookService.checkUserLibrary(bookId)

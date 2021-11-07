@@ -1,14 +1,16 @@
 import { BookSentenceHasWordDto } from '@/model/BookSentenceHasWordDto'
+import { BookDto } from '@/model/bookDto'
 
-export interface BookSentence {
+export interface BookSentenceRead {
   id?: number;
+  book?: BookDto
   words?: BookSentenceHasWordDto[];
 }
 
-export class BookSentenceDto implements BookSentence {
-  /* eslint no-useless-constructor: "off" */
+export class BookSentenceReadDto implements BookSentenceRead {
   constructor (
     public id?: number,
+    public book?: BookDto,
     public words?: BookSentenceHasWordDto[]
   ) {
   }

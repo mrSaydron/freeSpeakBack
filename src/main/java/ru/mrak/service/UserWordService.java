@@ -51,7 +51,9 @@ public class UserWordService {
     @Value("#{${box-count} + 1}")
     private Integer KNOW_BOX_NUMBER;
 
+    // todo не помню зачем я делал нулевую коробку
     private static final Integer PRELIMINARY_BOX_NUMBER = 0;
+
     private static final Integer START_BOX_NUMBER = 1;
 
     @Transactional(readOnly = true)
@@ -99,10 +101,10 @@ public class UserWordService {
 
             for (UserWordProgressTypeEnum progressType : UserWordProgressTypeEnum.values()) {
                 UserWordHasProgress userWordHasProgress = new UserWordHasProgress();
-                userWord.getUserWordHasProgresses().add(userWordHasProgress);
+                userWord.getWordProgresses().add(userWordHasProgress);
 
                 userWordHasProgress.setType(progressType);
-                userWordHasProgress.setBoxNumber(PRELIMINARY_BOX_NUMBER);
+                userWordHasProgress.setBoxNumber(START_BOX_NUMBER);
                 userWordHasProgress.setSuccessfulAttempts(0);
             }
 
@@ -148,8 +150,8 @@ public class UserWordService {
 
         Optional<UserWord> userWordsOptional = userWordRepository.findByUserAndWord(user, wordRepository.getOne(wordId));
         if (userWordsOptional.isPresent()) {
-            for (UserWordHasProgress userWordHasProgress : userWordsOptional.get().getUserWordHasProgresses()) {
-                userWordHasProgress.setBoxNumber(PRELIMINARY_BOX_NUMBER);
+            for (UserWordHasProgress userWordHasProgress : userWordsOptional.get().getWordProgresses()) {
+                userWordHasProgress.setBoxNumber(START_BOX_NUMBER);
             }
         }
     }
@@ -163,8 +165,8 @@ public class UserWordService {
 
         userWordRepository.findAllByUserAndWordIn(user, wordIds.stream().map(wordRepository::getOne).collect(Collectors.toList()))
             .stream()
-            .flatMap(userWord -> userWord.getUserWordHasProgresses().stream())
-            .forEach(progress -> progress.setBoxNumber(PRELIMINARY_BOX_NUMBER));
+            .flatMap(userWord -> userWord.getWordProgresses().stream())
+            .forEach(progress -> progress.setBoxNumber(START_BOX_NUMBER));
     }
 
     /**
@@ -174,8 +176,8 @@ public class UserWordService {
         log.debug("erase word progress by criteria: {}", criteria);
         findByCriteria(criteria)
             .stream()
-            .flatMap(userWord -> userWord.getUserWordHasProgresses().stream())
-            .forEach(progress -> progress.setBoxNumber(PRELIMINARY_BOX_NUMBER));
+            .flatMap(userWord -> userWord.getWordProgresses().stream())
+            .forEach(progress -> progress.setBoxNumber(START_BOX_NUMBER));
     }
 
     /**
@@ -217,7 +219,7 @@ public class UserWordService {
 
         Instant currentInstant = currentDate.atStartOfDay().toInstant(ZoneOffset.UTC);
 
-        return userWordRepository.getByUserAndBoxesAndLessFailDateAndLessSuccessDate(user, boxes, currentInstant);
+        return userWordRepository.findByAllByUserAndBoxesAndLessFailDateAndLessSuccessDate(user, boxes, currentInstant);
     }
 
     /**
@@ -225,14 +227,14 @@ public class UserWordService {
      * Прогресс сбрасывается, слово перемещается в первую коробку
      * Записывается текущее вреся в поле с неправильным ответом
      */
-    public void answerFail(Long wordId, UserWordProgressTypeEnum type) {
+    public void answerFail(Long userWordId, UserWordProgressTypeEnum type) {
         log.debug("user fail answer on word progress");
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
 
-        Optional<UserWord> userWordOptional = userWordRepository.findByUserAndWord(user, wordRepository.getOne(wordId));
+        Optional<UserWord> userWordOptional = userWordRepository.findById(userWordId);
         if (userWordOptional.isPresent()) {
             UserWord userWord = userWordOptional.get();
-            UserWordHasProgress userWordHasProgress = userWord.getUserWordHasProgresses().stream()
+            UserWordHasProgress userWordHasProgress = userWord.getWordProgresses().stream()
                 .filter(progress -> Objects.equals(type, progress.getType()))
                 .findFirst().orElseThrow(RuntimeException::new);
             userWordHasProgress.setBoxNumber(START_BOX_NUMBER);
@@ -246,14 +248,14 @@ public class UserWordService {
      * Если сегодня не было неправильных ответов, то слово пееносится в следующую коробку. Но не больше последней коробки + 1
      * Записывается текущее время в поле с правильным ответом
      */
-    public void answerSuccess(Long wordId, UserWordProgressTypeEnum type) {
+    public void answerSuccess(Long userWordId, UserWordProgressTypeEnum type) {
         log.debug("user success answer on word progress");
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
 
-        Optional<UserWord> userWordOptional = userWordRepository.findByUserAndWord(user, wordRepository.getOne(wordId));
+        Optional<UserWord> userWordOptional = userWordRepository.findById(userWordId);
         if (userWordOptional.isPresent()) {
             UserWord userWord = userWordOptional.get();
-            UserWordHasProgress userWordHasProgress = userWord.getUserWordHasProgresses().stream()
+            UserWordHasProgress userWordHasProgress = userWord.getWordProgresses().stream()
                 .filter(progress -> Objects.equals(type, progress.getType()))
                 .findFirst().orElseThrow(RuntimeException::new);
 
@@ -281,7 +283,7 @@ public class UserWordService {
         Optional<UserWord> userWordsOptional = userWordRepository.findByUserAndWord(user, wordRepository.getOne(wordId));
         if (userWordsOptional.isPresent()) {
             UserWord userWord = userWordsOptional.get();
-            for (UserWordHasProgress progress : userWord.getUserWordHasProgresses()) {
+            for (UserWordHasProgress progress : userWord.getWordProgresses()) {
                 progress.setBoxNumber(KNOW_BOX_NUMBER);
             }
         }
@@ -296,7 +298,7 @@ public class UserWordService {
 
         userWordRepository.findAllByUserAndWordIn(user, wordIds.stream().map(wordRepository::getOne).collect(Collectors.toList()))
             .stream()
-            .flatMap(userWord -> userWord.getUserWordHasProgresses().stream())
+            .flatMap(userWord -> userWord.getWordProgresses().stream())
             .forEach(progress -> progress.setBoxNumber(KNOW_BOX_NUMBER));
     }
 
@@ -307,7 +309,7 @@ public class UserWordService {
         log.debug("move words to know box by criteria: {}", criteria);
         findByCriteria(criteria)
             .stream()
-            .flatMap(userWord -> userWord.getUserWordHasProgresses().stream())
+            .flatMap(userWord -> userWord.getWordProgresses().stream())
             .forEach(progress -> progress.setBoxNumber(KNOW_BOX_NUMBER));
     }
 }

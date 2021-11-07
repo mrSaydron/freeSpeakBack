@@ -3,6 +3,7 @@ import { UserWordDto } from '@/model/userWordDto.ts'
 import { SortValue } from '@/util/sortValue'
 import { UserWordFilter } from '@/services/filters/userWordFilter'
 import { User } from '@/model/userDto'
+import { Card } from '@/model/card'
 
 const baseApiUrl = '/api/user-word'
 
@@ -201,9 +202,9 @@ export default class UserWordService {
   /**
    * Пользователь не верно ответил, прогресс сбрасывается
    */
-  public async answerFail (progressId: number): Promise<void> {
+  public async answerFail (card: Card): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-      axios.put(`${baseApiUrl}/answer-fail/${progressId}`)
+      axios.put(`${baseApiUrl}/answer-fail?userWordId=${card.id}&type=${card.wordProgress.type}`)
         .catch(err => {
           reject(err)
         })
@@ -212,11 +213,10 @@ export default class UserWordService {
 
   /**
    * Пользователь ответил верно, прогресс слова переходит в седующую коробку
-   * @param progressId
    */
-  public async answerSuccess (progressId: number): Promise<void> {
+  public async answerSuccess (card: Card): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-      axios.put(`${baseApiUrl}/answer-success/${progressId}`)
+      axios.put(`${baseApiUrl}/answer-success?userWordId=${card.id}&type=${card.wordProgress.type}`)
         .catch(err => {
           reject(err)
         })

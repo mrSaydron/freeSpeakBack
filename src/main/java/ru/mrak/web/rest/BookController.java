@@ -146,7 +146,7 @@ public class BookController {
     /**
      * Запрашивает все ли слова из книги есть в словаре пользователя
      */
-    @GetMapping("check-user-library/{bookId}")
+    @GetMapping("/check-user-library/{bookId}")
     public boolean checkUserLibrary(@PathVariable Long bookId) {
         log.debug("REST request to check word for Book: {}", bookId);
         return bookService.checkUserLibrary(bookId);
@@ -155,17 +155,10 @@ public class BookController {
     /**
      * Добавляет слова из книги в словарь пользователя
      */
-    @PutMapping("add-words-to-dictionary/{bookId}")
+    @PutMapping("/add-words-to-dictionary/{bookId}")
     public void addWordsToDictionary(@PathVariable Long bookId) {
         log.debug("REST request to add words in book to user dictionary");
         bookService.addWordsToDictionary(bookId);
     }
 
-    @Transactional(readOnly = true)
-    @GetMapping("words/{bookId}")
-    public List<BookSentenceDTO> getSentences(@PathVariable Long bookId) {
-        log.debug("REST all words in book");
-        List<BookSentence> bookServices = bookService.getSentences(bookId);
-        return bookSentenceMapper.toDto(bookServices);
-    }
 }

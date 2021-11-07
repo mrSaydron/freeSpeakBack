@@ -9,6 +9,7 @@ import Book from '@/components/book/book.vue'
 import UserWord from '@/components/userWord/userWord.vue'
 import CardsLearn from '@/components/cardsLearn/cardsLearn.vue'
 import account from '@/router/account'
+import SentenceRead from '@/components/sentenceRead/sentenceRead.vue'
 
 Vue.use(VueRouter)
 
@@ -69,6 +70,17 @@ const routes: Array<RouteConfig> = [
     component: NewBook,
     meta: {
       authorities: [Authority.ADMIN],
+      backPage: () => {
+        return '/'
+      }
+    }
+  },
+  {
+    path: '/sentence-read',
+    name: 'SentenceRead',
+    component: SentenceRead,
+    meta: {
+      authorities: [Authority.USER],
       backPage: () => {
         return '/'
       }

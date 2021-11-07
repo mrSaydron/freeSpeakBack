@@ -201,8 +201,8 @@ export default class UserWord extends Vue {
    */
   public eraserWord (word: UserWordDto): void {
     if (word.wordProgresses) {
-      word.averageBox = 0
-      word.wordProgresses.forEach((progress) => { progress.boxNumber = 0 })
+      word.averageBox = 1
+      word.wordProgresses.forEach((progress) => { progress.boxNumber = 1 })
     }
     if (word.word && word.word.id) {
       this.userWordService.eraseWord(word.word.id)
@@ -216,8 +216,8 @@ export default class UserWord extends Vue {
     if (this.selectWords) {
       this.selectWords.forEach(word => {
         if (word.wordProgresses) {
-          word.averageBox = 0
-          word.wordProgresses.forEach(progress => { progress.boxNumber = 0 })
+          word.averageBox = 1
+          word.wordProgresses.forEach(progress => { progress.boxNumber = 1 })
         }
       })
     }
@@ -294,6 +294,7 @@ export default class UserWord extends Vue {
    * Свободное изучение выделенных слов
    */
   public learnSelectWords (): void {
+    // todo
     console.log(this.selectWords)
   }
 
@@ -303,7 +304,6 @@ export default class UserWord extends Vue {
   }
 
   public async clickRow (userWord: UserWordDto) {
-    console.log(userWord)
     if (userWord && userWord.word && userWord.word.audioId) {
       if (!userWord.word.audioUrl) {
         userWord.word.audioUrl = await this.fileService.getUrl(userWord.word.audioId)

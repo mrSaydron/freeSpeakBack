@@ -58,7 +58,6 @@ export default class BookText extends Vue {
   public userHas = false
 
   public async wordClick (translateId: number) {
-    console.log(translateId)
     if (translateId) {
       this.wordId = translateId
       this.wordDto = await this.wordService.find(translateId)
@@ -77,7 +76,7 @@ export default class BookText extends Vue {
 }
 </script>
 
-<style>
+<style scoped>
 span.pre-wrap {
   white-space: pre-wrap;
 }

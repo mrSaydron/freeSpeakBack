@@ -12,6 +12,8 @@ import WordService from '@/services/wordService'
 import UserWordService from '@/services/userWordService'
 import FileService from '@/services/fileService'
 import BookSentenceService from '@/services/bookSentenceService'
+import GalleriesPageService from '@/services/galleriesPageService'
+import GalleryService from '@/services/galleryService'
 
 Vue.config.productionTip = false
 
@@ -24,6 +26,8 @@ const wordService = new WordService()
 const userWordService = new UserWordService()
 const fileService = new FileService()
 const bookSentenceService = new BookSentenceService()
+const galleriesPageService = new GalleriesPageService()
+const galleryService = new GalleryService()
 
 router.beforeEach(async (to, from, next) => {
   // if (!accountService.authenticated) {
@@ -61,6 +65,8 @@ new Vue({
     wordService,
     userWordService,
     fileService,
-    bookSentenceService
+    bookSentenceService,
+    galleriesPageService,
+    galleryService
   }
 }).$mount('#app')

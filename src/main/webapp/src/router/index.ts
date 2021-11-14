@@ -10,6 +10,7 @@ import UserWord from '@/components/userWord/userWord.vue'
 import CardsLearn from '@/components/cardsLearn/cardsLearn.vue'
 import account from '@/router/account'
 import SentenceRead from '@/components/sentenceRead/sentenceRead.vue'
+import Home from '@/components/home/home.vue'
 
 Vue.use(VueRouter)
 
@@ -18,9 +19,19 @@ let lastPage: Route | null = null
 const routes: Array<RouteConfig> = [
   {
     path: '/',
-    component: Library,
+    component: Home,
     meta: {
       authorities: [Authority.NO_AUTHORITY, Authority.USER]
+    }
+  },
+  {
+    path: '/library',
+    component: Library,
+    meta: {
+      authorities: [Authority.USER],
+      backPage: () => {
+        return '/'
+      }
     }
   },
   {

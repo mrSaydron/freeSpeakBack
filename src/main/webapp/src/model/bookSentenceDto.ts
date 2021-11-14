@@ -1,4 +1,4 @@
-import { BookSentenceHasWordDto } from '@/model/BookSentenceHasWordDto'
+import { BookSentenceHasWordDto } from '@/model/bookSentenceHasWordDto'
 
 export interface BookSentence {
   id?: number;

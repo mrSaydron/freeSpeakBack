@@ -1,8 +1,6 @@
 import axios from 'axios'
 import { UserWordDto } from '@/model/userWordDto.ts'
-import { SortValue } from '@/util/sortValue'
 import { UserWordFilter } from '@/services/filters/userWordFilter'
-import { User } from '@/model/userDto'
 import { Card } from '@/model/card'
 
 const baseApiUrl = '/api/user-word'

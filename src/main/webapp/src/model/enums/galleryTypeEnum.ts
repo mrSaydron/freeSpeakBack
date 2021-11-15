@@ -1,4 +1,4 @@
 export const enum GalleryTypeEnum {
-  daily = 'daily',
-  books = 'books'
+  DAILY = 'DAILY',
+  BOOK = 'BOOK'
 }

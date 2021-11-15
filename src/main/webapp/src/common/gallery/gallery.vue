@@ -1,8 +1,8 @@
 <template>
-  <v-container>
+  <v-container v-if="galleryItems.length > 0">
     <v-row>
       <v-col>
-        {{ title }}
+        <h2>{{ gallery.title }}</h2>
       </v-col>
     </v-row>
     <v-row>
@@ -11,12 +11,11 @@
           show-arrows
         >
           <v-slide-item
-            v-for="(item, index) in items"
+            v-for="(item, index) in galleryItems"
             :key="index"
           >
             <gallery-item
               :gallery-item="item"
-              :type="galleryDto.type"
             ></gallery-item>
           </v-slide-item>
         </v-slide-group>
@@ -27,11 +26,12 @@
 
 <script lang="ts">
 import Component from 'vue-class-component'
-import { Inject, Prop, Vue } from 'vue-property-decorator'
+import { Inject, Prop, Vue, Watch } from 'vue-property-decorator'
 import { GalleryDto } from '@/model/gallery/galleryDto'
 import GalleryService from '@/services/galleryService'
-import { GalleryItemDto } from '@/model/gallery/galleryItemDto'
 import GalleryItem from '@/common/gallery/galleryItem.vue'
+import { GalleryHeadDto } from '@/model/gallery/galleryHeadDto'
+import { GalleryItemDto } from '@/model/gallery/galleryItemDto'
 
 @Component({
   components: {
@@ -39,19 +39,30 @@ import GalleryItem from '@/common/gallery/galleryItem.vue'
   }
 })
 export default class Gallery extends Vue {
-  @Prop(String) readonly gallery?: GalleryDto
-
   @Inject() readonly galleryService!: GalleryService
 
-  private galleryDto?: GalleryDto
-  private items: GalleryItemDto[] = []
-  private title = ''
+  @Prop(Object) readonly galleryHead?: GalleryHeadDto
 
-  public async mounted() {
-    if (this.gallery && this.gallery.type) {
-      this.galleryDto = await this.galleryService.get(this.gallery.type)
-      this.items = this.galleryDto.galleryItems
-      this.title = this.galleryDto.type ? this.galleryDto.type : ''
+  private gallery: GalleryDto | null = null
+  private galleryItems: GalleryItemDto[] = []
+
+  public async mounted (): Promise<void> {
+    if (this.galleryHead) {
+      await this.getGallery(this.galleryHead)
+    }
+  }
+
+  @Watch('galleryHead')
+  public async galleryHeadChange (galleryHead: GalleryHeadDto): Promise<void> {
+    await this.getGallery(galleryHead)
+  }
+
+  public async getGallery (galleryHead: GalleryHeadDto): Promise<void> {
+    if (galleryHead && galleryHead.url) {
+      this.gallery = await this.galleryService.get(galleryHead.url)
+      if (this.gallery && this.gallery.galleryItems) {
+        this.galleryItems = this.gallery.galleryItems
+      }
     }
   }
 }

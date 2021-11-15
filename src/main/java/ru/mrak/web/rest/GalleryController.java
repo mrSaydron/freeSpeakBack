@@ -6,7 +6,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.mrak.service.GalleryService;
+import ru.mrak.service.gallery.GalleryBookService;
+import ru.mrak.service.gallery.GalleryDailyService;
 import ru.mrak.service.dto.gallery.GalleryDto;
 
 @RestController
@@ -16,19 +17,24 @@ public class GalleryController {
 
     private final Logger log = LoggerFactory.getLogger(GalleryController.class);
 
-    private final GalleryService galleryService;
+    private final GalleryDailyService galleryDailyService;
+    private final GalleryBookService galleryBookService;
 
     public final static String GALLERY_CONTROLLER_URL = "/api/gallery";
     public final static String DAILY_URL = "/daily";
-    public final static String BOOKS_URL = "/books";
+    public final static String BOOK_URL = "/book";
 
     @GetMapping(DAILY_URL)
     public GalleryDto getDailyGallery() {
-        return new GalleryDto();
+        log.debug("GET daily gallery");
+
+        return galleryDailyService.get().orElseThrow(RuntimeException::new);
     }
 
-    @GetMapping(BOOKS_URL)
+    @GetMapping(BOOK_URL)
     public GalleryDto getBooksGallery() {
-        return new GalleryDto();
+        log.debug("GET book gallery");
+
+        return galleryBookService.get().orElseThrow(RuntimeException::new);
     }
 }

@@ -67,6 +67,7 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '/cards-learn',
+    name: 'cardLearn',
     component: CardsLearn,
     meta: {
       authorities: [Authority.USER],
@@ -77,7 +78,7 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '/new-book',
-    name: 'NewBook',
+    name: 'newBook',
     component: NewBook,
     meta: {
       authorities: [Authority.ADMIN],
@@ -88,7 +89,7 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '/sentence-read',
-    name: 'SentenceRead',
+    name: 'sentenceRead',
     component: SentenceRead,
     meta: {
       authorities: [Authority.USER],

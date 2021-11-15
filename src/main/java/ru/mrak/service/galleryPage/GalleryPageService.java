@@ -1,4 +1,4 @@
-package ru.mrak.service;
+package ru.mrak.service.galleryPage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,8 +8,9 @@ import ru.mrak.service.dto.gallery.GalleriesPageDto;
 import ru.mrak.service.dto.gallery.GalleryHeadDto;
 
 import java.util.Arrays;
+import java.util.Optional;
 
-import static ru.mrak.model.enumeration.GalleryTypeEnum.BOOKS;
+import static ru.mrak.model.enumeration.GalleryTypeEnum.BOOK;
 import static ru.mrak.model.enumeration.GalleryTypeEnum.DAILY;
 import static ru.mrak.web.rest.GalleryController.GALLERY_CONTROLLER_URL;
 
@@ -21,23 +22,21 @@ public class GalleryPageService {
     /**
      * Возвращает заголовки галлерей для домашенй страницы пользователя
      */
-    public GalleriesPageDto get() {
+    public Optional<GalleriesPageDto> get() {
         log.debug("get pages for user: todo");
 
-        GalleryHeadDto dailyHead = GalleryHeadDto.builder()
-            .title("Задания на день")
-            .type(DAILY)
-            .url(GALLERY_CONTROLLER_URL + DAILY.getUrl())
-            .build();
+        GalleryHeadDto dailyHead = new GalleryHeadDto()
+            .setTitle("Задания на день")
+            .setType(DAILY)
+            .setUrl(GALLERY_CONTROLLER_URL + DAILY.getUrl());
 
-        GalleryHeadDto booksHead = GalleryHeadDto.builder()
-            .title("Книги")
-            .type(GalleryTypeEnum.BOOKS)
-            .url(GALLERY_CONTROLLER_URL + BOOKS.getUrl())
-            .build();
+        GalleryHeadDto booksHead = new GalleryHeadDto()
+            .setTitle("Книги")
+            .setType(GalleryTypeEnum.BOOK)
+            .setUrl(GALLERY_CONTROLLER_URL + BOOK.getUrl());
 
-        return GalleriesPageDto.builder()
-            .galleryHeads(Arrays.asList(dailyHead, booksHead))
-            .build();
+        GalleriesPageDto galleriesPageDto = new GalleriesPageDto()
+            .setGalleryHeads(Arrays.asList(dailyHead, booksHead));
+        return Optional.of(galleriesPageDto);
     }
 }

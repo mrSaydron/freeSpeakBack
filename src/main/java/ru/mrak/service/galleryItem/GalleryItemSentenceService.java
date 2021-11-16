@@ -7,8 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.mrak.model.entity.BookSentence;
 import ru.mrak.model.enumeration.GalleryItemTypeEnum;
 import ru.mrak.service.BookSentenceService;
-import ru.mrak.service.dto.gallery.GalleryItemDto;
-import ru.mrak.service.gallery.GalleryDailyService;
+import ru.mrak.service.dto.gallery.item.GalleryItemDto;
 
 import java.util.List;
 import java.util.Optional;

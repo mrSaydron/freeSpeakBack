@@ -4,14 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import ru.mrak.model.enumeration.GalleryItemTypeEnum;
 import ru.mrak.model.enumeration.GalleryTypeEnum;
 import ru.mrak.service.dto.gallery.GalleryDto;
-import ru.mrak.service.dto.gallery.GalleryItemDto;
+import ru.mrak.service.dto.gallery.item.GalleryItemDto;
 import ru.mrak.service.galleryItem.GalleryItemSentenceService;
 import ru.mrak.service.galleryItem.GalleryItemWordCardService;
 
-import java.util.Arrays;
 import java.util.Optional;
 
 @Service
@@ -29,7 +27,7 @@ public class GalleryDailyService implements Gallery {
 
         GalleryDto galleryDto = new GalleryDto()
             .setType(GalleryTypeEnum.DAILY)
-            .setTitle(GalleryTypeEnum.BOOK.getTitle());
+            .setTitle(GalleryTypeEnum.DAILY.getTitle());
 
         Optional<GalleryItemDto> galleryItemWordCard = galleryItemWordCardService.get();
         galleryItemWordCard.ifPresent(item -> galleryDto.getGalleryItems().add(item));

@@ -2,15 +2,14 @@ export interface GalleryItem {
   title?: string
   pictureUrl?: string
   type?: string
-  args?: Map<string, string>
 }
 
 export class GalleryItemDto implements GalleryItem {
+  /* eslint no-useless-constructor: "off" */
   constructor (
     public title?: string,
     public pictureUrl?: string,
     public type?: string,
-    public args?: Map<string, string>
   ) {
   }
 }

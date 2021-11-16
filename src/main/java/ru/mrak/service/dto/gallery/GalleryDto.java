@@ -1,9 +1,9 @@
 package ru.mrak.service.dto.gallery;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import ru.mrak.model.enumeration.GalleryTypeEnum;
+import ru.mrak.service.dto.gallery.item.GalleryItemDto;
 
 import java.util.ArrayList;
 import java.util.List;

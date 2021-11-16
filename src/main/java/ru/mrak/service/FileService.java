@@ -80,11 +80,11 @@ public class FileService {
 
     /**
      * Возвращает ссылку на файл по его имени
-     * @param fileName имя корзины + имя пакета
+     * @param fileId имя корзины + имя пакета
      * @return ссылка на файл
      */
-    public String getUrl(String fileName) {
-        log.debug("Return url to file name: {}", fileName);
-        return s3Service.getUrl(fileName);
+    public String getUrl(String fileId) {
+        log.debug("Return url to file name: {}", fileId);
+        return s3Service.getUrl(fileId);
     }
 }

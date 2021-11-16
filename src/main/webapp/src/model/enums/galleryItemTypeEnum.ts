@@ -1,5 +1,6 @@
 export const enum GalleryItemTypeEnum {
-  WORD_CARD = 'WORD_CARD',
+  CARD_LEARN = 'CARD_LEARN',
   SENTENCE = 'SENTENCE',
-  BOOK = 'BOOK'
+  BOOK = 'BOOK',
+  SEE_MORE = 'SEE_MORE'
 }

@@ -1,4 +1,4 @@
-import { GalleryItemDto } from '@/model/gallery/galleryItemDto'
+import { GalleryItemDto } from '@/model/galleryItem/galleryItemDto'
 
 export interface Gallery {
   galleryItems?: GalleryItemDto[]

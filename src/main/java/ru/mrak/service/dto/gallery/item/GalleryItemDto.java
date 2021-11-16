@@ -1,13 +1,15 @@
-package ru.mrak.service.dto.gallery;
+package ru.mrak.service.dto.gallery.item;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 import ru.mrak.model.enumeration.GalleryItemTypeEnum;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@Data
+@Getter
+@Setter
 @Accessors(chain = true)
 public class GalleryItemDto {
     private String title;

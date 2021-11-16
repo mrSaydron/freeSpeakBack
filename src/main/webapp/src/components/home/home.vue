@@ -5,7 +5,7 @@
 <script lang="ts">
 import Component from 'vue-class-component'
 import { Vue } from 'vue-property-decorator'
-import GalleriesPage from '@/common/gallery/galleriesPage.vue'
+import GalleriesPage from '@/common/galleryPage/galleriesPage.vue'
 
 @Component({
   components: {

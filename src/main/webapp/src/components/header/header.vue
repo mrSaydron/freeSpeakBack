@@ -11,22 +11,6 @@
         </v-icon>
       </v-btn>
       <v-spacer></v-spacer>
-      <v-btn
-        to="/cards-learn"
-      >
-        ИЗУЧИТЬ СЛОВА
-      </v-btn>
-      <v-btn
-        to="/sentence-read"
-      >
-        ПЕРЕВОД ПРЕДЛОЖЕНИЙ
-      </v-btn>
-      <v-btn
-        to="/my-dictionary"
-      >
-        СЛОВАРЬ
-      </v-btn>
-      <v-spacer></v-spacer>
       <user-menu></user-menu>
     </v-app-bar>
   </div>

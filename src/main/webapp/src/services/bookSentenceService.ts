@@ -6,7 +6,6 @@ const baseApiUrl = '/api/book/sentence'
 
 export default class BookSentenceService {
   public async findByBook (id: number): Promise<BookSentenceDto[]> {
-    console.log('find by book')
     return new Promise<BookSentenceDto[]>((resolve, reject) => {
       axios
         .get(`${baseApiUrl}?bookId=${id}`)

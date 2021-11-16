@@ -26,6 +26,7 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '/library',
+    name: 'library',
     component: Library,
     meta: {
       authorities: [Authority.USER],
@@ -46,6 +47,7 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '/book/:id',
+    name: 'book',
     props: true,
     component: Book,
     meta: {
@@ -57,6 +59,7 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '/my-dictionary',
+    name: 'myDictionary',
     component: UserWord,
     meta: {
       authorities: [Authority.USER],

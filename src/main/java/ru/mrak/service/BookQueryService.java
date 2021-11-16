@@ -64,11 +64,10 @@ public class BookQueryService extends QueryService<Book> {
      * @return the matching entities.
      */
     @Transactional(readOnly = true)
-    public Page<BookDTO> findByCriteria(BookCriteria criteria, Pageable page) {
+    public Page<Book> findByCriteria(BookCriteria criteria, Pageable page) {
         log.debug("find by criteria : {}, page: {}", criteria, page);
         final Specification<Book> specification = createSpecification(criteria);
-        return bookRepository.findAll(specification, page)
-            .map(bookMapper::toDto);
+        return bookRepository.findAll(specification, page);
     }
 
     /**

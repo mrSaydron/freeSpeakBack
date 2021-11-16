@@ -100,7 +100,8 @@ public class BookController {
     @Transactional(readOnly = true)
     public ResponseEntity<List<BookDTO>> getBooks(BookCriteria criteria, Pageable pageable) {
         log.debug("REST request to get library Books by criteria: {}", criteria);
-        Page<BookDTO> page = bookQueryService.findByCriteria(criteria, pageable);
+        Page<BookDTO> page = bookQueryService.findByCriteria(criteria, pageable)
+            .map(bookMapper::toDto);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

@@ -7,8 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.mrak.model.entity.userWordProgress.UserWord;
 import ru.mrak.model.enumeration.GalleryItemTypeEnum;
 import ru.mrak.service.UserWordService;
-import ru.mrak.service.dto.gallery.GalleryItemDto;
-import ru.mrak.service.gallery.GalleryDailyService;
+import ru.mrak.service.dto.gallery.item.GalleryItemDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +22,7 @@ public class GalleryItemWordCardService implements GalleryItem {
 
     private static final GalleryItemDto WORD_CARD_GALLERY = new GalleryItemDto()
         .setTitle("Изучение слов")
-        .setType(GalleryItemTypeEnum.WORD_CARD);
+        .setType(GalleryItemTypeEnum.CARD_LEARN);
 
     @Override
     public Optional<GalleryItemDto> get() {

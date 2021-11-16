@@ -27,6 +27,9 @@ public class FileResource {
         return fileService.savePictureFile(file);
     }
 
+    /**
+     * Возвращает путь до файла по его идентификатору
+     */
     @GetMapping("/url")
     public String getFileUrl(@RequestParam("file-name") String fileName) {
         log.debug("REST request url for file name: {}", fileName);

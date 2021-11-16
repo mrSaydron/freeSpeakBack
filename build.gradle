@@ -272,8 +272,17 @@ dependencies {
     implementation "io.springfox:springfox-bean-validators"
     implementation "org.postgresql:postgresql"
     liquibaseRuntime "org.postgresql:postgresql"
+
+    implementation 'org.projectlombok:lombok:1.18.16'
+    annotationProcessor 'org.projectlombok:lombok:1.18.16'
+    // работает с mapstruct только с implementation
+//    compileOnly 'org.projectlombok:lombok:1.18.16'
+//    testCompileOnly 'org.projectlombok:lombok:1.18.16'
+//    testAnnotationProcessor 'org.projectlombok:lombok:1.18.16'
+
     implementation "org.mapstruct:mapstruct:${mapstruct_version}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
+
     annotationProcessor "org.hibernate:hibernate-jpamodelgen:${hibernate_version}"
     annotationProcessor "org.glassfish.jaxb:jaxb-runtime:${jaxb_runtime_version}"
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${spring_boot_version}"
@@ -286,11 +295,6 @@ dependencies {
     testRuntimeOnly "com.tngtech.archunit:archunit-junit5-engine:${archunit_junit5_version}"
     testImplementation "com.h2database:h2"
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
-
-    compileOnly 'org.projectlombok:lombok:1.18.16'
-    annotationProcessor 'org.projectlombok:lombok:1.18.16'
-    testCompileOnly 'org.projectlombok:lombok:1.18.16'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.16'
 
     implementation 'edu.stanford.nlp:stanford-corenlp:4.2.0'
     implementation 'edu.stanford.nlp:stanford-corenlp:4.2.0:models'

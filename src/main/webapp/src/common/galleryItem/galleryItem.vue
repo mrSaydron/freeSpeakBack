@@ -16,6 +16,14 @@
       v-if="checkSeeMore()"
       :gallery-item="galleryItem"
     ></gallery-item-see-more>
+    <gallery-item-see-more
+      v-if="checkSeeMore()"
+      :gallery-item="galleryItem"
+    ></gallery-item-see-more>
+    <gallery-item-user-dictionary
+      v-if="checkUserDictionary()"
+      :gallery-item="galleryItem"
+    ></gallery-item-user-dictionary>
   </div>
 </template>
 
@@ -28,13 +36,15 @@ import GalleryItemBook from '@/common/galleryItem/galleryItemBook.vue'
 import GalleryItemSentence from '@/common/galleryItem/galleryItemSentence.vue'
 import GalleryItemCardLearn from '@/common/galleryItem/galleryItemCardLearn.vue'
 import GalleryItemSeeMore from '@/common/galleryItem/gallerytemSeeMore.vue'
+import GalleryItemUserDictionary from '@/common/galleryItem/galleryItemUserDictionary.vue'
 
 @Component({
   components: {
     GalleryItemBook,
     GalleryItemCardLearn,
     GalleryItemSentence,
-    GalleryItemSeeMore
+    GalleryItemSeeMore,
+    GalleryItemUserDictionary
   }
 })
 export default class GalleryItem extends Vue {
@@ -58,6 +68,11 @@ export default class GalleryItem extends Vue {
   public checkSeeMore (): boolean {
     return this.galleryItem !== undefined &&
       this.galleryItem.type === GalleryItemTypeEnum.SEE_MORE
+  }
+
+  public checkUserDictionary (): boolean {
+    return this.galleryItem !== undefined &&
+      this.galleryItem.type === GalleryItemTypeEnum.USER_DICTIONARY
   }
 }
 </script>

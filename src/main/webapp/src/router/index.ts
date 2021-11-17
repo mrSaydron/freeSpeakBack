@@ -58,8 +58,8 @@ const routes: Array<RouteConfig> = [
     }
   },
   {
-    path: '/my-dictionary',
-    name: 'myDictionary',
+    path: '/user-dictionary',
+    name: 'userDictionary',
     component: UserWord,
     meta: {
       authorities: [Authority.USER],

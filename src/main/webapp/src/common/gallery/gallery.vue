@@ -8,6 +8,10 @@
       v-if="checkBook()"
       :gallery-head="galleryHead"
     ></gallery-book>
+    <gallery-free-learn
+      v-if="checkFreeLearn()"
+      :gallery-head="galleryHead"
+    ></gallery-free-learn>
   </div>
 </template>
 
@@ -19,11 +23,13 @@ import { GalleryHeadDto } from '@/model/gallery/galleryHeadDto'
 import GalleryBook from '@/common/gallery/galleryBook.vue'
 import GalleryDaily from '@/common/gallery/galleryDaily.vue'
 import { GalleryTypeEnum } from '@/model/enums/galleryTypeEnum'
+import GalleryFreeLearn from '@/common/gallery/galleryFreeLearn.vue'
 
 @Component({
   components: {
     GalleryBook,
-    GalleryDaily
+    GalleryDaily,
+    GalleryFreeLearn
   }
 })
 export default class Gallery extends Vue {
@@ -38,6 +44,11 @@ export default class Gallery extends Vue {
   public checkDaily (): boolean {
     return this.galleryHead !== undefined &&
       this.galleryHead.type === GalleryTypeEnum.DAILY
+  }
+
+  public checkFreeLearn (): boolean {
+    return this.galleryHead !== undefined &&
+      this.galleryHead.type === GalleryTypeEnum.FREE_LEARN
   }
 }
 </script>

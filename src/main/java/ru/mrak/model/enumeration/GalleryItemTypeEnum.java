@@ -7,4 +7,5 @@ public enum GalleryItemTypeEnum {
     CARD_LEARN,
     SENTENCE,
     BOOK,
+    USER_DICTIONARY,
 }

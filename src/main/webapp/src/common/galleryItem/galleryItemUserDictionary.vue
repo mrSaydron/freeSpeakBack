@@ -1,9 +1,9 @@
 <template>
   <v-card
     class="ma-2"
-    height="300"
+    height="250"
     width="200"
-    elevation="0"
+    elevation="1"
     @click="itemClick"
   >
     <v-img
@@ -13,26 +13,23 @@
     <v-card-title>
       {{ galleryItem.title }}
     </v-card-title>
-    <v-card-subtitle>
-      {{ galleryItem.author }}
-    </v-card-subtitle>
   </v-card>
 </template>
 
 <script lang="ts">
 import Component from 'vue-class-component'
 import { Prop, Vue } from 'vue-property-decorator'
-import { GalleryItemBookDto } from '@/model/galleryItem/galleryItemBookDto'
+import { GalleryItemDto } from '@/model/galleryItem/galleryItemDto'
 
 @Component({
   components: {}
 })
-export default class GalleryItemBook extends Vue {
-  @Prop(Object) readonly galleryItem?: GalleryItemBookDto
+export default class GalleryItemUserDictionary extends Vue {
+  @Prop(Object) readonly galleryItem?: GalleryItemDto
 
   public itemClick (): void {
-    if (this.galleryItem && this.galleryItem.id) {
-      this.$router.push({ name: 'book', params: { id: this.galleryItem.id.toString() } })
+    if (this.galleryItem) {
+      this.$router.push({ name: 'userDictionary' })
     }
   }
 }

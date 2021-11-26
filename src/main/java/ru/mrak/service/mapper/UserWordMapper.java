@@ -2,12 +2,11 @@ package ru.mrak.service.mapper;
 
 import org.mapstruct.Mapper;
 import ru.mrak.model.entity.userWordProgress.UserWord;
-import ru.mrak.model.entity.userWordProgress.UserWordHasProgress;
-import ru.mrak.service.dto.userWord.UserWordDTO;
+import ru.mrak.service.dto.userWord.UserWordDto;
 
 /**
- * Mapper for the entity {@link UserHasWord} and its DTO {@link UserWordDTO}.
+ * Mapper for the entity {@link UserHasWord} and its DTO {@link UserWordDto}.
  */
 @Mapper(componentModel = "spring", uses = {WordProgressMapper.class, WordMapper.class})
-public interface UserWordMapper extends EntityMapper<UserWordDTO, UserWord> {
+public interface UserWordMapper extends EntityMapper<UserWordDto, UserWord> {
 }

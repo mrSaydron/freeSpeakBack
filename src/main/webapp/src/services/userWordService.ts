@@ -25,6 +25,21 @@ export default class UserWordService {
     })
   }
 
+  public async get (wordId: number): Promise<UserWordDto> {
+    return new Promise<UserWordDto>((resolve, reject) => {
+      axios
+        .get(`${baseApiUrl}/${wordId}`)
+        .then(res => {
+          const userWord = res.data
+          UserWordDto.fill(userWord)
+          resolve(userWord)
+        })
+        .catch(err => {
+          reject(err)
+        })
+    })
+  }
+
   /**
    * Добавление слова в словарь пользователя
    */

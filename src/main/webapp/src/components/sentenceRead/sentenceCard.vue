@@ -30,11 +30,11 @@
         </v-icon>
       </v-btn>
     </v-card-actions>
-    <word-translate
+    <sentence-word
       :wordModal="wordModal"
       :word-id="wordId"
       @modal-close="modalClose"
-    ></word-translate>
+    ></sentence-word>
   </v-card>
 </template>
 
@@ -42,9 +42,9 @@
 import Component from 'vue-class-component'
 import { Prop, Vue, Watch } from 'vue-property-decorator'
 import { BookSentenceReadDto } from '@/model/bookSentenceReadDto'
-import Sentence from '@/common/sentence.vue'
+import Sentence from '@/common/sentence/sentence.vue'
 import { BookSentenceDto } from '@/model/bookSentenceDto'
-import WordTranslate from '@/common/wordTranslate.vue'
+import SentenceWord from '@/common/sentence/sentenceWord.vue'
 
 /**
  * Предложение для перевода
@@ -52,7 +52,7 @@ import WordTranslate from '@/common/wordTranslate.vue'
 @Component({
   components: {
     Sentence,
-    WordTranslate
+    SentenceWord
   }
 })
 export default class SentenceCard extends Vue {

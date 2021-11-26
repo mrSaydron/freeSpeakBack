@@ -1,13 +1,13 @@
 <template>
   <v-card
     class="ma-2"
-    height="250"
+    height="200"
     width="200"
-    elevation="1"
+    elevation="0"
     @click="itemClick"
   >
     <v-img
-      :src=galleryItem.pictureUrl
+      src="/picture/book.png"
       height="200"
     ></v-img>
     <v-card-title>

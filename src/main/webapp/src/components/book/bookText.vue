@@ -1,33 +1,16 @@
 <template>
   <v-container>
     <span v-for="bookSentence in bookSentences" :key="bookSentence.id">
-      <span
-        v-for="(word, index) in bookSentence.words"
-        :key="index"
-      >
-        <span
-          v-if="word.translateId"
-          class="pre-wrap hover-span"
-          @click="wordClick(word.translateId)"
-        >{{word.word}}{{word.afterWord}}</span>
-        <span
-          v-if="!word.translateId"
-          class="pre-wrap"
-        >{{word.word}}{{word.afterWord}}</span>
-      </span>
+      <sentence
+        :book-sentence="bookSentence"
+        @word-click="wordClick"
+      ></sentence>
     </span>
-    <v-dialog
-      v-model="wordModal"
-      max-width="300px"
-    >
-      <v-card>
-        <v-card-title>{{ word }}</v-card-title>
-        <v-card-text>
-          <p>{{ partOfSpeech }}</p>
-          <p>{{ translate }}</p>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
+    <sentence-word
+      :word-id="wordId"
+      :word-modal="wordModal"
+      @modal-close="modalClose"
+    ></sentence-word>
   </v-container>
 </template>
 
@@ -37,11 +20,15 @@ import { Inject, Prop, Vue } from 'vue-property-decorator'
 import { BookSentenceDto } from '@/model/bookSentenceDto'
 import { WordDto } from '@/model/wordDto'
 import WordService from '@/services/wordService'
-import { PartOfSpeechEnum } from '@/model/enums/partOfSpeechEnum'
 import FileService from '@/services/fileService'
+import Sentence from '@/common/sentence/sentence.vue'
+import SentenceWord from '@/common/sentence/sentenceWord.vue'
 
 @Component({
-  components: {}
+  components: {
+    Sentence,
+    SentenceWord
+  }
 })
 export default class BookText extends Vue {
   @Prop(String) readonly bookSentences?: BookSentenceDto[]
@@ -57,21 +44,13 @@ export default class BookText extends Vue {
   public partOfSpeech = ''
   public userHas = false
 
-  public async wordClick (translateId: number) {
-    if (translateId) {
-      this.wordId = translateId
-      this.wordDto = await this.wordService.find(translateId)
-      this.word = this.wordDto.word || ''
-      this.translate = this.wordDto.translate || ''
-      this.partOfSpeech = this.wordDto.partOfSpeech ? PartOfSpeechEnum[this.wordDto.partOfSpeech] : ''
-      this.wordModal = true
+  public wordClick (wordId: number): void {
+    this.wordId = wordId
+    this.wordModal = true
+  }
 
-      if (this.wordDto && this.wordDto.audioId) {
-        this.wordDto.audioUrl = await this.fileService.getUrl(this.wordDto.audioId)
-        const audio = new Audio(this.wordDto.audioUrl)
-        await audio.play()
-      }
-    }
+  public modalClose (): void {
+    this.wordModal = false
   }
 }
 </script>

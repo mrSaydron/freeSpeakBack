@@ -1,7 +1,7 @@
 <template>
   <v-card
     class="ma-2"
-    height="250"
+    height="200"
     width="200"
     elevation="1"
     @click="itemClick"
@@ -19,7 +19,6 @@
 <script lang="ts">
 import Component from 'vue-class-component'
 import { Prop, Vue } from 'vue-property-decorator'
-import { GalleryItemTypeEnum } from '@/model/enums/galleryItemTypeEnum'
 import { GalleryItemSeeMoreDto } from '@/model/galleryItem/galleryItemSeeMoreDto'
 
 @Component({

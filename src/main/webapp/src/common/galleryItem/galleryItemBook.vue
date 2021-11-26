@@ -1,7 +1,7 @@
 <template>
   <v-card
     class="ma-2"
-    height="300"
+    height="200"
     width="200"
     elevation="0"
     @click="itemClick"

@@ -15,7 +15,7 @@ import ru.mrak.model.entity.userWordProgress.UserWord;
 import ru.mrak.model.enumeration.UserWordProgressTypeEnum;
 import ru.mrak.service.UserWordService;
 import ru.mrak.service.dto.userWord.UserWordCriteria;
-import ru.mrak.service.dto.userWord.UserWordDTO;
+import ru.mrak.service.dto.userWord.UserWordDto;
 import ru.mrak.service.mapper.UserWordMapper;
 
 import java.util.List;
@@ -39,12 +39,20 @@ public class UserWordController {
      */
     @GetMapping
     @Transactional(readOnly = true)
-    public ResponseEntity<List<UserWordDTO>> getUserWords(UserWordCriteria criteria, Pageable pageable) {
+    public ResponseEntity<List<UserWordDto>> getUserWords(UserWordCriteria criteria, Pageable pageable) {
         log.debug("REST request to get words for user by criteria: {}", criteria);
         Page<UserWord> userWords = userWordService.findByCriteria(criteria, pageable);
-        Page<UserWordDTO> page = userWords.map(userWordMapper::toDto);
+        Page<UserWordDto> page = userWords.map(userWordMapper::toDto);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    @GetMapping("/{wordId}")
+    @Transactional(readOnly = true)
+    public UserWordDto get(@PathVariable long wordId) {
+        log.debug("REST request user word by word id: {}", wordId);
+        UserWord userWord = userWordService.get(wordId);
+        return userWordMapper.toDto(userWord);
     }
 
     /**
@@ -84,7 +92,7 @@ public class UserWordController {
     }
 
     /**
-     * Удаляет слово из словаря пользователя
+     * Сбрасывает прогресс слова
      */
     @PutMapping("/erase-word/{wordId}")
     public void eraseWord(@PathVariable Long wordId) {
@@ -93,7 +101,7 @@ public class UserWordController {
     }
 
     /**
-     * Удаляет слова из словаря пользователя
+     * Сбрасывает прогресс слов
      */
     @PutMapping("/erase-words")
     public void eraseWords(@RequestBody List<Long> wordIds) {
@@ -102,7 +110,7 @@ public class UserWordController {
     }
 
     /**
-     * Удаляет слова из словаря пользователя по запросу
+     * Сбрасывает прогресс слов по запросу
      */
     @PutMapping("/erase-all-words")
     public void eraseAllWords(UserWordCriteria criteria) {
@@ -151,7 +159,7 @@ public class UserWordController {
      */
     @GetMapping("/words-of-day")
     @Transactional(readOnly = true)
-    public List<UserWordDTO> getWordsOfDay() {
+    public List<UserWordDto> getWordsOfDay() {
         log.debug("REST request words of day");
         List<UserWord> userWords = userWordService.getWordsOfDay();
         return userWordMapper.toDto(userWords);

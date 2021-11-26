@@ -1,5 +1,6 @@
 package ru.mrak.service;
 
+import liquibase.pro.packaged.U;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +52,7 @@ public class UserWordService {
     @Value("#{${box-count} + 1}")
     private Integer KNOW_BOX_NUMBER;
 
-    // todo не помню зачем я делал нулевую коробку
+    // Коробка в которой слова не находятся в обучении
     private static final Integer PRELIMINARY_BOX_NUMBER = 0;
 
     private static final Integer START_BOX_NUMBER = 1;
@@ -82,13 +83,22 @@ public class UserWordService {
     public void addWord(Long wordId) {
         log.debug("add word to user dictionary, word id: {}", wordId);
         Word word = wordRepository.getOne(wordId);
-        addWord(word);
+        addWord(word, START_BOX_NUMBER);
     }
 
     /**
      * Добавляет слово в словарь пользователя
      */
-    public void addWord(Word word) {
+    public void addWord(Long wordId, int boxNumber) {
+        log.debug("add word to user dictionary, word id: {}", wordId);
+        Word word = wordRepository.getOne(wordId);
+        addWord(word, boxNumber);
+    }
+
+    /**
+     * Добавляет слово в словарь пользователя
+     */
+    public void addWord(Word word, int boxNumber) {
         log.debug("add word to user dictionary, word id: {}", word.getId());
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
 
@@ -104,7 +114,7 @@ public class UserWordService {
                 userWord.getWordProgresses().add(userWordHasProgress);
 
                 userWordHasProgress.setType(progressType);
-                userWordHasProgress.setBoxNumber(START_BOX_NUMBER);
+                userWordHasProgress.setBoxNumber(boxNumber);
                 userWordHasProgress.setSuccessfulAttempts(0);
             }
 
@@ -286,6 +296,8 @@ public class UserWordService {
             for (UserWordHasProgress progress : userWord.getWordProgresses()) {
                 progress.setBoxNumber(KNOW_BOX_NUMBER);
             }
+        } else {
+            addWord(wordId, KNOW_BOX_NUMBER);
         }
     }
 
@@ -293,6 +305,7 @@ public class UserWordService {
      * Отмечает слова выученными
      */
     public void knowWords(List<Long> wordIds) {
+        // todo сделать и для слов, которых нет у пользователя
         log.debug("move words to know box. Word ids: {}", wordIds);
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
 
@@ -306,10 +319,31 @@ public class UserWordService {
      * Отмечает слова выученными по условию
      */
     public void knowAllWords(UserWordCriteria criteria) {
+        // todo сделать и для слов, которых нет у пользователя
         log.debug("move words to know box by criteria: {}", criteria);
         findByCriteria(criteria)
             .stream()
             .flatMap(userWord -> userWord.getWordProgresses().stream())
             .forEach(progress -> progress.setBoxNumber(KNOW_BOX_NUMBER));
+    }
+
+    /**
+     * Возвращает слово с прогрессом пользователя по идентификатору слова
+     * Если у пользователя нет прогресса для этого слова, то в ответе будет только слово, без прогресса
+     */
+    public UserWord get(long wordId) {
+        log.debug("get user word by word id: {}", wordId);
+        User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
+        Optional<UserWord> userWordOptional = userWordRepository.findByUserAndWord(user, wordRepository.getOne(wordId));
+        UserWord result = null;
+        if (userWordOptional.isPresent()) {
+            result = userWordOptional.get();
+        } else {
+            result = new UserWord();
+            Optional<Word> wordOptional = wordRepository.findById(wordId);
+            wordOptional.orElseThrow(RuntimeException::new);
+            result.setWord(wordOptional.get());
+        }
+        return result;
     }
 }

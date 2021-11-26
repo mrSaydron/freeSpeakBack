@@ -1,5 +1,7 @@
 package ru.mrak.model.entity.userWordProgress;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CollectionId;
 import org.hibernate.annotations.Type;
 import ru.mrak.model.entity.User;
@@ -11,6 +13,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "user_word")
+@Getter
+@Setter
 public class UserWord {
 
     @Id
@@ -38,38 +42,6 @@ public class UserWord {
     )
     @SequenceGenerator(name = "user_word_has_progress_seq", sequenceName = "user_word_has_progress_seq", allocationSize = 1)
     private List<UserWordHasProgress> wordProgresses = new ArrayList<>();
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Word getWord() {
-        return word;
-    }
-
-    public void setWord(Word word) {
-        this.word = word;
-    }
-
-    public List<UserWordHasProgress> getWordProgresses() {
-        return wordProgresses;
-    }
-
-    public void setWordProgresses(List<UserWordHasProgress> wordProgresses) {
-        this.wordProgresses = wordProgresses;
-    }
 
     @Override
     public String toString() {

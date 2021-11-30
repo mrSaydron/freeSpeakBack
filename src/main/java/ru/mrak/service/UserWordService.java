@@ -52,7 +52,7 @@ public class UserWordService {
     @Value("#{${box-count} + 1}")
     private Integer KNOW_BOX_NUMBER;
 
-    // Коробка в которой слова не находятся в обучении
+    // Коробка в которой слова не находятся в обучении, и будут взяты туда при запросе из карточек
     private static final Integer PRELIMINARY_BOX_NUMBER = 0;
 
     private static final Integer START_BOX_NUMBER = 1;
@@ -83,7 +83,7 @@ public class UserWordService {
     public void addWord(Long wordId) {
         log.debug("add word to user dictionary, word id: {}", wordId);
         Word word = wordRepository.getOne(wordId);
-        addWord(word, START_BOX_NUMBER);
+        addWord(word, PRELIMINARY_BOX_NUMBER);
     }
 
     /**
@@ -108,6 +108,7 @@ public class UserWordService {
 
             userWord.setUser(user);
             userWord.setWord(word);
+            userWord.setPriority(0);
 
             for (UserWordProgressTypeEnum progressType : UserWordProgressTypeEnum.values()) {
                 UserWordHasProgress userWordHasProgress = new UserWordHasProgress();
@@ -161,7 +162,7 @@ public class UserWordService {
         Optional<UserWord> userWordsOptional = userWordRepository.findByUserAndWord(user, wordRepository.getOne(wordId));
         if (userWordsOptional.isPresent()) {
             for (UserWordHasProgress userWordHasProgress : userWordsOptional.get().getWordProgresses()) {
-                userWordHasProgress.setBoxNumber(START_BOX_NUMBER);
+                userWordHasProgress.setBoxNumber(PRELIMINARY_BOX_NUMBER);
             }
         }
     }
@@ -176,7 +177,7 @@ public class UserWordService {
         userWordRepository.findAllByUserAndWordIn(user, wordIds.stream().map(wordRepository::getOne).collect(Collectors.toList()))
             .stream()
             .flatMap(userWord -> userWord.getWordProgresses().stream())
-            .forEach(progress -> progress.setBoxNumber(START_BOX_NUMBER));
+            .forEach(progress -> progress.setBoxNumber(PRELIMINARY_BOX_NUMBER));
     }
 
     /**
@@ -187,7 +188,7 @@ public class UserWordService {
         findByCriteria(criteria)
             .stream()
             .flatMap(userWord -> userWord.getWordProgresses().stream())
-            .forEach(progress -> progress.setBoxNumber(START_BOX_NUMBER));
+            .forEach(progress -> progress.setBoxNumber(PRELIMINARY_BOX_NUMBER));
     }
 
     /**
@@ -247,6 +248,7 @@ public class UserWordService {
             UserWordHasProgress userWordHasProgress = userWord.getWordProgresses().stream()
                 .filter(progress -> Objects.equals(type, progress.getType()))
                 .findFirst().orElseThrow(RuntimeException::new);
+            // переноси слово в обучение
             userWordHasProgress.setBoxNumber(START_BOX_NUMBER);
             userWordHasProgress.setFailLastDate(Instant.now());
         }
@@ -275,6 +277,7 @@ public class UserWordService {
                 && userWordHasProgress.getBoxNumber() <= boxCount
             ) {
                 if (userWordHasProgress.getBoxNumber() == PRELIMINARY_BOX_NUMBER) {
+                    // переносит слово в обучение при первом ответе
                     userWordHasProgress.setBoxNumber(START_BOX_NUMBER);
                 }
                 userWordHasProgress.setBoxNumber(userWordHasProgress.getBoxNumber() + 1);
@@ -345,5 +348,23 @@ public class UserWordService {
             result.setWord(wordOptional.get());
         }
         return result;
+    }
+
+    /**
+     * Сбрасывает приоритет изучения слов пользователя
+     */
+    public void resetPriority() {
+        log.debug("reset words priority");
+        User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
+        userWordRepository.resetPriority(user.getId());
+    }
+
+    /**
+     * Раставляет приоритет слов для изучения, для указанной книги
+     */
+    public void setPriorityByBook(long bookId) {
+        log.debug("set priority for book id: {}", bookId);
+        User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
+        userWordRepository.updatePriorityByBook(user.getId(), bookId);
     }
 }

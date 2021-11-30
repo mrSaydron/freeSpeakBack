@@ -1,4 +1,4 @@
-package ru.mrak.service;
+package ru.mrak.service.book;
 
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -12,12 +12,16 @@ import ru.mrak.model.entity.BookSentence;
 import ru.mrak.model.entity.User;
 import ru.mrak.repository.BookRepository;
 import ru.mrak.repository.BookSentenceRepository;
+import ru.mrak.repository.BookUserRepository;
+import ru.mrak.service.TextService;
+import ru.mrak.service.UserService;
+import ru.mrak.service.UserWordService;
+import ru.mrak.service.WordService;
 import ru.mrak.service.dto.BookCreateDTO;
-import ru.mrak.service.dto.BookDTO;
+import ru.mrak.service.dto.BookDto;
 import ru.mrak.service.mapper.BookMapper;
 
 import javax.persistence.EntityManager;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +41,7 @@ public class BookService {
     private final WordService wordService;
     private final UserWordService userWordService;
     private final TextService textService;
+    private final BookUserService bookUserService;
 
     private final BookRepository bookRepository;
     private final BookSentenceRepository bookSentenceRepository;
@@ -72,7 +77,7 @@ public class BookService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<BookDTO> findAll(Pageable pageable) {
+    public Page<BookDto> findAll(Pageable pageable) {
         log.debug("Request to get all Books");
         return bookRepository.findAll(pageable)
             .map(bookMapper::toDto);
@@ -83,7 +88,7 @@ public class BookService {
      *
      * @return the list of entities.
      */
-    public Page<BookDTO> findAllWithEagerRelationships(Pageable pageable) {
+    public Page<BookDto> findAllWithEagerRelationships(Pageable pageable) {
         return bookRepository.findAllWithEagerRelationships(pageable).map(bookMapper::toDto);
     }
 
@@ -94,7 +99,7 @@ public class BookService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<BookDTO> findOne(Long id) {
+    public Optional<BookDto> findOne(Long id) {
         log.debug("Request to get Book : {}", id);
         return bookRepository.findOneWithEagerRelationships(id)
             .map(bookMapper::toDto);
@@ -121,11 +126,31 @@ public class BookService {
     /**
      * Добавляет недостающие слова из книги в словарь пользователя
      */
-    @Transactional
-    public void addWordsToDictionary(Long bookId) {
+    public void addWordsToDictionary(long bookId) {
+        log.debug("add words to user dictionary in book, book id: {}", bookId);
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
         List<Long> wordIds = bookRepository.getMissingWords(user, bookRepository.getOne(bookId));
         wordIds.forEach(userWordService::addWord);
     }
 
+    /**
+     * Помечает книгу "для чтения" и настраивает приоритеты для слов на изучение
+     */
+    public void setBookIsRead(long bookId) {
+        log.debug("set book 'is read' by book id: {}", bookId);
+        bookUserService.resetBookIsRead();
+        bookUserService.setBookIsRead(bookId);
+        userWordService.resetPriority();
+
+        addWordsToDictionary(bookId);
+        userWordService.setPriorityByBook(bookId);
+    }
+
+    /**
+     * Сбрасывает книги "для чтения" для текущего пользователя
+     */
+    public void resetBookIsRead() {
+        log.debug("reset book 'is read'");
+        bookUserService.resetBookIsRead();
+    }
 }

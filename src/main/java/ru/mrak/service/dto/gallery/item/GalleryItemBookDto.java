@@ -10,4 +10,6 @@ import lombok.experimental.Accessors;
 public class GalleryItemBookDto extends GalleryItemDto {
     private String author;
     private Long id;
+    private Double know;
+    private Boolean isReading;
 }

@@ -149,6 +149,7 @@ export default class UserWord extends Vue {
   public async searchChange (wordOrTranslate: string) {
     this.userWordFilter.sort.maxValue = undefined
     this.userWordFilter.wordOrTranslate.contains = wordOrTranslate
+    this.words = []
 
     this.retrieve()
   }

@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.mrak.model.enumeration.GalleryTypeEnum;
-import ru.mrak.service.BookQueryService;
+import ru.mrak.service.book.BookQueryService;
 import ru.mrak.service.dto.BookCriteria;
 import ru.mrak.service.dto.gallery.GalleryDto;
 import ru.mrak.service.dto.gallery.item.GalleryItemDto;

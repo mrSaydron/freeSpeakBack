@@ -1,6 +1,8 @@
 package ru.mrak.service.dto.userWord;
 
+import edu.stanford.nlp.io.NumberRangeFileFilter;
 import io.github.jhipster.service.Criteria;
+import io.github.jhipster.service.filter.RangeFilter;
 import io.github.jhipster.service.filter.StringFilter;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -18,8 +20,10 @@ public class UserWordCriteria implements Serializable, Criteria {
 
     private static final long serialVersionUID = 1L;
 
-    private StringFilter wordOrTranslate;
+    private StringRangeFilter wordOrTranslate;
     private StringRangeFilter word;
+    private RangeFilter<Integer> boxNumber;
+    private RangeFilter<Long> priority;
 
     public UserWordCriteria() {
     }
@@ -27,6 +31,8 @@ public class UserWordCriteria implements Serializable, Criteria {
     public UserWordCriteria(UserWordCriteria other) {
         this.wordOrTranslate = other.wordOrTranslate;
         this.word = other.word;
+        this.boxNumber = other.boxNumber;
+        this.priority = other.priority;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package ru.mrak.service;
+package ru.mrak.service.book;
 
 import io.github.jhipster.service.QueryService;
 import org.slf4j.Logger;
@@ -14,8 +14,9 @@ import ru.mrak.model.entity.bookUserKnow.BookUserKnow;
 import ru.mrak.model.entity.User;
 import ru.mrak.model.entity.bookUserKnow.BookUserKnow_;
 import ru.mrak.repository.BookRepository;
+import ru.mrak.service.UserService;
 import ru.mrak.service.dto.BookCriteria;
-import ru.mrak.service.dto.BookDTO;
+import ru.mrak.service.dto.BookDto;
 import ru.mrak.service.mapper.BookMapper;
 
 import javax.persistence.criteria.*;
@@ -25,7 +26,7 @@ import java.util.List;
  * Service for executing complex queries for {@link Book} entities in the database.
  * The main input is a {@link BookCriteria} which gets converted to {@link Specification},
  * in a way that all the filters must apply.
- * It returns a {@link List} of {@link BookDTO} or a {@link Page} of {@link BookDTO} which fulfills the criteria.
+ * It returns a {@link List} of {@link BookDto} or a {@link Page} of {@link BookDto} which fulfills the criteria.
  */
 @Service
 @Transactional(readOnly = true)
@@ -46,19 +47,19 @@ public class BookQueryService extends QueryService<Book> {
     }
 
     /**
-     * Return a {@link List} of {@link BookDTO} which matches the criteria from the database.
+     * Return a {@link List} of {@link BookDto} which matches the criteria from the database.
      * @param criteria The object which holds all the filters, which the entities should match.
      * @return the matching entities.
      */
     @Transactional(readOnly = true)
-    public List<BookDTO> findByCriteria(BookCriteria criteria) {
+    public List<BookDto> findByCriteria(BookCriteria criteria) {
         log.debug("find by criteria : {}", criteria);
         final Specification<Book> specification = createSpecification(criteria);
         return bookMapper.toDto(bookRepository.findAll(specification));
     }
 
     /**
-     * Return a {@link Page} of {@link BookDTO} which matches the criteria from the database.
+     * Return a {@link Page} of {@link BookDto} which matches the criteria from the database.
      * @param criteria The object which holds all the filters, which the entities should match.
      * @param page The page, which should be returned.
      * @return the matching entities.

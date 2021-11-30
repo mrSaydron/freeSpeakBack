@@ -20,22 +20,51 @@
         <v-col
           class="text-end"
         >
-          <div
-            v-if="userHasAllWords != null"
+
+          <v-tooltip
+            left
+            v-if="isReading"
           >
-            <v-btn
-              v-if="userHasAllWords"
-              class="ma-6"
-              color="green"
-              disabled
-            >Все слова в словаре</v-btn>
-            <v-btn
-              v-else
-              class="ma-6"
-              color="yellow"
-              @click="addWordToDictionary"
-            >Узучать слова</v-btn>
-          </div>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                fab
+                color="blue-grey"
+                class="ma-2 white--text"
+                x-large
+                @click="notReading"
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon dark>
+                  mdi-star
+                </v-icon>
+              </v-btn>
+            </template>
+            <span>Не изучать слова этой книги</span>
+          </v-tooltip>
+
+          <v-tooltip
+            left
+            v-else
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                fab
+                color="blue-grey"
+                class="ma-2 white--text"
+                x-large
+                @click="reading"
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon dark>
+                  mdi-star-outline
+                </v-icon>
+              </v-btn>
+            </template>
+            <span>Настроить словарь для изучения слов этой книги</span>
+          </v-tooltip>
+
         </v-col>
       </v-row>
     </v-parallax>
@@ -73,8 +102,8 @@ export default class Book extends Vue {
   public book: BookDto = {}
   public dictionary: DictionaryDto = {}
   public tab = 0
-  public userHasAllWords: boolean | null = null
   public bookSentences: BookSentenceDto[] = []
+  public isReading = false
 
   public async mounted () {
     if (this.id) {
@@ -94,20 +123,21 @@ export default class Book extends Vue {
               .then(res => {
                 this.book.pictureUrl = res
               })
+            this.isReading = this.book.isReading || false
           }
-        })
-
-      this.bookService.checkUserLibrary(bookId)
-        .then(check => {
-          this.userHasAllWords = check
         })
     }
   }
 
-  public async addWordToDictionary () {
+  public notReading (): void {
+    this.isReading = !this.isReading
+    this.bookService.resetBookIsRead()
+  }
+
+  public reading (): void {
     if (this.book && this.book.id) {
-      this.bookService.addWordToDictionary(this.book.id)
-      this.userHasAllWords = true
+      this.isReading = !this.isReading
+      this.bookService.setBookIsRead(this.book.id)
     }
   }
 }

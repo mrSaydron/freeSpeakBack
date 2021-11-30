@@ -2,17 +2,15 @@ package ru.mrak.web.rest;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
-import ru.mrak.model.entity.BookSentence;
 import ru.mrak.model.entity.Book;
-import ru.mrak.service.BookService;
+import ru.mrak.service.book.BookService;
 import ru.mrak.service.UserService;
 import ru.mrak.service.dto.BookCreateDTO;
-import ru.mrak.service.dto.BookSentenceDTO;
+import ru.mrak.service.dto.BookDto;
 import ru.mrak.service.mapper.BookMapper;
 import ru.mrak.service.mapper.BookSentenceMapper;
-import ru.mrak.service.dto.BookDTO;
 import ru.mrak.service.dto.BookCriteria;
-import ru.mrak.service.BookQueryService;
+import ru.mrak.service.book.BookQueryService;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
@@ -77,7 +75,7 @@ public class BookController {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping
-    public ResponseEntity<BookDTO> updateBook(@Valid @RequestBody BookDTO bookDTO) throws URISyntaxException {
+    public ResponseEntity<BookDto> updateBook(@Valid @RequestBody BookDto bookDTO) throws URISyntaxException {
         throw new RuntimeException("Not implemented");
 //        log.debug("REST request to update Book : {}", bookDTO);
 //        if (bookDTO.getId() == null) {
@@ -98,9 +96,9 @@ public class BookController {
      */
     @GetMapping
     @Transactional(readOnly = true)
-    public ResponseEntity<List<BookDTO>> getBooks(BookCriteria criteria, Pageable pageable) {
+    public ResponseEntity<List<BookDto>> getBooks(BookCriteria criteria, Pageable pageable) {
         log.debug("REST request to get library Books by criteria: {}", criteria);
-        Page<BookDTO> page = bookQueryService.findByCriteria(criteria, pageable)
+        Page<BookDto> page = bookQueryService.findByCriteria(criteria, pageable)
             .map(bookMapper::toDto);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
@@ -125,9 +123,9 @@ public class BookController {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the bookDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<BookDTO> getBook(@PathVariable Long id) {
+    public ResponseEntity<BookDto> getBook(@PathVariable Long id) {
         log.debug("REST request to get Book : {}", id);
-        Optional<BookDTO> bookDTO = bookService.findOne(id);
+        Optional<BookDto> bookDTO = bookService.findOne(id);
         return ResponseUtil.wrapOrNotFound(bookDTO);
     }
 
@@ -162,4 +160,21 @@ public class BookController {
         bookService.addWordsToDictionary(bookId);
     }
 
+    /**
+     * Сбрасывает флаг, для всех книг пользователя, "для чтения"
+     */
+    @PutMapping("/reset-book-is-read")
+    public void resetBookIsRead() {
+        log.debug("PUT reset all book is read");
+        bookService.resetBookIsRead();
+    }
+
+    /**
+     * Устанавливает флаг "для чтения" на книгу
+     */
+    @PutMapping("/set-book-is-read/{bookId}")
+    public void setBookIsRead(@PathVariable long bookId) {
+        log.debug("PUT set book 'is read', book id: {}", bookId);
+        bookService.setBookIsRead(bookId);
+    }
 }

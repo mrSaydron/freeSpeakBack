@@ -4,6 +4,6 @@ import ru.mrak.service.dto.gallery.item.GalleryItemDto;
 
 import java.util.Optional;
 
-public interface GalleryItem {
-    Optional<GalleryItemDto> get();
+public interface GalleryItem<T extends GalleryItemDto> {
+    Optional<T> get();
 }

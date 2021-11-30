@@ -24,6 +24,10 @@
       v-if="checkUserDictionary()"
       :gallery-item="galleryItem"
     ></gallery-item-user-dictionary>
+    <gallery-item-mark-sentence
+      v-if="checkMarkSentence()"
+      :gallery-item="galleryItem"
+    ></gallery-item-mark-sentence>
   </div>
 </template>
 
@@ -37,6 +41,7 @@ import GalleryItemSentence from '@/common/galleryItem/galleryItemSentence.vue'
 import GalleryItemCardLearn from '@/common/galleryItem/galleryItemCardLearn.vue'
 import GalleryItemSeeMore from '@/common/galleryItem/gallerytemSeeMore.vue'
 import GalleryItemUserDictionary from '@/common/galleryItem/galleryItemUserDictionary.vue'
+import GalleryItemMarkSentence from '@/common/galleryItem/galleryItemMarkSentence.vue'
 
 @Component({
   components: {
@@ -44,7 +49,8 @@ import GalleryItemUserDictionary from '@/common/galleryItem/galleryItemUserDicti
     GalleryItemCardLearn,
     GalleryItemSentence,
     GalleryItemSeeMore,
-    GalleryItemUserDictionary
+    GalleryItemUserDictionary,
+    GalleryItemMarkSentence
   }
 })
 export default class GalleryItem extends Vue {
@@ -73,6 +79,11 @@ export default class GalleryItem extends Vue {
   public checkUserDictionary (): boolean {
     return this.galleryItem !== undefined &&
       this.galleryItem.type === GalleryItemTypeEnum.USER_DICTIONARY
+  }
+
+  public checkMarkSentence (): boolean {
+    return this.galleryItem !== undefined &&
+      this.galleryItem.type === GalleryItemTypeEnum.MARK_SENTENCE
   }
 }
 </script>

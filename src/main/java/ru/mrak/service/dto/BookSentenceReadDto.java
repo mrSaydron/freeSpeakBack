@@ -9,7 +9,7 @@ public class BookSentenceReadDto {
 
     private Long id;
     private List<BookSentenceHasWordDTO> words;
-    private BookDTO book;
+    private BookDto book;
 
     public Long getId() {
         return id;
@@ -27,11 +27,11 @@ public class BookSentenceReadDto {
         this.words = words;
     }
 
-    public BookDTO getBook() {
+    public BookDto getBook() {
         return book;
     }
 
-    public void setBook(BookDTO book) {
+    public void setBook(BookDto book) {
         this.book = book;
     }
 }

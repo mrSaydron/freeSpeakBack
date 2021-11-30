@@ -30,6 +30,9 @@ public class UserWord {
     @JoinColumn(name = "word_id")
     private Word word;
 
+    @Column(name = "priority")
+    private long priority = Integer.MAX_VALUE;
+
     @ElementCollection
     @CollectionTable(
         name = "user_word_has_progress",

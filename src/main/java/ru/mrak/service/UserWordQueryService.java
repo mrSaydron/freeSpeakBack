@@ -11,13 +11,17 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.mrak.model.entity.User;
 import ru.mrak.model.entity.Word_;
 import ru.mrak.model.entity.userWordProgress.UserWord;
+import ru.mrak.model.entity.userWordProgress.UserWordHasProgress;
+import ru.mrak.model.entity.userWordProgress.UserWordHasProgress_;
 import ru.mrak.model.entity.userWordProgress.UserWord_;
 import ru.mrak.service.dto.userWord.UserWordCriteria;
 import ru.mrak.web.rest.filter.StringRangeFilter;
 
 import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.SetJoin;
+import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import java.util.function.Function;
 
@@ -49,6 +53,15 @@ public class UserWordQueryService extends QueryService<UserWord> {
                     UserWord_.word,
                     Word_.translate);
                 specification = specification.and(wordSpecification.or(translateSpecification));
+            }
+            if (criteria.getBoxNumber() != null && criteria.getBoxNumber().getEquals() != null) {
+                // todo джойнится прогресс, если типов будет много, то будут дубли
+                Specification<UserWord> boxNumberEquals
+                    = (root, query, builder) -> builder.equal(root.join(UserWord_.wordProgresses, JoinType.INNER).get(UserWordHasProgress_.BOX_NUMBER), criteria.getBoxNumber().getEquals());
+                specification = specification.and(boxNumberEquals);
+            }
+            if (criteria.getPriority() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getPriority(), UserWord_.priority));
             }
         }
 

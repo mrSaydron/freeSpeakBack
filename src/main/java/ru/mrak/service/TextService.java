@@ -16,6 +16,7 @@ import ru.mrak.model.enumeration.PartOfSpeechEnum;
 import ru.mrak.repository.ExceptionWordRepository;
 import ru.mrak.repository.TokenRuleRepository;
 import ru.mrak.repository.WordRepository;
+import ru.mrak.service.book.BookService;
 import ru.mrak.service.tarnslate.TranslateService;
 
 import java.util.ArrayList;

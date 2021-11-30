@@ -65,8 +65,9 @@ export default class SentenceWord extends Vue {
   @Inject() readonly userWordService!: UserWordService
   @Inject() readonly fileService!: FileService
 
-  public KNOW_BOX_NUMBER = Constants.KNOW_BOX_NUMBER
+  public PRELIMINARY_BOX_NUMBER = Constants.PRELIMINARY_BOX_NUMBER
   public START_BOX_NUMBER = Constants.START_BOX_NUMBER
+  public KNOW_BOX_NUMBER = Constants.KNOW_BOX_NUMBER
 
   public modal = false
   public userWordDto: UserWordDto = {}

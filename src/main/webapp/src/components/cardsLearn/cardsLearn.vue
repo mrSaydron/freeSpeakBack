@@ -41,7 +41,7 @@ import WordCardDirect from '@/common/wordCard/wordCardDirect.vue'
 import { WordDto } from '@/model/wordDto'
 import UserWordService from '@/services/userWordService'
 import { CardTypeEnum } from '@/model/enums/cardTypeEnum'
-import { SortValue } from '@/util/sortValue'
+import { asc, SortValue } from '@/util/sortValue'
 import { UserWordFilter } from '@/services/filters/userWordFilter'
 import { Card } from '@/model/card'
 
@@ -139,13 +139,14 @@ export default class CardsLearn extends Vue {
    */
   public async nextNewWords (): Promise<void> {
     if (!this.allElements && this.leftHearts > 0) {
-      const words = await this.userWordService.retrieve(new UserWordFilter())
-      this.allElements = words.length < this.requestCount
+      const filter = new UserWordFilter()
+      filter.boxNumber.equals = 0
+      filter.sort.sortField = filter.priority
+      filter.sort.sortDirection = asc
 
-      if (words.length > 0 && this.wordSort) {
-        this.wordSort.maxValue = words[words.length - 1].word?.word
-        this.cards = this.cards.concat(Card.transform(words))
-      }
+      const words = await this.userWordService.retrieve(filter)
+      this.allElements = words.length < this.requestCount
+      this.cards = this.cards.concat(Card.transform(words))
     }
   }
 }

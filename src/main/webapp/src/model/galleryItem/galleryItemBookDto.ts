@@ -7,7 +7,9 @@ export class GalleryItemBookDto implements GalleryItemDto {
     public pictureUrl?: string,
     public type?: string,
     public author?: string,
-    public id?: number
+    public id?: number,
+    public know?: number,
+    public isReading?: boolean
   ) {
   }
 }

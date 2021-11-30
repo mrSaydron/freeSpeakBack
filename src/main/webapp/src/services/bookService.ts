@@ -127,4 +127,36 @@ export default class BookService {
         })
     })
   }
+
+  /**
+   * Сбрасывает отметку "для чтения" со всех книг пользователя
+   */
+  public async resetBookIsRead (): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      axios
+        .put(`${baseApiUrl}/reset-book-is-read`)
+        .then(() => {
+          resolve()
+        })
+        .catch(err => {
+          reject(err)
+        })
+    })
+  }
+
+  /**
+   * Устанавливает флаг "для чтения" на книгу
+   */
+  public async setBookIsRead (bookId: number): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      axios
+        .put(`${baseApiUrl}/set-book-is-read/${bookId}`)
+        .then(() => {
+          resolve()
+        })
+        .catch(err => {
+          reject(err)
+        })
+    })
+  }
 }

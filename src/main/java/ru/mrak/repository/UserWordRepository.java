@@ -2,7 +2,9 @@ package ru.mrak.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.mrak.model.entity.User;
 import ru.mrak.model.entity.Word;
@@ -25,9 +27,6 @@ public interface UserWordRepository extends JpaRepository<UserWord, Long>, JpaSp
 
     /**
      * Возвращает количество неудачных ответов за день
-     * @param user
-     * @param currentDay
-     * @return
      */
     @Query(
         "select count(uw.id) " +
@@ -70,4 +69,36 @@ public interface UserWordRepository extends JpaRepository<UserWord, Long>, JpaSp
         User user,
         Instant greaterDay
     );
+
+
+    /**
+     * Сбрасывает приоритет изучения слов для пользователя
+     */
+    @Modifying
+    @Query(
+        value = "update user_word " +
+            "set priority = " + Integer.MAX_VALUE + " " +
+            "where user_id = :userId",
+        nativeQuery = true
+    )
+    void resetPriority(@Param("userId") long userId);
+
+    /**
+     * Расставляет приоритеты изучения слов для указанного пользователя для книги
+     */
+    @Modifying
+    @Query(
+        value = "update user_word " +
+            "set priority = ( " +
+            "select min(bshw.id) priority " +
+            "from book_sentence bs " +
+            "join book_sentence_has_word bshw on bs.id = bshw.book_sentence_id " +
+            "where bs.book_id = :bookId " +
+            "and bshw.word_id is not null " +
+            "and bshw.word_id = user_word.word_id " +
+            "group by bshw.word_id) " +
+            "where user_id = :userId",
+        nativeQuery = true
+    )
+    void updatePriorityByBook(@Param("userId") Long userId, @Param("bookId") long bookId);
 }

@@ -11,6 +11,7 @@ import CardsLearn from '@/components/cardsLearn/cardsLearn.vue'
 import account from '@/router/account'
 import SentenceRead from '@/components/sentenceRead/sentenceRead.vue'
 import Home from '@/components/home/home.vue'
+import MarkSentenceRead from '@/components/sentenceReadFromMarkedBook/sentenceReadFromMarkedBook.vue'
 
 Vue.use(VueRouter)
 
@@ -94,6 +95,17 @@ const routes: Array<RouteConfig> = [
     path: '/sentence-read',
     name: 'sentenceRead',
     component: SentenceRead,
+    meta: {
+      authorities: [Authority.USER],
+      backPage: () => {
+        return '/'
+      }
+    }
+  },
+  {
+    path: '/mark-sentence-read',
+    name: 'markSentenceRead',
+    component: MarkSentenceRead,
     meta: {
       authorities: [Authority.USER],
       backPage: () => {

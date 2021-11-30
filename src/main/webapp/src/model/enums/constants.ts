@@ -1,4 +1,5 @@
 export const Constants: {[index: string]: any} = {
-  KNOW_BOX_NUMBER: 7,
-  START_BOX_NUMBER: 1
+  PRELIMINARY_BOX_NUMBER: 0,
+  START_BOX_NUMBER: 1,
+  KNOW_BOX_NUMBER: 7
 }

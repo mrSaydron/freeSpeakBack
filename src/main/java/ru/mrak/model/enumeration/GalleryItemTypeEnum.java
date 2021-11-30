@@ -8,4 +8,5 @@ public enum GalleryItemTypeEnum {
     SENTENCE,
     BOOK,
     USER_DICTIONARY,
+    MARK_SENTENCE
 }

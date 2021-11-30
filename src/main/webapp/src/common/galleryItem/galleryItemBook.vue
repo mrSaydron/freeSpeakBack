@@ -1,7 +1,7 @@
 <template>
   <v-card
     class="ma-2"
-    height="200"
+    height="250"
     width="200"
     elevation="0"
     @click="itemClick"
@@ -9,7 +9,13 @@
     <v-img
       :src=galleryItem.pictureUrl
       height="200"
-    ></v-img>
+    >
+      <v-chip
+        class="ma-2"
+        color="white"
+        style=""
+      >{{ getKnow() }}</v-chip>
+    </v-img>
     <v-card-title>
       {{ galleryItem.title }}
     </v-card-title>
@@ -34,6 +40,10 @@ export default class GalleryItemBook extends Vue {
     if (this.galleryItem && this.galleryItem.id) {
       this.$router.push({ name: 'book', params: { id: this.galleryItem.id.toString() } })
     }
+  }
+
+  public getKnow (): number {
+    return (this.galleryItem && this.galleryItem.know && Math.floor(this.galleryItem.know)) || 0
   }
 }
 </script>

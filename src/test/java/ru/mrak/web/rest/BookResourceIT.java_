@@ -4,10 +4,10 @@ import ru.mrak.LibFourApp;
 import ru.mrak.model.entity.Book;
 import ru.mrak.model.entity.User;
 import ru.mrak.repository.BookRepository;
-import ru.mrak.service.BookService;
-import ru.mrak.service.dto.BookDTO;
+import ru.mrak.service.book.BookService;
+import ru.mrak.service.dto.BookDto;
 import ru.mrak.service.mapper.BookMapper;
-import ru.mrak.service.BookQueryService;
+import ru.mrak.service.book.BookQueryService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

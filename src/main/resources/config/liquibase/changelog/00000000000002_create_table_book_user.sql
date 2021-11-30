@@ -12,7 +12,7 @@ create table book_user
         foreign key (user_id) references jhi_user (id)
             on delete cascade,
     constraint book_user_book_id_fk
-        foreign key (user_id) references book (id)
+        foreign key (book_id) references book (id)
             on delete cascade
 );
 comment on table book_user is 'Связывает пользователя и книги';

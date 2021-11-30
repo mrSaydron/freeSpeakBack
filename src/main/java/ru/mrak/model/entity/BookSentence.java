@@ -1,5 +1,8 @@
 package ru.mrak.model.entity;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CollectionId;
 import org.hibernate.annotations.Type;
 import ru.mrak.config.Constants;
@@ -10,6 +13,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "book_sentence")
+@Getter
+@Setter
 public class BookSentence {
 
     @Id
@@ -21,7 +26,7 @@ public class BookSentence {
     @JoinColumn(name = "book_id")
     private Book book;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(
         name = "book_sentence_has_word",
         joinColumns = @JoinColumn(name = "book_sentence_id")

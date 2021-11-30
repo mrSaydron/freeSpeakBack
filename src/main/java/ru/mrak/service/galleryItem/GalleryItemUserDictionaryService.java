@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class GalleryItemUserDictionaryService implements GalleryItem {
+public class GalleryItemUserDictionaryService implements GalleryItem<GalleryItemDto> {
 
     private final Logger log = LoggerFactory.getLogger(GalleryItemUserDictionaryService.class);
 

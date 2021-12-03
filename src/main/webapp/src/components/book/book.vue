@@ -68,7 +68,9 @@
         </v-col>
       </v-row>
     </v-parallax>
-    <book-text :bookSentences="bookSentences"></book-text>
+    <book-text
+      :book-sentences-union="bookSentencesUnion"
+    ></book-text>
   </div>
 </template>
 
@@ -84,6 +86,7 @@ import BookDictionaryService from '@/services/bookDictionaryService'
 import FileService from '@/services/fileService'
 import { BookSentenceDto } from '@/model/bookSentenceDto'
 import BookSentenceService from '@/services/bookSentenceService'
+import { BookSentenceUnionDto } from '@/model/bookSentenceUnionDto'
 
 @Component({
   components: {
@@ -104,18 +107,19 @@ export default class Book extends Vue {
   public tab = 0
   public bookSentences: BookSentenceDto[] = []
   public isReading = false
+  public bookSentencesUnion: BookSentenceUnionDto | null = null
 
   public async mounted () {
     if (this.id) {
       const bookId = Number(this.id)
 
-      this.bookSentenceService.findByBook(bookId)
+      const sentencesPromise = this.bookSentenceService.findByBook(bookId)
         .then(data => {
           this.bookSentences = data
         })
         .catch(err => console.log(err))
 
-      this.bookService.find(Number(bookId))
+      const bookPromise = this.bookService.find(Number(bookId))
         .then(book => {
           this.book = book
           if (this.book.pictureId) {
@@ -125,6 +129,12 @@ export default class Book extends Vue {
               })
             this.isReading = this.book.isReading || false
           }
+        })
+        .catch(err => console.log(err))
+
+      Promise.all([sentencesPromise, bookPromise])
+        .then(() => {
+          this.bookSentencesUnion = new BookSentenceUnionDto(this.book, this.bookSentences)
         })
     }
   }

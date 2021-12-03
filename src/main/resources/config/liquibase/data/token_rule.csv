@@ -2,7 +2,7 @@ part_of_speech;rule_name;target_part_of_speech
 CC;REMOVE;CC
 CD;NUMBER;CD
 DT;REMOVE;DT
-EX;NO_LEMMA;EX
+EX;LEMMA;RB
 FW;REMOVE;FW
 IN;NO_LEMMA;IN
 JJ;NO_LEMMA;JJ

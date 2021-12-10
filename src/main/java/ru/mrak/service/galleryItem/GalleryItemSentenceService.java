@@ -8,26 +8,30 @@ import ru.mrak.model.entity.BookSentence;
 import ru.mrak.model.enumeration.GalleryItemTypeEnum;
 import ru.mrak.service.book.BookSentenceService;
 import ru.mrak.service.dto.gallery.item.GalleryItemDto;
+import ru.mrak.service.dto.gallery.item.GalleryItemSentenceDto;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class GalleryItemSentenceService implements GalleryItem<GalleryItemDto> {
+public class GalleryItemSentenceService implements GalleryItem<GalleryItemSentenceDto> {
 
     private final Logger log = LoggerFactory.getLogger(GalleryItemSentenceService.class);
 
     private final BookSentenceService bookSentenceService;
 
-    private static final GalleryItemDto SENTENCE_GALLERY = new GalleryItemDto()
-        .setTitle("Предложения")
-        .setType(GalleryItemTypeEnum.SENTENCE);
+    private static final GalleryItemSentenceDto SENTENCE_GALLERY;
+
+    static {
+        SENTENCE_GALLERY = new GalleryItemSentenceDto();
+        SENTENCE_GALLERY.setTitle("Предложения");
+    }
 
     @Override
-    public Optional<GalleryItemDto> get() {
+    public Optional<GalleryItemSentenceDto> get() {
         log.debug("get gallery item: sentence");
-        Optional<GalleryItemDto> result = Optional.empty();
+        Optional<GalleryItemSentenceDto> result = Optional.empty();
 
         List<BookSentence> sentenceForUser = bookSentenceService.getSentenceForUser();
         if (sentenceForUser.size() > 0) {

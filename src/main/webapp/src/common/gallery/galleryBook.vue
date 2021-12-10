@@ -69,7 +69,6 @@ export default class GalleryBook extends Vue {
         if (this.galleryItems && this.galleryItems.length >= 10) {
           const seeMoreItem = new GalleryItemSeeMoreDto(
             'Больше',
-            '',
             GalleryItemTypeEnum.SEE_MORE,
             'library'
           )

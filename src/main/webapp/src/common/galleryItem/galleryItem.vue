@@ -28,6 +28,10 @@
       v-if="checkMarkSentence()"
       :gallery-item="galleryItem"
     ></gallery-item-mark-sentence>
+    <gallery-item-test-vocabulary
+      v-if="checkTestVocabulary()"
+      :gallery-item="galleryItem"
+    ></gallery-item-test-vocabulary>
   </div>
 </template>
 
@@ -42,6 +46,7 @@ import GalleryItemCardLearn from '@/common/galleryItem/galleryItemCardLearn.vue'
 import GalleryItemSeeMore from '@/common/galleryItem/gallerytemSeeMore.vue'
 import GalleryItemUserDictionary from '@/common/galleryItem/galleryItemUserDictionary.vue'
 import GalleryItemMarkSentence from '@/common/galleryItem/galleryItemMarkSentence.vue'
+import GalleryItemTestVocabulary from '@/common/galleryItem/galleryItemTestVocabulary.vue'
 
 @Component({
   components: {
@@ -50,7 +55,8 @@ import GalleryItemMarkSentence from '@/common/galleryItem/galleryItemMarkSentenc
     GalleryItemSentence,
     GalleryItemSeeMore,
     GalleryItemUserDictionary,
-    GalleryItemMarkSentence
+    GalleryItemMarkSentence,
+    GalleryItemTestVocabulary
   }
 })
 export default class GalleryItem extends Vue {
@@ -84,6 +90,11 @@ export default class GalleryItem extends Vue {
   public checkMarkSentence (): boolean {
     return this.galleryItem !== undefined &&
       this.galleryItem.type === GalleryItemTypeEnum.MARK_SENTENCE
+  }
+
+  public checkTestVocabulary (): boolean {
+    return this.galleryItem !== undefined &&
+      this.galleryItem.type === GalleryItemTypeEnum.TEST_VOCABULARY
   }
 }
 </script>

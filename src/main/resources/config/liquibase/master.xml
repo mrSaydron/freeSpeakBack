@@ -38,5 +38,6 @@
     <include file="config/liquibase/changelog/00000000000070_create_table_test_vocabulary_check.sql" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/00000000000080_insert_test_vocabulary_to_service_data.sql" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/00000000000090_add_column_to_user_word.sql" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/2021.12.10_create_table_user_settings.sql" relativeToChangelogFile="false"/>
 
 </databaseChangeLog>

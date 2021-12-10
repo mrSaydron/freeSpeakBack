@@ -27,17 +27,12 @@ public abstract class BookToGalleryItemMapper {
     @Autowired private BookUserKnowRepository bookUserKnowRepository;
 
     @Mapping(target = "pictureUrl", expression = "java( getPictureUrl(book) )")
-    @Mapping(target = "type", expression = "java( getType() )" )
     @Mapping(target = "know", expression = "java( know(book) )")
     @Mapping(target = "isReading", expression = "java( isReading(book) )")
     public abstract GalleryItemBookDto toDto(Book book);
 
     protected String getPictureUrl(Book book) {
         return fileService.getUrl(book.getPictureId());
-    }
-
-    protected GalleryItemTypeEnum getType() {
-        return GalleryItemTypeEnum.BOOK;
     }
 
     Double know(Book book) {

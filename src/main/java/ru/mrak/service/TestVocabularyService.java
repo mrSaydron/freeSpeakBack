@@ -6,16 +6,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.mrak.model.entity.User;
+import ru.mrak.model.entity.UserSettings;
 import ru.mrak.model.entity.Word;
 import ru.mrak.model.entity.testVocabulary.TestVocabulary;
 import ru.mrak.model.entity.testVocabulary.TestVocabularyAnswer;
 import ru.mrak.model.enumeration.ServiceDataKeysEnum;
-import ru.mrak.model.enumeration.TestVocabularyTypeEnum;
 import ru.mrak.repository.TestVocabularyAnswerRepository;
 import ru.mrak.repository.TestVocabularyRepository;
 import ru.mrak.repository.WordRepository;
-import ru.mrak.service.dto.testWord.TestVocabularyDto;
-import ru.mrak.service.dto.testWord.TestWordResultDto;
+import ru.mrak.service.dto.testVocabulary.TestVocabularyDto;
+import ru.mrak.service.dto.testVocabulary.TestVocabularyResultDto;
+import ru.mrak.service.dto.testVocabulary.TestVocabularyWordDto;
+import ru.mrak.service.dto.testVocabulary.TestWordResultDto;
 import ru.mrak.service.mapper.WordMapper;
 import ru.mrak.web.rest.TestVocabularyController;
 
@@ -36,6 +38,7 @@ public class TestVocabularyService {
     private final UserService userService;
     private final ServiceDataService serviceDataService;
     private final UserWordService userWordService;
+    private final UserSettingsService userSettingsService;
 
     private final WordRepository wordRepository;
     private final TestVocabularyRepository testVocabularyRepository;
@@ -63,10 +66,10 @@ public class TestVocabularyService {
         int step = getStep(0, true);
         Word word = wordRepository.findStepForwardForVocabulary(step).orElseThrow(RuntimeException::new);
 
-        return new TestVocabularyDto()
-            .setTestWordType(TestVocabularyTypeEnum.WORD)
-            .setTestVocabularyId(testVocabulary.getId())
-            .setWord(wordMapper.toDto(word));
+        TestVocabularyWordDto testVocabularyWordDto = new TestVocabularyWordDto();
+        testVocabularyWordDto.setTestVocabularyId(testVocabulary.getId());
+        testVocabularyWordDto.setWord(wordMapper.toDto(word));
+        return testVocabularyWordDto;
     }
 
     /**
@@ -97,11 +100,11 @@ public class TestVocabularyService {
                 .orElseThrow(RuntimeException::new);
             TestWordResultDto testWordResult = new TestWordResultDto()
                 .setVocabulary(vocabulary);
-            result = new TestVocabularyDto()
-                .setTestWordType(TestVocabularyTypeEnum.RESULT)
-                .setTestVocabularyId(testVocabularyId)
-                .setTestWordResult(testWordResult);
+            TestVocabularyResultDto testVocabularyResultDto = new TestVocabularyResultDto();
+            testVocabularyResultDto.setTestVocabularyId(testVocabularyId);
+            testVocabularyResultDto.setTestWordResult(testWordResult);
 
+            result = testVocabularyResultDto;
             testVocabulary
                 .setResultCount(vocabulary)
                 .setResultWord(lastKnowWord);
@@ -119,10 +122,11 @@ public class TestVocabularyService {
                 }
             }
             Word nextWord = stepBackOptional.orElseThrow(RuntimeException::new);
-            result = new TestVocabularyDto()
-                .setTestWordType(TestVocabularyTypeEnum.WORD)
-                .setTestVocabularyId(testVocabularyId)
-                .setWord(wordMapper.toDto(nextWord));
+            TestVocabularyWordDto testVocabularyWordDto = new TestVocabularyWordDto();
+            testVocabularyWordDto.setTestVocabularyId(testVocabularyId);
+            testVocabularyWordDto.setWord(wordMapper.toDto(nextWord));
+
+            result = testVocabularyWordDto;
         }
 
         return result;
@@ -147,10 +151,10 @@ public class TestVocabularyService {
         }
         if (nextWordOptional.isPresent()) {
             // Слудующее слово есть, возвращаем следующее слово
-            result = new TestVocabularyDto()
-                .setTestWordType(TestVocabularyTypeEnum.WORD)
-                .setTestVocabularyId(testVocabularyId)
-                .setWord(wordMapper.toDto(nextWordOptional.get()));
+            TestVocabularyWordDto testVocabularyWordDto = new TestVocabularyWordDto();
+            testVocabularyWordDto.setTestVocabularyId(testVocabularyId);
+            testVocabularyWordDto.setWord(wordMapper.toDto(nextWordOptional.get()));
+            result = testVocabularyWordDto;
         } else {
             // Слова закончились, возвращаем результат
             int vocabulary = wordRepository.countAllByTranslateNotNull();
@@ -163,10 +167,10 @@ public class TestVocabularyService {
             TestWordResultDto testWordResultDto = new TestWordResultDto()
                 .setVocabulary(vocabulary);
 
-            result = new TestVocabularyDto()
-                .setTestWordType(TestVocabularyTypeEnum.RESULT)
-                .setTestVocabularyId(testVocabularyId)
-                .setTestWordResult(testWordResultDto);
+            TestVocabularyResultDto testVocabularyResultDto = new TestVocabularyResultDto();
+            testVocabularyResultDto.setTestVocabularyId(testVocabularyId);
+            testVocabularyResultDto.setTestWordResult(testWordResultDto);
+            result = testVocabularyResultDto;
 
             // todo асинхронно
             saveResult(lastKnowWord.getTotalAmount(), user);
@@ -184,6 +188,9 @@ public class TestVocabularyService {
         List<Word> resultWords = wordRepository.findResultWordsForTestVocabulary(averageAmount, user.getId());
         List<Long> wordIds = resultWords.stream().map(Word::getId).collect(Collectors.toList());
         userWordService.knowWords(wordIds);
+
+        UserSettings userSettings = userSettingsService.get();
+        userSettings.setTestedVocabulary(true);
     }
 
     /**

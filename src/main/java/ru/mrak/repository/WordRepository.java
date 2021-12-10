@@ -177,13 +177,14 @@ public interface WordRepository extends JpaRepository<Word, Long>, JpaSpecificat
      */
     @Query(
         value =
-            "select distinct * " +
+            "select distinct w.* " +
             "from word w " +
             "left join user_word uw on w.id = uw.word_id and uw.user_id = :userId " +
             "left join user_word_has_progress uwhp on uw.id = uwhp.user_word_id " +
             "where w.total_amount <= :totalAmount " +
             "and (uw.id is null or uwhp.box_number = 0) " +
-            "and w.translate is not null"
+            "and w.translate is not null",
+        nativeQuery = true
     )
     List<Word> findResultWordsForTestVocabulary(
         @Param("totalAmount") long totalAmount,

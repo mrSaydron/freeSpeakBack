@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.mrak.model.enumeration.GalleryItemTypeEnum;
 import ru.mrak.service.book.BookSentenceService;
 import ru.mrak.service.dto.gallery.item.GalleryItemDto;
+import ru.mrak.service.dto.gallery.item.GalleryItemMarkSentenceDto;
 
 import java.util.Optional;
 
@@ -15,20 +16,23 @@ import java.util.Optional;
  */
 @Service
 @RequiredArgsConstructor
-public class GalleryItemMarkSentenceService implements GalleryItem<GalleryItemDto> {
+public class GalleryItemMarkSentenceService implements GalleryItem<GalleryItemMarkSentenceDto> {
 
     private final Logger log = LoggerFactory.getLogger(GalleryItemMarkSentenceService.class);
 
     private final BookSentenceService bookSentenceService;
 
-    private static final GalleryItemDto MARK_SENTENCE_GALLERY = new GalleryItemDto()
-        .setTitle("Продолжить чтение")
-        .setType(GalleryItemTypeEnum.MARK_SENTENCE);
+    private static final GalleryItemMarkSentenceDto MARK_SENTENCE_GALLERY;
+
+    static {
+        MARK_SENTENCE_GALLERY = new GalleryItemMarkSentenceDto();
+        MARK_SENTENCE_GALLERY.setTitle("Продолжить чтение");
+    }
 
     @Override
-    public Optional<GalleryItemDto> get() {
+    public Optional<GalleryItemMarkSentenceDto> get() {
         log.debug("get gallery item: mark sentence");
-        Optional<GalleryItemDto> result = Optional.empty();
+        Optional<GalleryItemMarkSentenceDto> result = Optional.empty();
 
         boolean hasMarkSentence = bookSentenceService.hasMarkSentence();
         if (hasMarkSentence) {

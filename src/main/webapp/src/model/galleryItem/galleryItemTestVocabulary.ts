@@ -1,11 +1,10 @@
 import { GalleryItemDto } from '@/model/galleryItem/galleryItemDto'
 
-export class GalleryItemSeeMoreDto implements GalleryItemDto {
+export class GalleryItemTestVocabularyDto implements GalleryItemDto {
   /* eslint no-useless-constructor: "off" */
   constructor (
     public title?: string,
-    public type?: string,
-    public routeName?: string
+    public type?: string
   ) {
   }
 }

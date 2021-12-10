@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.mrak.service.TestVocabularyService;
-import ru.mrak.service.dto.testWord.TestVocabularyDto;
+import ru.mrak.service.dto.testVocabulary.TestVocabularyDto;
 
 /**
  * Контроллер для определения словарного запаса пользователя

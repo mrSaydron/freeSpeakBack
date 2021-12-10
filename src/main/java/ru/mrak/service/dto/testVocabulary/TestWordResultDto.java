@@ -1,4 +1,4 @@
-package ru.mrak.service.dto.testWord;
+package ru.mrak.service.dto.testVocabulary;
 
 import lombok.Getter;
 import lombok.Setter;

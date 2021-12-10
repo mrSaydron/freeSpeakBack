@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.mrak.model.enumeration.GalleryTypeEnum;
 import ru.mrak.service.dto.gallery.GalleryDto;
 import ru.mrak.service.galleryItem.GalleryItemMarkBookService;
+import ru.mrak.service.galleryItem.GalleryItemTestVocabularyService;
 import ru.mrak.service.galleryItem.GalleryItemUserDictionaryService;
 
 import java.util.Optional;
@@ -19,6 +20,7 @@ public class GalleryFreeLearnService implements Gallery {
 
     private final GalleryItemUserDictionaryService galleryItemUserDictionaryService;
     private final GalleryItemMarkBookService galleryItemMarkBookService;
+    private final GalleryItemTestVocabularyService galleryItemTestVocabularyService;
 
     @Override
     public Optional<GalleryDto> get() {
@@ -30,6 +32,7 @@ public class GalleryFreeLearnService implements Gallery {
 
         galleryItemMarkBookService.get().ifPresent(item -> galleryDto.getGalleryItems().add(item));
         galleryItemUserDictionaryService.get().ifPresent(item -> galleryDto.getGalleryItems().add(item));
+        galleryItemTestVocabularyService.get().ifPresent(item -> galleryDto.getGalleryItems().add(item));
 
         return Optional.of(galleryDto);
     }

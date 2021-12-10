@@ -61,7 +61,7 @@ public class UserWordController {
     @PutMapping("/add-word/{wordId}")
     public void addWord(@PathVariable Long wordId) {
         log.debug("REST request to add word in user dictionary. Word id: {}", wordId);
-        userWordService.addWord(wordId);
+        userWordService.addOrUpdateWord(wordId);
     }
 
     /**
@@ -124,7 +124,7 @@ public class UserWordController {
     @PutMapping("/know-word/{wordId}")
     public void knowWord(@PathVariable Long wordId) {
         log.debug("REST request to move word to know box. Word id: {}", wordId);
-        userWordService.knowWord(wordId);
+        userWordService.knowWord(wordId, false);
     }
 
     /**

@@ -9,6 +9,9 @@ import ru.mrak.model.entity.ServiceData;
 import ru.mrak.model.enumeration.ServiceDataKeysEnum;
 import ru.mrak.repository.ServiceDataRepository;
 
+/**
+ * Сервис для работы с параметрами хранящимися в БД
+ */
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -22,6 +25,11 @@ public class ServiceDataService {
     public ServiceData getByKey(ServiceDataKeysEnum key) {
         log.debug("Get service data by key {}", key);
         return serviceDataRepository.findById(key.name()).orElseThrow(() -> new RuntimeException("Key not found: " + key));
+    }
+
+    @Transactional(readOnly = true)
+    public int getIntByKey(ServiceDataKeysEnum key) {
+        return Integer.parseInt(getByKey(key).getValue());
     }
 
     public void save(ServiceDataKeysEnum key, String value) {

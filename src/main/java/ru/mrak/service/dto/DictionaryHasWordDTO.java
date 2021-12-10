@@ -9,7 +9,7 @@ public class DictionaryHasWordDTO implements Serializable {
 
     private Long id;
     private Integer count;
-    private WordDTO word;
+    private WordDto word;
 
     @Override
     public boolean equals(Object o) {
@@ -39,11 +39,11 @@ public class DictionaryHasWordDTO implements Serializable {
         this.count = count;
     }
 
-    public WordDTO getWord() {
+    public WordDto getWord() {
         return word;
     }
 
-    public void setWord(WordDTO word) {
+    public void setWord(WordDto word) {
         this.word = word;
     }
 

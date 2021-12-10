@@ -33,5 +33,10 @@
     <include file="config/liquibase/changelog/00000000000020_create_table_user_has_sentence.sql" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/00000000000030_add_columns_to_book_user.sql" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/00000000000040_add_column_priority_to_user_word.sql" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/00000000000050_create_table_test_vocabulary.sql" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/00000000000060_create_table_test_vocabulary_answer.sql" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/00000000000070_create_table_test_vocabulary_check.sql" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/00000000000080_insert_test_vocabulary_to_service_data.sql" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/00000000000090_add_column_to_user_word.sql" relativeToChangelogFile="false"/>
 
 </databaseChangeLog>

@@ -59,4 +59,159 @@ public interface WordRepository extends JpaRepository<Word, Long>, JpaSpecificat
     List<Word> findByTranslateIsNull(@Param("count") int count);
 
     List<Word> findByAudioFileRequestedIsFalse();
+
+    /**
+     * Ищет слово для теста словарного запаса вперед с указанным шагом от начала словаря
+     * @param step - размер шага
+     */
+    @Query(
+        value =
+            "select w.* " +
+            "from word w " +
+            "order by w.total_amount, w.id " +
+            "offset :step " +
+            "limit 1",
+        nativeQuery = true
+    )
+    Optional<Word> findStepForwardForVocabulary(@Param("step") int step);
+
+    /**
+     /**
+     * Ищет слово, для теста словарного запаса, вперед с указанным шагом от указанного слова
+     * @param wordId - слово от которого ищем
+     * @param step - размер шага
+     */
+    @Query(
+        value =
+            "select w.* " +
+                "from word w " +
+                "left join test_vocabulary_answer tva on w.id = tva.word_id and tva.test_vocabulary_id = :testVocabularyId " +
+                "where tva.id is null " +
+                "and (w.total_amount > (select w_in.total_amount from word w_in where w_in.id = :wordId) " +
+                "or (w.total_amount = (select w_in.total_amount from word w_in where w_in.id = :wordId) and w.id > :wordId)) " +
+                "order by w.total_amount, w.id " +
+                "offset :step " +
+                "limit 1",
+        nativeQuery = true
+    )
+    Optional<Word> findStepForwardForVocabulary(
+        @Param("wordId") long wordId,
+        @Param("step") int step,
+        @Param("testVocabularyId") long testVocabularyId
+    );
+
+    /**
+     * Ищет слово для теста словарного запаса назад с указанным шагом от указанного слова
+     * @param wordId - слово от которого ищем
+     * @param step - размер шага
+     */
+    @Query(
+        value =
+            "select w.* " +
+            "from word w " +
+            "left join test_vocabulary_answer tva on w.id = tva.word_id and tva.test_vocabulary_id = :testVocabularyId " +
+            "where tva.id is null " +
+            "and (w.total_amount < (select w_in.total_amount from word w_in where w_in.id = :wordId) " +
+            "or (w.total_amount = (select w_in.total_amount from word w_in where w_in.id = :wordId) and w.id < :wordId)) " +
+            "order by w.total_amount desc, w.id desc " +
+            "offset :step " +
+            "limit 1",
+        nativeQuery = true
+    )
+    Optional<Word> findStepBackForVocabulary(
+        @Param("wordId") long wordId,
+        @Param("step") int step,
+        @Param("testVocabularyId") long testVocabularyId
+    );
+
+    /**
+     * Ищет последнее слово для теста словарного запаса назад
+     * @param wordId - слово от которого ищем
+     * @param step - размер шага
+     */
+    @Query(
+        value =
+            "select w.* " +
+            "from word w " +
+            "left join test_vocabulary_answer tva on w.id = tva.word_id and tva.test_vocabulary_id = :testVocabularyId " +
+            "where tva.id is null " +
+            "and (w.total_amount < (select w_in.total_amount from word w_in where w_in.id = :wordId) " +
+            "or (w.total_amount = (select w_in.total_amount from word w_in where w_in.id = :wordId) and w.id < :wordId)) " +
+            "order by w.total_amount desc, w.id desc " +
+            "limit 1",
+        nativeQuery = true
+    )
+    Optional<Word> findLastBackForVocabulary(
+        @Param("wordId") long wordId,
+        @Param("testVocabularyId") long testVocabularyId
+    );
+
+    /**
+     * Ищет следующее слово для теста словарного запаса
+     * @param wordId - слово от которого ищем
+     * @param step - размер шага
+     */
+    @Query(
+        value =
+            "select w.* " +
+            "from word w " +
+            "left join test_vocabulary_answer tva on w.id = tva.word_id and tva.test_vocabulary_id = :testVocabularyId " +
+            "where tva.id is null " +
+            "and (w.total_amount > (select w_in.total_amount from word w_in where w_in.id = :wordId) " +
+            "or (w.total_amount = (select w_in.total_amount from word w_in where w_in.id = :wordId) and w.id > :wordId)) " +
+            "order by w.total_amount, w.id " +
+            "limit 1",
+        nativeQuery = true
+    )
+    Optional<Word> findNextForVocabulary(
+        @Param("wordId") long wordId,
+        @Param("testVocabularyId") long testVocabularyId
+    );
+
+    int countAllByTotalAmountLessThanEqual(long totalAmount);
+
+    Optional<Word> findFirstByTotalAmountLessThanEqualOrderByTotalAmountDescId(long totalAmount);
+
+    /**
+     * Возвращает слова по результатм тестирования словарного запаса. Исключаются слова которые уже находятся на изучении
+     */
+    @Query(
+        value =
+            "select distinct * " +
+            "from word w " +
+            "left join user_word uw on w.id = uw.word_id and uw.user_id = :userId " +
+            "left join user_word_has_progress uwhp on uw.id = uwhp.user_word_id " +
+            "where w.total_amount <= :totalAmount " +
+            "and (uw.id is null or uwhp.box_number = 0) " +
+            "and w.translate is not null"
+    )
+    List<Word> findResultWordsForTestVocabulary(
+        @Param("totalAmount") long totalAmount,
+        @Param("userId") long userId
+    );
+
+    /**
+     * Ищет последнее слово для теста словарного запаса вперед
+     * @param wordId - слово от которого ищем
+     */
+    @Query(
+        value =
+            "select w.* " +
+            "from word w " +
+            "left join test_vocabulary_answer tva on w.id = tva.word_id and tva.test_vocabulary_id = :testVocabularyId " +
+            "where tva.id is null " +
+            "and (w.total_amount > (select w_in.total_amount from word w_in where w_in.id = :wordId) " +
+            "or (w.total_amount = (select w_in.total_amount from word w_in where w_in.id = :wordId) and w.id > :wordId)) " +
+            "order by w.total_amount, w.id " +
+            "limit 1",
+        nativeQuery = true
+    )
+    Optional<Word> findLastForwardForVocabulary(
+        @Param("wordId") long wordId,
+        @Param("testVocabularyId") long testVocabularyId
+    );
+
+    int countAllByTranslateNotNull();
+
+    Optional<Word> findFirstByTranslateIsNotNullOrderByTotalAmountDesc();
 }

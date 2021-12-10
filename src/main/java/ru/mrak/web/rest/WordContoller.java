@@ -17,7 +17,7 @@ import ru.mrak.model.entity.Word;
 import ru.mrak.service.WordQueryService;
 import ru.mrak.service.WordService;
 import ru.mrak.service.dto.WordCriteria;
-import ru.mrak.service.dto.WordDTO;
+import ru.mrak.service.dto.WordDto;
 import ru.mrak.service.mapper.WordMapper;
 import ru.mrak.web.rest.errors.BadRequestAlertException;
 
@@ -55,12 +55,12 @@ public class WordContoller {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping
-    public ResponseEntity<WordDTO> createWord(@Valid @RequestBody WordDTO wordDTO) throws URISyntaxException {
+    public ResponseEntity<WordDto> createWord(@Valid @RequestBody WordDto wordDTO) throws URISyntaxException {
         log.debug("REST request to save Word : {}", wordDTO);
         if (wordDTO.getId() != null) {
             throw new BadRequestAlertException("A new word cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        WordDTO result = wordService.save(wordDTO);
+        WordDto result = wordService.save(wordDTO);
         return ResponseEntity.created(new URI("/api/words/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -76,12 +76,12 @@ public class WordContoller {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping
-    public ResponseEntity<WordDTO> updateWord(@Valid @RequestBody WordDTO wordDTO) throws URISyntaxException {
+    public ResponseEntity<WordDto> updateWord(@Valid @RequestBody WordDto wordDTO) throws URISyntaxException {
         log.debug("REST request to update Word : {}", wordDTO);
         if (wordDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        WordDTO result = wordService.save(wordDTO);
+        WordDto result = wordService.save(wordDTO);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, wordDTO.getId().toString()))
             .body(result);
@@ -95,10 +95,10 @@ public class WordContoller {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of words in body.
      */
     @GetMapping
-    public ResponseEntity<List<WordDTO>> getAllWordsForUser(WordCriteria criteria, Pageable pageable) {
+    public ResponseEntity<List<WordDto>> getAllWordsForUser(WordCriteria criteria, Pageable pageable) {
         log.debug("REST request to get Words by criteria: {}", criteria);
         Page<Word> page = wordService.findByCriteriaForUser(criteria, pageable);
-        Page<WordDTO> result = page.map(wordMapper::toDto);
+        Page<WordDto> result = page.map(wordMapper::toDto);
 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(result.getContent());
@@ -123,9 +123,9 @@ public class WordContoller {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the wordDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<WordDTO> getWord(@PathVariable Long id) {
+    public ResponseEntity<WordDto> getWord(@PathVariable Long id) {
         log.debug("REST request to get Word : {}", id);
-        Optional<WordDTO> wordDTO = wordService.findOne(id);
+        Optional<WordDto> wordDTO = wordService.findOne(id);
         return ResponseUtil.wrapOrNotFound(wordDTO);
     }
 

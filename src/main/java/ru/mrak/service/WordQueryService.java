@@ -10,21 +10,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.mrak.model.entity.Word;
 import ru.mrak.model.entity.Word_;
-import ru.mrak.model.entity.userWordProgress.UserWordHasProgress;
 import ru.mrak.repository.WordRepository;
 import ru.mrak.service.dto.WordCriteria;
-import ru.mrak.service.dto.WordDTO;
+import ru.mrak.service.dto.WordDto;
 import ru.mrak.service.mapper.WordMapper;
 
-import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.ListJoin;
 import java.util.List;
 
 /**
  * Service for executing complex queries for {@link Word} entities in the database.
  * The main input is a {@link WordCriteria} which gets converted to {@link Specification},
  * in a way that all the filters must apply.
- * It returns a {@link List} of {@link WordDTO} or a {@link Page} of {@link WordDTO} which fulfills the criteria.
+ * It returns a {@link List} of {@link WordDto} or a {@link Page} of {@link WordDto} which fulfills the criteria.
  */
 @Service
 @Transactional(readOnly = true)
@@ -42,19 +39,19 @@ public class WordQueryService extends QueryService<Word> {
     }
 
     /**
-     * Return a {@link List} of {@link WordDTO} which matches the criteria from the database.
+     * Return a {@link List} of {@link WordDto} which matches the criteria from the database.
      * @param criteria The object which holds all the filters, which the entities should match.
      * @return the matching entities.
      */
     @Transactional(readOnly = true)
-    public List<WordDTO> findByCriteria(WordCriteria criteria) {
+    public List<WordDto> findByCriteria(WordCriteria criteria) {
         log.debug("find by criteria : {}", criteria);
         final Specification<Word> specification = createSpecification(criteria);
         return wordMapper.toDto(wordRepository.findAll(specification));
     }
 
     /**
-     * Return a {@link Page} of {@link WordDTO} which matches the criteria from the database.
+     * Return a {@link Page} of {@link WordDto} which matches the criteria from the database.
      * @param criteria The object which holds all the filters, which the entities should match.
      * @param page The page, which should be returned.
      * @return the matching entities.

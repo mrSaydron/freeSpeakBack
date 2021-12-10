@@ -4,14 +4,14 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import ru.mrak.web.rest.TestUtil;
 
-public class WordDTOTest {
+public class WordDtoTest {
 
     @Test
     public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(WordDTO.class);
-        WordDTO wordDTO1 = new WordDTO();
+        TestUtil.equalsVerifier(WordDto.class);
+        WordDto wordDTO1 = new WordDto();
         wordDTO1.setId(1L);
-        WordDTO wordDTO2 = new WordDTO();
+        WordDto wordDTO2 = new WordDto();
         assertThat(wordDTO1).isNotEqualTo(wordDTO2);
         wordDTO2.setId(wordDTO1.getId());
         assertThat(wordDTO1).isEqualTo(wordDTO2);

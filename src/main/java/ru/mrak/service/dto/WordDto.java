@@ -10,7 +10,7 @@ import java.io.Serializable;
  * A DTO for the {@link Word} entity.
  */
 @ToString
-public class WordDTO implements Serializable {
+public class WordDto implements Serializable {
 
     private Long id;
 
@@ -102,11 +102,11 @@ public class WordDTO implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof WordDTO)) {
+        if (!(o instanceof WordDto)) {
             return false;
         }
 
-        return id != null && id.equals(((WordDTO) o).id);
+        return id != null && id.equals(((WordDto) o).id);
     }
 
     @Override

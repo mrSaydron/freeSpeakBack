@@ -1,6 +1,5 @@
 package ru.mrak.service;
 
-import liquibase.pro.packaged.U;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,27 +77,27 @@ public class UserWordService {
     }
 
     /**
-     * Добавляет слово в словарь пользователя
+     * Добавляет или оновляет слово из словаря пользователя
      */
-    public void addWord(Long wordId) {
+    public void addOrUpdateWord(Long wordId) {
         log.debug("add word to user dictionary, word id: {}", wordId);
         Word word = wordRepository.getOne(wordId);
-        addWord(word, PRELIMINARY_BOX_NUMBER);
+        addOrUpdateWord(word, PRELIMINARY_BOX_NUMBER, false);
     }
 
     /**
-     * Добавляет слово в словарь пользователя
+     * Добавляет или оновляет слово из словаря пользователя
      */
-    public void addWord(Long wordId, int boxNumber) {
+    public void addOrUpdateWord(Long wordId, int boxNumber, boolean fromTest) {
         log.debug("add word to user dictionary, word id: {}", wordId);
         Word word = wordRepository.getOne(wordId);
-        addWord(word, boxNumber);
+        addOrUpdateWord(word, boxNumber, fromTest);
     }
 
     /**
-     * Добавляет слово в словарь пользователя
+     * Добавляет или оновляет слово из словаря пользователя
      */
-    public void addWord(Word word, int boxNumber) {
+    public void addOrUpdateWord(Word word, int boxNumber, boolean fromTest) {
         log.debug("add word to user dictionary, word id: {}", word.getId());
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
 
@@ -109,6 +108,7 @@ public class UserWordService {
             userWord.setUser(user);
             userWord.setWord(word);
             userWord.setPriority(0);
+            userWord.setFormTest(fromTest);
 
             for (UserWordProgressTypeEnum progressType : UserWordProgressTypeEnum.values()) {
                 UserWordHasProgress userWordHasProgress = new UserWordHasProgress();
@@ -120,6 +120,11 @@ public class UserWordService {
             }
 
             userWordRepository.save(userWord);
+        } else {
+            UserWord userWord = progressOptional.get();
+            userWord.setFormTest(fromTest);
+            userWord.getWordProgresses()
+                .forEach(userWordHasProgress -> userWordHasProgress.setBoxNumber(boxNumber));
         }
     }
 
@@ -289,7 +294,7 @@ public class UserWordService {
     /**
      * Отмечает слово выученным
      */
-    public void knowWord(Long wordId) {
+    public void knowWord(Long wordId, boolean fotTest) {
         log.debug("move word to know box. Word id: {}", wordId);
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
 
@@ -300,7 +305,7 @@ public class UserWordService {
                 progress.setBoxNumber(KNOW_BOX_NUMBER);
             }
         } else {
-            addWord(wordId, KNOW_BOX_NUMBER);
+            addOrUpdateWord(wordId, KNOW_BOX_NUMBER, fotTest);
         }
     }
 

@@ -12,7 +12,6 @@ import ru.mrak.model.entity.BookSentence;
 import ru.mrak.model.entity.User;
 import ru.mrak.repository.BookRepository;
 import ru.mrak.repository.BookSentenceRepository;
-import ru.mrak.repository.BookUserRepository;
 import ru.mrak.service.TextService;
 import ru.mrak.service.UserService;
 import ru.mrak.service.UserWordService;
@@ -130,7 +129,7 @@ public class BookService {
         log.debug("add words to user dictionary in book, book id: {}", bookId);
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
         List<Long> wordIds = bookRepository.getMissingWords(user, bookRepository.getOne(bookId));
-        wordIds.forEach(userWordService::addWord);
+        wordIds.forEach(userWordService::addOrUpdateWord);
     }
 
     /**

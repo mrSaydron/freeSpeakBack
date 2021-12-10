@@ -15,7 +15,7 @@ import ru.mrak.model.entity.Word;
 import ru.mrak.model.enumeration.ServiceDataKeysEnum;
 import ru.mrak.repository.WordRepository;
 import ru.mrak.service.dto.WordCriteria;
-import ru.mrak.service.dto.WordDTO;
+import ru.mrak.service.dto.WordDto;
 import ru.mrak.service.mapper.WordMapper;
 
 import java.util.Optional;
@@ -44,7 +44,7 @@ public class WordService {
      * @param wordDTO the entity to save.
      * @return the persisted entity.
      */
-    public WordDTO save(WordDTO wordDTO) {
+    public WordDto save(WordDto wordDTO) {
         log.debug("Request to save Word : {}", wordDTO);
         Word word = wordMapper.toEntity(wordDTO);
         word = wordRepository.save(word);
@@ -58,7 +58,7 @@ public class WordService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<WordDTO> findAll(Pageable pageable) {
+    public Page<WordDto> findAll(Pageable pageable) {
         log.debug("Request to get all Words");
         return wordRepository.findAll(pageable)
             .map(wordMapper::toDto);
@@ -83,7 +83,7 @@ public class WordService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<WordDTO> findOne(Long id) {
+    public Optional<WordDto> findOne(Long id) {
         log.debug("Request to get Word : {}", id);
         return wordRepository.findById(id)
             .map(wordMapper::toDto);

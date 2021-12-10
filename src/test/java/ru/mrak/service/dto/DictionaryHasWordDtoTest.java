@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import ru.mrak.web.rest.TestUtil;
 
-public class DictionaryHasWordDTOTest {
+public class DictionaryHasWordDtoTest {
 
     @Test
     public void dtoEqualsVerifier() throws Exception {

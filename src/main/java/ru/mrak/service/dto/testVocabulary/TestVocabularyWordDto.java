@@ -11,7 +11,7 @@ public class TestVocabularyWordDto extends TestVocabularyDto {
     private WordDto word;
 
     @Override
-    public TestVocabularyTypeEnum getTestWordType() {
+    public TestVocabularyTypeEnum getType() {
         return TestVocabularyTypeEnum.WORD;
     }
 }

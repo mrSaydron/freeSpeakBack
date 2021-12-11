@@ -14,6 +14,7 @@ import FileService from '@/services/fileService'
 import BookSentenceService from '@/services/bookSentenceService'
 import GalleriesPageService from '@/services/galleriesPageService'
 import GalleryService from '@/services/galleryService'
+import TestVocabularyService from '@/services/testVocabularyService'
 
 Vue.config.productionTip = false
 
@@ -28,6 +29,7 @@ const fileService = new FileService()
 const bookSentenceService = new BookSentenceService()
 const galleriesPageService = new GalleriesPageService()
 const galleryService = new GalleryService()
+const testVocabularyService = new TestVocabularyService()
 
 router.beforeEach(async (to, from, next) => {
   // if (!accountService.authenticated) {
@@ -67,6 +69,7 @@ new Vue({
     fileService,
     bookSentenceService,
     galleriesPageService,
-    galleryService
+    galleryService,
+    testVocabularyService
   }
 }).$mount('#app')

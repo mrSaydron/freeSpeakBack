@@ -9,5 +9,5 @@ import ru.mrak.model.enumeration.TestVocabularyTypeEnum;
 public abstract class TestVocabularyDto {
     private long testVocabularyId;
 
-    public abstract TestVocabularyTypeEnum getTestWordType();
+    public abstract TestVocabularyTypeEnum getType();
 }

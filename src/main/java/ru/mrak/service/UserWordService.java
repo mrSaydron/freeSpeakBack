@@ -296,31 +296,23 @@ public class UserWordService {
      */
     public void knowWord(Long wordId, boolean fotTest) {
         log.debug("move word to know box. Word id: {}", wordId);
-        User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
-
-        Optional<UserWord> userWordsOptional = userWordRepository.findByUserAndWord(user, wordRepository.getOne(wordId));
-        if (userWordsOptional.isPresent()) {
-            UserWord userWord = userWordsOptional.get();
-            for (UserWordHasProgress progress : userWord.getWordProgresses()) {
-                progress.setBoxNumber(KNOW_BOX_NUMBER);
-            }
-        } else {
-            addOrUpdateWord(wordId, KNOW_BOX_NUMBER, fotTest);
-        }
+        addOrUpdateWord(wordId, KNOW_BOX_NUMBER, fotTest);
     }
 
     /**
      * Отмечает слова выученными
      */
     public void knowWords(List<Long> wordIds) {
-        // todo сделать и для слов, которых нет у пользователя
         log.debug("move words to know box. Word ids: {}", wordIds);
-        User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
+        wordIds.forEach(wordId -> knowWord(wordId, false));
+    }
 
-        userWordRepository.findAllByUserAndWordIn(user, wordIds.stream().map(wordRepository::getOne).collect(Collectors.toList()))
-            .stream()
-            .flatMap(userWord -> userWord.getWordProgresses().stream())
-            .forEach(progress -> progress.setBoxNumber(KNOW_BOX_NUMBER));
+    /**
+     * Отмечает слова выученными для теста
+     */
+    public void knowWordsByTest(List<Word> words) {
+        log.debug("move words to know box from test");
+        words.forEach(word -> knowWord(word.getId(), true));
     }
 
     /**

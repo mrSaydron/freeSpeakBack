@@ -24,7 +24,6 @@ import ru.mrak.web.rest.TestVocabularyController;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -102,7 +101,7 @@ public class TestVocabularyService {
                 .setVocabulary(vocabulary);
             TestVocabularyResultDto testVocabularyResultDto = new TestVocabularyResultDto();
             testVocabularyResultDto.setTestVocabularyId(testVocabularyId);
-            testVocabularyResultDto.setTestWordResult(testWordResult);
+            testVocabularyResultDto.setResult(testWordResult);
 
             result = testVocabularyResultDto;
             testVocabulary
@@ -141,6 +140,13 @@ public class TestVocabularyService {
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
         TestVocabulary testVocabulary = testVocabularyRepository.findById(testVocabularyId).orElseThrow(RuntimeException::new);
 
+        TestVocabularyAnswer testVocabularyAnswer = new TestVocabularyAnswer()
+            .setSuccess(false)
+            .setTestVocabulary(testVocabulary)
+            .setWord(wordRepository.getOne(wordId));
+        testVocabularyAnswerRepository.save(testVocabularyAnswer);
+        testVocabularyAnswerRepository.flush();
+
         TestVocabularyDto result;
         int failAnswersCount =
             testVocabularyAnswerRepository.countAllByTestVocabularyAndSuccessIsFalse(testVocabulary);
@@ -169,7 +175,7 @@ public class TestVocabularyService {
 
             TestVocabularyResultDto testVocabularyResultDto = new TestVocabularyResultDto();
             testVocabularyResultDto.setTestVocabularyId(testVocabularyId);
-            testVocabularyResultDto.setTestWordResult(testWordResultDto);
+            testVocabularyResultDto.setResult(testWordResultDto);
             result = testVocabularyResultDto;
 
             // todo асинхронно
@@ -186,8 +192,7 @@ public class TestVocabularyService {
         log.debug("save testing result, averageAmount: {}, userId: {}", averageAmount, user.getId());
 
         List<Word> resultWords = wordRepository.findResultWordsForTestVocabulary(averageAmount, user.getId());
-        List<Long> wordIds = resultWords.stream().map(Word::getId).collect(Collectors.toList());
-        userWordService.knowWords(wordIds);
+        userWordService.knowWordsByTest(resultWords);
 
         UserSettings userSettings = userSettingsService.get();
         userSettings.setTestedVocabulary(true);

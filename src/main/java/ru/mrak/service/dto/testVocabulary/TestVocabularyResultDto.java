@@ -7,10 +7,10 @@ import ru.mrak.model.enumeration.TestVocabularyTypeEnum;
 @Getter
 @Setter
 public class TestVocabularyResultDto extends TestVocabularyDto {
-    private TestWordResultDto testWordResult;
+    private TestWordResultDto result;
 
     @Override
-    public TestVocabularyTypeEnum getTestWordType() {
-        return TestVocabularyTypeEnum.WORD;
+    public TestVocabularyTypeEnum getType() {
+        return TestVocabularyTypeEnum.RESULT;
     }
 }

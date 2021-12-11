@@ -12,6 +12,7 @@ import account from '@/router/account'
 import SentenceRead from '@/components/sentenceRead/sentenceRead.vue'
 import Home from '@/components/home/home.vue'
 import MarkSentenceRead from '@/components/sentenceReadFromMarkedBook/sentenceReadFromMarkedBook.vue'
+import TestVocabulary from '@/components/testVocabulary/testVocabulary.vue'
 
 Vue.use(VueRouter)
 
@@ -106,6 +107,17 @@ const routes: Array<RouteConfig> = [
     path: '/mark-sentence-read',
     name: 'markSentenceRead',
     component: MarkSentenceRead,
+    meta: {
+      authorities: [Authority.USER],
+      backPage: () => {
+        return '/'
+      }
+    }
+  },
+  {
+    path: '/test-vocabulary',
+    name: 'testVocabulary',
+    component: TestVocabulary,
     meta: {
       authorities: [Authority.USER],
       backPage: () => {

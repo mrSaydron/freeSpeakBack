@@ -9,4 +9,11 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class TestWordResultDto {
     private int vocabulary;
+
+    @Override
+    public String toString() {
+        return "TestWordResultDto{" +
+            "vocabulary=" + vocabulary +
+            '}';
+    }
 }

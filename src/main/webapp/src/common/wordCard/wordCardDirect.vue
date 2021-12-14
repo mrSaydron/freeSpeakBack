@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card v-id="userWord && userWord.word">
     <v-card-title class="justify-center">
       {{ word.word }}
       <v-icon
@@ -15,46 +15,86 @@
       </div>
       {{ word.partOfSpeechNote }}
     </v-card-text>
-    <v-card-actions class="justify-center">
-      <v-btn
-        text
-        color="error"
-        @click="notRemember"
-        @keypress.left="notRemember"
-      >
-        <v-icon class="mr-1">
-          mdi-arrow-left
-        </v-icon>
-        НЕ ПОМНЮ
-      </v-btn>
-
-      <v-btn
-        text
-        @click="turn"
-      >
-        ПЕРЕВЕРНУТЬ
-      </v-btn>
-
-      <v-btn
-        text
-        @click="remember"
-        @keypress.right="remember"
-      >
-        ПОМНЮ
-        <v-icon class="ml-1">
-          mdi-arrow-right
-        </v-icon>
-      </v-btn>
+    <v-card-actions>
+      <v-container>
+        <v-row
+          justify="center"
+        >
+          <v-col md="3" class="text-right">
+            <v-btn
+              text
+              color="error"
+              @click="notRemember"
+              @keypress.left="notRemember"
+            >
+              <v-icon class="mr-1">
+                mdi-arrow-left
+              </v-icon>
+              НЕ ПОМНЮ
+            </v-btn>
+          </v-col>
+          <v-col md="3" class="text-center">
+            <v-btn
+              text
+              @click="turn"
+            >
+              ПЕРЕВЕРНУТЬ
+              <v-icon class="ml-1">mdi-arrow-up</v-icon>
+            </v-btn>
+          </v-col>
+          <v-col md="3" class="text-left">
+            <v-btn
+              v-if="canToKnow"
+              text
+              @click="remember"
+              @keypress.right="remember"
+            >
+              ИЗУЧАТЬ
+              <v-icon class="ml-1">mdi-arrow-right</v-icon>
+            </v-btn>
+            <v-btn
+              v-else
+              text
+              @click="remember"
+              @keypress.right="remember"
+            >
+              ПОМНЮ
+              <v-icon class="ml-1">
+                mdi-arrow-right
+              </v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-row
+          justify="center"
+          v-if="canToKnow"
+        >
+          <v-col md="3" class="text-center">
+            <v-btn
+              text
+              class="text-center"
+              @click="know"
+            >
+              ЗНАЮ
+              <v-icon class="ml-1">
+                mdi-arrow-down
+              </v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-container>
     </v-card-actions>
   </v-card>
 </template>
 
 <script lang="ts">
 import Component from 'vue-class-component'
-import { Vue, Prop, Watch, Inject } from 'vue-property-decorator'
+import { Inject, Prop, Vue, Watch } from 'vue-property-decorator'
 import { WordDto } from '@/model/wordDto'
-import WordService from '@/services/wordService'
 import FileService from '@/services/fileService'
+import { UserWordDto } from '@/model/userWordDto'
+import { CardTypeEnum } from '@/model/enums/cardTypeEnum'
+import { Constants } from '@/model/enums/constants'
 
 /**
  * Карточка для изучения слова. Прямой перевод, иностронное слово -> перевод
@@ -66,14 +106,26 @@ import FileService from '@/services/fileService'
 export default class WordCardDirect extends Vue {
   @Inject() readonly fileService!: FileService
 
-  @Prop(Object) readonly word: WordDto | undefined
+  @Prop(Object) readonly userWord: UserWordDto | undefined
 
+  public word: WordDto | null = null
   public isTurn = false
 
-  @Watch('word')
-  public async wordChange (word: WordDto): Promise<void> {
-    this.isTurn = false
-    await this.play()
+  public mounted (): void {
+    console.log('card mounted')
+    console.log(this.userWord)
+    if (this.userWord) {
+      this.wordChange(this.userWord)
+    }
+  }
+
+  @Watch('userWord')
+  public async wordChange (userWord: UserWordDto): Promise<void> {
+    if (userWord.word) {
+      this.isTurn = false
+      this.word = userWord.word
+      await this.play()
+    }
   }
 
   public async play (): Promise<void> {
@@ -98,6 +150,23 @@ export default class WordCardDirect extends Vue {
   public remember (): void {
     this.isTurn = false
     this.$emit('remember')
+  }
+
+  public know (): void {
+    this.isTurn = false
+    this.$emit('know')
+  }
+
+  /**
+   * Если слово можно сразу перевести в последнюю коробку
+   */
+  get canToKnow (): boolean {
+    let result = false
+    if (this.userWord && this.userWord.wordProgresses) {
+      const find = this.userWord.wordProgresses.find(progress => progress.type === CardTypeEnum.direct)
+      result = this.userWord.fromTest || (!!find && find.boxNumber === Constants.PRELIMINARY_BOX_NUMBER)
+    }
+    return result
   }
 }
 </script>

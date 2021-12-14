@@ -94,8 +94,8 @@ public class TestVocabularyService {
         if (failAnswersCount >= serviceDataService.getIntByKey(ServiceDataKeysEnum.TEST_VOCABULARY_MAX_FAIL_COUNT)) {
             // пользователь сделал много ошибок, расчитываю результат и возвращаю
             long averageAmount = getResult(testVocabulary);
-            int vocabulary = wordRepository.countAllByTotalAmountLessThanEqual(averageAmount);
-            Word lastKnowWord = wordRepository.findFirstByTotalAmountLessThanEqualOrderByTotalAmountDescId(averageAmount)
+            int vocabulary = wordRepository.countResultWordsForTestVocabulary(averageAmount);
+            Word lastKnowWord = wordRepository.findEdgeWordForTestVocabulary(averageAmount)
                 .orElseThrow(RuntimeException::new);
             TestWordResultDto testWordResult = new TestWordResultDto()
                 .setVocabulary(vocabulary);
@@ -128,6 +128,7 @@ public class TestVocabularyService {
             result = testVocabularyWordDto;
         }
 
+        log.debug("result, {}", result);
         return result;
     }
 
@@ -141,7 +142,7 @@ public class TestVocabularyService {
         TestVocabulary testVocabulary = testVocabularyRepository.findById(testVocabularyId).orElseThrow(RuntimeException::new);
 
         TestVocabularyAnswer testVocabularyAnswer = new TestVocabularyAnswer()
-            .setSuccess(false)
+            .setSuccess(true)
             .setTestVocabulary(testVocabulary)
             .setWord(wordRepository.getOne(wordId));
         testVocabularyAnswerRepository.save(testVocabularyAnswer);
@@ -182,6 +183,7 @@ public class TestVocabularyService {
             saveResult(lastKnowWord.getTotalAmount(), user);
         }
 
+        log.debug("result, {}", result);
         return result;
     }
 

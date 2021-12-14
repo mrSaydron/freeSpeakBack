@@ -2,11 +2,11 @@
   <v-container>
     <v-row v-if="isWord && word && word.word">
       <v-col>
-        <word-card-direct
+        <word-card-direct-learn
           :word="word.word"
           @not-remember="answerFail"
           @remember="answerSuccess"
-        ></word-card-direct>
+        ></word-card-direct-learn>
       </v-col>
     </v-row>
     <v-row v-if="isResult">
@@ -32,12 +32,12 @@ import { TestVocabularyDto } from '@/model/testVocabulary/testVocabularyDto'
 import { TestVocabularyTypeEnum } from '@/model/enums/testVocabularyTypeEnum'
 import { TestVocabularyWordDto } from '@/model/testVocabulary/testVocabularyWordDto'
 import { TestVocabularyResultDto } from '@/model/testVocabulary/testVocabularyResultDto'
-import WordCardDirect from '@/common/wordCard/wordCardDirect.vue'
 import { Word } from '@/model/wordDto'
+import WordCardDirectTest from '@/common/wordCard/wordCardDirectTest.vue'
 
 @Component({
   components: {
-    WordCardDirect
+    WordCardDirectLearn: WordCardDirectTest
   }
 })
 export default class TestVocabulary extends Vue {

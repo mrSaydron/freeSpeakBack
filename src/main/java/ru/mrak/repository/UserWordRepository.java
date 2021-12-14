@@ -1,5 +1,6 @@
 package ru.mrak.repository;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -10,6 +11,7 @@ import ru.mrak.model.entity.User;
 import ru.mrak.model.entity.Word;
 import ru.mrak.model.entity.userWordProgress.UserWord;
 import ru.mrak.model.entity.userWordProgress.UserWordHasProgress;
+import ru.mrak.service.UserWordService;
 
 import java.time.Instant;
 import java.util.List;
@@ -88,7 +90,8 @@ public interface UserWordRepository extends JpaRepository<UserWord, Long>, JpaSp
      */
     @Modifying
     @Query(
-        value = "update user_word " +
+        value =
+            "update user_word " +
             "set priority = ( " +
             "select min(bshw.id) priority " +
             "from book_sentence bs " +
@@ -101,4 +104,17 @@ public interface UserWordRepository extends JpaRepository<UserWord, Long>, JpaSp
         nativeQuery = true
     )
     void updatePriorityByBook(@Param("userId") Long userId, @Param("bookId") long bookId);
+
+    @Query(
+        value =
+            "select distinct uw.* " +
+            "from user_word uw " +
+            "join user_word_has_progress p on p.user_word_id = uw.id " +
+            "where uw.user_id = :userId " +
+            "and (p.box_number = " + UserWordService.PRELIMINARY_BOX_NUMBER + " or uw.from_test = true) " +
+            "order by uw.priority " +
+            "limit :limit",
+        nativeQuery = true
+    )
+    List<UserWord> getNextWords(@Param("userId") long userId, @Param("limit") int limit);
 }

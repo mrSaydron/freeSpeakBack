@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.NonNull;
@@ -52,9 +53,12 @@ public class UserWordService {
     private Integer KNOW_BOX_NUMBER;
 
     // Коробка в которой слова не находятся в обучении, и будут взяты туда при запросе из карточек
-    private static final Integer PRELIMINARY_BOX_NUMBER = 0;
+    public static final int PRELIMINARY_BOX_NUMBER = 0;
 
-    private static final Integer START_BOX_NUMBER = 1;
+    private static final int START_BOX_NUMBER = 1;
+
+    // Ограничение на зпрос следующих для изучения слов
+    private static final int NEXT_WORD_LIMIT = 10;
 
     @Transactional(readOnly = true)
     public Page<UserWord> findByCriteria(UserWordCriteria criteria, @NonNull Pageable pageable) {
@@ -108,7 +112,7 @@ public class UserWordService {
             userWord.setUser(user);
             userWord.setWord(word);
             userWord.setPriority(0);
-            userWord.setFormTest(fromTest);
+            userWord.setFromTest(fromTest);
 
             for (UserWordProgressTypeEnum progressType : UserWordProgressTypeEnum.values()) {
                 UserWordHasProgress userWordHasProgress = new UserWordHasProgress();
@@ -122,7 +126,7 @@ public class UserWordService {
             userWordRepository.save(userWord);
         } else {
             UserWord userWord = progressOptional.get();
-            userWord.setFormTest(fromTest);
+            userWord.setFromTest(fromTest);
             userWord.getWordProgresses()
                 .forEach(userWordHasProgress -> userWordHasProgress.setBoxNumber(boxNumber));
         }
@@ -363,5 +367,14 @@ public class UserWordService {
         log.debug("set priority for book id: {}", bookId);
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
         userWordRepository.updatePriorityByBook(user.getId(), bookId);
+    }
+
+    /**
+     * Возвращает допольнительные слова для изучения из словаря пользователя
+     */
+    public List<UserWord> getNextWords() {
+        log.debug("get next words");
+        User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
+        return userWordRepository.getNextWords(user.getId(), NEXT_WORD_LIMIT);
     }
 }

@@ -5,17 +5,19 @@ export interface UserWord {
   id?: number;
   word?: WordDto;
   wordProgresses?: WordProgressDto[];
+  fromTest?: boolean;
 }
 
 export class UserWordDto implements UserWord {
+  /* eslint no-useless-constructor: "off" */
   constructor (
     public id?: number,
     public word?: WordDto,
     public wordProgresses?: WordProgressDto[],
     public averageBox?: number,
-    public selected?: boolean
+    public selected?: boolean,
+    public fromTest?: boolean
   ) {
-    console.log('UserWordDto')
   }
 
   public static fill (userWord: UserWordDto) {

@@ -68,7 +68,8 @@ public interface WordRepository extends JpaRepository<Word, Long>, JpaSpecificat
         value =
             "select w.* " +
             "from word w " +
-            "order by w.total_amount, w.id " +
+            "where w.translate is not null " +
+            "order by w.total_amount desc, w.id " +
             "offset :step " +
             "limit 1",
         nativeQuery = true
@@ -84,14 +85,15 @@ public interface WordRepository extends JpaRepository<Word, Long>, JpaSpecificat
     @Query(
         value =
             "select w.* " +
-                "from word w " +
-                "left join test_vocabulary_answer tva on w.id = tva.word_id and tva.test_vocabulary_id = :testVocabularyId " +
-                "where tva.id is null " +
-                "and (w.total_amount > (select w_in.total_amount from word w_in where w_in.id = :wordId) " +
-                "or (w.total_amount = (select w_in.total_amount from word w_in where w_in.id = :wordId) and w.id > :wordId)) " +
-                "order by w.total_amount, w.id " +
-                "offset :step " +
-                "limit 1",
+            "from word w " +
+            "left join test_vocabulary_answer tva on w.id = tva.word_id and tva.test_vocabulary_id = :testVocabularyId " +
+            "where tva.id is null " +
+            "and w.translate is not null " +
+            "and (w.total_amount < (select w_in.total_amount from word w_in where w_in.id = :wordId) " +
+            "or (w.total_amount = (select w_in.total_amount from word w_in where w_in.id = :wordId) and w.id > :wordId)) " +
+            "order by w.total_amount desc, w.id " +
+            "offset :step " +
+            "limit 1",
         nativeQuery = true
     )
     Optional<Word> findStepForwardForVocabulary(
@@ -111,9 +113,10 @@ public interface WordRepository extends JpaRepository<Word, Long>, JpaSpecificat
             "from word w " +
             "left join test_vocabulary_answer tva on w.id = tva.word_id and tva.test_vocabulary_id = :testVocabularyId " +
             "where tva.id is null " +
-            "and (w.total_amount < (select w_in.total_amount from word w_in where w_in.id = :wordId) " +
+            "and w.translate is not null " +
+            "and (w.total_amount > (select w_in.total_amount from word w_in where w_in.id = :wordId) " +
             "or (w.total_amount = (select w_in.total_amount from word w_in where w_in.id = :wordId) and w.id < :wordId)) " +
-            "order by w.total_amount desc, w.id desc " +
+            "order by w.total_amount, w.id desc " +
             "offset :step " +
             "limit 1",
         nativeQuery = true
@@ -135,9 +138,10 @@ public interface WordRepository extends JpaRepository<Word, Long>, JpaSpecificat
             "from word w " +
             "left join test_vocabulary_answer tva on w.id = tva.word_id and tva.test_vocabulary_id = :testVocabularyId " +
             "where tva.id is null " +
-            "and (w.total_amount < (select w_in.total_amount from word w_in where w_in.id = :wordId) " +
+            "and w.translate is not null " +
+            "and (w.total_amount > (select w_in.total_amount from word w_in where w_in.id = :wordId) " +
             "or (w.total_amount = (select w_in.total_amount from word w_in where w_in.id = :wordId) and w.id < :wordId)) " +
-            "order by w.total_amount desc, w.id desc " +
+            "order by w.total_amount desc, w.id " +
             "limit 1",
         nativeQuery = true
     )
@@ -157,9 +161,10 @@ public interface WordRepository extends JpaRepository<Word, Long>, JpaSpecificat
             "from word w " +
             "left join test_vocabulary_answer tva on w.id = tva.word_id and tva.test_vocabulary_id = :testVocabularyId " +
             "where tva.id is null " +
-            "and (w.total_amount > (select w_in.total_amount from word w_in where w_in.id = :wordId) " +
+            "and w.translate is not null " +
+            "and (w.total_amount < (select w_in.total_amount from word w_in where w_in.id = :wordId) " +
             "or (w.total_amount = (select w_in.total_amount from word w_in where w_in.id = :wordId) and w.id > :wordId)) " +
-            "order by w.total_amount, w.id " +
+            "order by w.total_amount desc, w.id " +
             "limit 1",
         nativeQuery = true
     )
@@ -168,9 +173,33 @@ public interface WordRepository extends JpaRepository<Word, Long>, JpaSpecificat
         @Param("testVocabularyId") long testVocabularyId
     );
 
-    int countAllByTotalAmountLessThanEqual(long totalAmount);
+    /**
+     * Сколько слов знает пользователь
+     */
+    @Query(
+        value =
+            "select count(*) " +
+            "from word w " +
+            "where w.total_amount >= :totalAmount " +
+            "and w.translate is not null",
+        nativeQuery = true
+    )
+    int countResultWordsForTestVocabulary(@Param("totalAmount") long totalAmount);
 
-    Optional<Word> findFirstByTotalAmountLessThanEqualOrderByTotalAmountDescId(long totalAmount);
+    /**
+     * Возвращает граничное слово по результатам тестирования словарного запаса
+     */
+    @Query(
+        value =
+            "select w.* " +
+            "from word w " +
+            "where w.total_amount >= :totalAmount " +
+            "and w.translate is not null " +
+            "order by w.total_amount, w.id desc " +
+            "limit 1",
+        nativeQuery = true
+    )
+    Optional<Word> findEdgeWordForTestVocabulary(long totalAmount);
 
     /**
      * Возвращает слова по результатм тестирования словарного запаса. Исключаются слова которые уже находятся на изучении
@@ -181,7 +210,7 @@ public interface WordRepository extends JpaRepository<Word, Long>, JpaSpecificat
             "from word w " +
             "left join user_word uw on w.id = uw.word_id and uw.user_id = :userId " +
             "left join user_word_has_progress uwhp on uw.id = uwhp.user_word_id " +
-            "where w.total_amount <= :totalAmount " +
+            "where w.total_amount >= :totalAmount " +
             "and (uw.id is null or uwhp.box_number = 0) " +
             "and w.translate is not null",
         nativeQuery = true
@@ -201,9 +230,10 @@ public interface WordRepository extends JpaRepository<Word, Long>, JpaSpecificat
             "from word w " +
             "left join test_vocabulary_answer tva on w.id = tva.word_id and tva.test_vocabulary_id = :testVocabularyId " +
             "where tva.id is null " +
-            "and (w.total_amount > (select w_in.total_amount from word w_in where w_in.id = :wordId) " +
+            "and w.translate is not null " +
+            "and (w.total_amount < (select w_in.total_amount from word w_in where w_in.id = :wordId) " +
             "or (w.total_amount = (select w_in.total_amount from word w_in where w_in.id = :wordId) and w.id > :wordId)) " +
-            "order by w.total_amount, w.id " +
+            "order by w.total_amount, w.id desc " +
             "limit 1",
         nativeQuery = true
     )

@@ -213,6 +213,22 @@ export default class UserWordService {
   }
 
   /**
+   * Запрашивает следующие слова на изучения из словаря пользователя
+   */
+  public async nextWords (): Promise<UserWordDto[]> {
+    return new Promise<UserWordDto[]>((resolve, reject) => {
+      axios.get(`${baseApiUrl}/next-words`)
+        .then(res => {
+          res.data.forEach((item: UserWordDto) => UserWordDto.fill(item))
+          resolve(res.data)
+        })
+        .catch(err => {
+          reject(err)
+        })
+    })
+  }
+
+  /**
    * Пользователь не верно ответил, прогресс сбрасывается
    */
   public async answerFail (card: Card): Promise<void> {

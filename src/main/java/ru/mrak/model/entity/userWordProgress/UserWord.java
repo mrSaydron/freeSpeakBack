@@ -49,7 +49,7 @@ public class UserWord {
     private List<UserWordHasProgress> wordProgresses = new ArrayList<>();
 
     @Column(name = "from_test")
-    private boolean formTest;
+    private boolean fromTest;
 
     @Override
     public String toString() {

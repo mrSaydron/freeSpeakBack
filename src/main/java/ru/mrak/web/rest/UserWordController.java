@@ -166,6 +166,17 @@ public class UserWordController {
     }
 
     /**
+     * Возвращает допольнительные слова для изучения из словаря пользователя
+     */
+    @GetMapping("/next-words")
+    @Transactional(readOnly = true)
+    public List<UserWordDto> getNextWords() {
+        log.debug("GET next words");
+        List<UserWord> userWords = userWordService.getNextWords();
+        return userWordMapper.toDto(userWords);
+    }
+
+    /**
      * Пользователь ответил на слово не верно
      */
     @PutMapping("/answer-fail")

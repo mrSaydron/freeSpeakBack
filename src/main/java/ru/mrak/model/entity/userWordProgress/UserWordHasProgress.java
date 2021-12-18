@@ -1,6 +1,5 @@
 package ru.mrak.model.entity.userWordProgress;
 
-import ru.mrak.model.entity.User;
 import ru.mrak.model.enumeration.UserWordProgressTypeEnum;
 
 import javax.persistence.*;

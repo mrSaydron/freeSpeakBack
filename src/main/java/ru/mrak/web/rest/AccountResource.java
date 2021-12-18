@@ -35,6 +35,7 @@ import java.util.*;
  */
 @RestController
 @RequestMapping("/api")
+
 public class AccountResource {
 
     private static class AccountResourceException extends RuntimeException {

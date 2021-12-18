@@ -11,6 +11,7 @@ import ru.mrak.model.entity.Word;
 import ru.mrak.model.entity.testVocabulary.TestVocabulary;
 import ru.mrak.model.entity.testVocabulary.TestVocabularyAnswer;
 import ru.mrak.model.enumeration.ServiceDataKeysEnum;
+import ru.mrak.model.enumeration.UserWordLogTypeEnum;
 import ru.mrak.repository.TestVocabularyAnswerRepository;
 import ru.mrak.repository.TestVocabularyRepository;
 import ru.mrak.repository.WordRepository;
@@ -38,6 +39,7 @@ public class TestVocabularyService {
     private final ServiceDataService serviceDataService;
     private final UserWordService userWordService;
     private final UserSettingsService userSettingsService;
+    private final UserWordLogService userWordLogService;
 
     private final WordRepository wordRepository;
     private final TestVocabularyRepository testVocabularyRepository;
@@ -109,7 +111,7 @@ public class TestVocabularyService {
                 .setResultWord(lastKnowWord);
 
             // todo асинхронно
-            saveResult(averageAmount, user);
+            saveResult(averageAmount, user, testVocabularyId);
         } else {
             // ошибок еще мало, следующее слово
             int step = getStep(failAnswersCount, false);
@@ -128,7 +130,12 @@ public class TestVocabularyService {
             result = testVocabularyWordDto;
         }
 
-        log.debug("result, {}", result);
+        userWordLogService.create(
+            wordRepository.getOne(wordId),
+            UserWordLogTypeEnum.FAIL_FROM_TEST,
+            testVocabularyRepository.getOne(testVocabularyId)
+        );
+
         return result;
     }
 
@@ -180,21 +187,27 @@ public class TestVocabularyService {
             result = testVocabularyResultDto;
 
             // todo асинхронно
-            saveResult(lastKnowWord.getTotalAmount(), user);
+            saveResult(lastKnowWord.getTotalAmount(), user, testVocabularyId);
         }
 
-        log.debug("result, {}", result);
+        userWordLogService.create(
+            wordRepository.getOne(wordId),
+            UserWordLogTypeEnum.SUCCESS_FROM_TEST,
+            testVocabularyRepository.getOne(testVocabularyId)
+        );
+
         return result;
     }
 
     /**
      * Обновляет словарь пользователя согласно результатам тестирования
      */
-    private void saveResult(long averageAmount, User user) {
+    private void saveResult(long averageAmount, User user, long testVocabularyId) {
         log.debug("save testing result, averageAmount: {}, userId: {}", averageAmount, user.getId());
 
         List<Word> resultWords = wordRepository.findResultWordsForTestVocabulary(averageAmount, user.getId());
         userWordService.knowWordsByTest(resultWords);
+        userWordLogService.create(resultWords, UserWordLogTypeEnum.KNOW_FROM_TEST, testVocabularyRepository.getOne(testVocabularyId));
 
         UserSettings userSettings = userSettingsService.get();
         userSettings.setTestedVocabulary(true);

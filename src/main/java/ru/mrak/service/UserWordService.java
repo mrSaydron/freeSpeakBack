@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.NonNull;
@@ -15,6 +14,7 @@ import ru.mrak.model.entity.User;
 import ru.mrak.model.entity.Word;
 import ru.mrak.model.entity.userWordProgress.UserWord;
 import ru.mrak.model.entity.userWordProgress.UserWordHasProgress;
+import ru.mrak.model.enumeration.UserWordLogTypeEnum;
 import ru.mrak.model.enumeration.UserWordProgressTypeEnum;
 import ru.mrak.repository.UserWordRepository;
 import ru.mrak.repository.WordRepository;
@@ -39,6 +39,7 @@ public class UserWordService {
 
     private final UserService userService;
     private final UserWordQueryService userWordQueryService;
+    private final UserWordLogService userWordLogService;
 
     private final WordRepository wordRepository;
     private final UserWordRepository userWordRepository;
@@ -124,6 +125,7 @@ public class UserWordService {
             }
 
             userWordRepository.save(userWord);
+            userWordLogService.create(userWord.getWord(), UserWordLogTypeEnum.ADD_TO_DICTIONARY);
         } else {
             UserWord userWord = progressOptional.get();
             userWord.setFromTest(fromTest);
@@ -140,6 +142,7 @@ public class UserWordService {
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
 
         userWordRepository.deleteAllByUserAndWord(user, wordRepository.getOne(wordId));
+        userWordLogService.create(wordRepository.getOne(wordId), UserWordLogTypeEnum.REMOVE_FROM_DICTIONARY);
     }
 
     /**
@@ -149,7 +152,9 @@ public class UserWordService {
         log.debug("remove words from user dictionary, word ids: {}", wordIds);
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
 
-        userWordRepository.deleteAllByUserAndWordIn(user, wordIds.stream().map(wordRepository::getOne).collect(Collectors.toList()));
+        List<Word> words = wordIds.stream().map(wordRepository::getOne).collect(Collectors.toList());
+        userWordRepository.deleteAllByUserAndWordIn(user, words);
+        userWordLogService.create(words, UserWordLogTypeEnum.REMOVE_FROM_DICTIONARY);
     }
 
     /**
@@ -159,6 +164,9 @@ public class UserWordService {
         log.debug("remove words from user dictionary by criteria: {}", criteria);
         List<UserWord> userWords = findByCriteria(criteria);
         userWordRepository.deleteAll(userWords);
+
+        List<Word> words = userWords.stream().map(UserWord::getWord).collect(Collectors.toList());
+        userWordLogService.create(words, UserWordLogTypeEnum.REMOVE_FROM_DICTIONARY);
     }
 
     /**
@@ -170,9 +178,11 @@ public class UserWordService {
 
         Optional<UserWord> userWordsOptional = userWordRepository.findByUserAndWord(user, wordRepository.getOne(wordId));
         if (userWordsOptional.isPresent()) {
+            UserWord userWord = userWordsOptional.get();
             for (UserWordHasProgress userWordHasProgress : userWordsOptional.get().getWordProgresses()) {
                 userWordHasProgress.setBoxNumber(PRELIMINARY_BOX_NUMBER);
             }
+            userWordLogService.create(userWord.getWord(), UserWordLogTypeEnum.DO_NOT_KNOW);
         }
     }
 
@@ -182,11 +192,12 @@ public class UserWordService {
     public void eraseWords(List<Long> wordIds) {
         log.debug("erase word progress, word ids: {}", wordIds);
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
-
-        userWordRepository.findAllByUserAndWordIn(user, wordIds.stream().map(wordRepository::getOne).collect(Collectors.toList()))
+        List<Word> words = wordIds.stream().map(wordRepository::getOne).collect(Collectors.toList());
+        userWordRepository.findAllByUserAndWordIn(user, words)
             .stream()
             .flatMap(userWord -> userWord.getWordProgresses().stream())
             .forEach(progress -> progress.setBoxNumber(PRELIMINARY_BOX_NUMBER));
+        userWordLogService.create(words, UserWordLogTypeEnum.DO_NOT_KNOW);
     }
 
     /**
@@ -194,10 +205,13 @@ public class UserWordService {
      */
     public void eraseAllWords(UserWordCriteria criteria) {
         log.debug("erase word progress by criteria: {}", criteria);
-        findByCriteria(criteria)
-            .stream()
+        List<UserWord> userWords = findByCriteria(criteria);
+        userWords.stream()
             .flatMap(userWord -> userWord.getWordProgresses().stream())
             .forEach(progress -> progress.setBoxNumber(PRELIMINARY_BOX_NUMBER));
+
+        List<Word> words = userWords.stream().map(UserWord::getWord).collect(Collectors.toList());
+        userWordLogService.create(words, UserWordLogTypeEnum.DO_NOT_KNOW);
     }
 
     /**
@@ -260,8 +274,9 @@ public class UserWordService {
             // переноси слово в обучение
             userWordHasProgress.setBoxNumber(START_BOX_NUMBER);
             userWordHasProgress.setFailLastDate(Instant.now());
-        }
 
+            userWordLogService.create(userWord.getWord(), UserWordLogTypeEnum.FAIL);
+        }
     }
 
     /**
@@ -292,6 +307,8 @@ public class UserWordService {
                 userWordHasProgress.setBoxNumber(userWordHasProgress.getBoxNumber() + 1);
             }
             userWordHasProgress.setSuccessfulLastDate(Instant.now());
+
+            userWordLogService.create(userWord.getWord(), UserWordLogTypeEnum.SUCCESS);
         }
     }
 
@@ -301,6 +318,10 @@ public class UserWordService {
     public void knowWord(Long wordId, boolean fotTest) {
         log.debug("move word to know box. Word id: {}", wordId);
         addOrUpdateWord(wordId, KNOW_BOX_NUMBER, fotTest);
+
+        if (!fotTest) {
+            userWordLogService.create(wordRepository.getOne(wordId), UserWordLogTypeEnum.KNOW);
+        }
     }
 
     /**
@@ -325,10 +346,13 @@ public class UserWordService {
     public void knowAllWords(UserWordCriteria criteria) {
         // todo сделать и для слов, которых нет у пользователя
         log.debug("move words to know box by criteria: {}", criteria);
-        findByCriteria(criteria)
-            .stream()
+        List<UserWord> userWords = findByCriteria(criteria);
+        userWords.stream()
             .flatMap(userWord -> userWord.getWordProgresses().stream())
             .forEach(progress -> progress.setBoxNumber(KNOW_BOX_NUMBER));
+
+        List<Word> words = userWords.stream().map(UserWord::getWord).collect(Collectors.toList());
+        userWordLogService.create(words, UserWordLogTypeEnum.KNOW);
     }
 
     /**

@@ -45,7 +45,11 @@ public class UserWord {
         type = @Type(type = "long"),
         generator = "user_word_has_progress_seq"
     )
-    @SequenceGenerator(name = "user_word_has_progress_seq", sequenceName = "user_word_has_progress_seq", allocationSize = 1)
+    @SequenceGenerator(
+        name = "user_word_has_progress_seq",
+        sequenceName = "user_word_has_progress_seq",
+        allocationSize = 1
+    )
     private List<UserWordHasProgress> wordProgresses = new ArrayList<>();
 
     @Column(name = "from_test")

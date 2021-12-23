@@ -2,15 +2,19 @@ package ru.mrak.service.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import ru.mrak.model.entity.Book;
+import ru.mrak.model.entity.TextTag;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 /**
  * A DTO for the {@link Book} entity.
  */
 @Getter
 @Setter
+@ToString
 public class BookDto implements Serializable {
 
     private Long id;
@@ -19,15 +23,6 @@ public class BookDto implements Serializable {
     private String pictureId;
     private Double know;
     private Boolean isReading;
+    private Collection<TextTagDto> textTags;
 
-    // prettier-ignore
-    @Override
-    public String toString() {
-        return "BookDTO{" +
-            "id=" + getId() +
-            ", title='" + getTitle() + "'" +
-            ", author='" + getAuthor() + "'" +
-            ", know='" + getKnow() + "'" +
-            "}";
-    }
 }

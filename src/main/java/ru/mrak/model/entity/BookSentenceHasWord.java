@@ -1,11 +1,15 @@
 package ru.mrak.model.entity;
 
+import lombok.Getter;
+import lombok.Setter;
 import ru.mrak.model.enumeration.PartOfSpeechEnum;
 
 import javax.persistence.*;
 
 // book_sentence_has_word
 
+@Getter
+@Setter
 @Embeddable
 public class BookSentenceHasWord {
 
@@ -22,38 +26,6 @@ public class BookSentenceHasWord {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "word_id")
     private Word translate;
-
-    public String getWord() {
-        return word;
-    }
-
-    public void setWord(String word) {
-        this.word = word;
-    }
-
-    public String getAfterWord() {
-        return afterWord;
-    }
-
-    public void setAfterWord(String afterWord) {
-        this.afterWord = afterWord;
-    }
-
-    public PartOfSpeechEnum getPartOfSpeech() {
-        return partOfSpeech;
-    }
-
-    public void setPartOfSpeech(PartOfSpeechEnum partOfSpeech) {
-        this.partOfSpeech = partOfSpeech;
-    }
-
-    public Word getTranslate() {
-        return translate;
-    }
-
-    public void setTranslate(Word translate) {
-        this.translate = translate;
-    }
 
     @Override
     public String toString() {

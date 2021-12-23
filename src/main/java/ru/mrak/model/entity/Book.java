@@ -1,23 +1,26 @@
 package ru.mrak.model.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.GenericGenerator;
 import ru.mrak.config.Constants;
 import ru.mrak.model.entity.bookUserKnow.BookUserKnow;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A Book.
  */
+@Getter
+@Setter
 @Entity
 @Table(name = "book")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -50,86 +53,13 @@ public class Book implements Serializable {
     @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
     private Collection<BookUserKnow> userKnows = new ArrayList<>();
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public Book title(String title) {
-        this.title = title;
-        return this;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public Book author(String author) {
-        this.author = author;
-        return this;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public Book users(Set<User> users) {
-        this.users = users;
-        return this;
-    }
-
-    public Book addUser(User user) {
-        this.users.add(user);
-        return this;
-    }
-
-    public Book removeUser(User user) {
-        this.users.remove(user);
-        return this;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
-
-    public Collection<BookUserKnow> getUserKnows() {
-        return userKnows;
-    }
-
-    public void setUserKnows(Collection<BookUserKnow> userKnows) {
-        this.userKnows = userKnows;
-    }
-
-    public String getPictureId() {
-        return pictureId;
-    }
-
-    public void setPictureId(String pictureId) {
-        this.pictureId = pictureId;
-    }
-
-//    public Collection<BookSentence> getSentences() {
-//        return sentences;
-//    }
-//
-//    public void setSentences(Collection<BookSentence> sentences) {
-//        this.sentences = sentences;
-//    }
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "book_has_text_tag",
+        joinColumns = @JoinColumn(name = "book_id"),
+        inverseJoinColumns = @JoinColumn(name = "text_tag_id")
+    )
+    private Set<TextTag> textTags = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

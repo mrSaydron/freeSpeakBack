@@ -20,7 +20,7 @@ import java.util.Optional;
 /**
  * Mapper for the entity {@link Book} and its DTO {@link BookDto}.
  */
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {TextTagMapper.class})
 public abstract class BookMapper implements EntityMapper<BookDto, Book> {
 
     @Autowired

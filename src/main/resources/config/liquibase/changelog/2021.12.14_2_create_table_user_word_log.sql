@@ -4,7 +4,7 @@
 create sequence user_word_log_seq;
 create table user_word_log
 (
-    id bigint not null,
+    id bigint default nextval('public.user_word_log_seq'),
     type_id bigint not null,
     test_vocabulary_id bigint null,
     word_id bigint not null,

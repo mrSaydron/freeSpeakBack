@@ -53,7 +53,7 @@ public class Book implements Serializable {
     @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
     private Collection<BookUserKnow> userKnows = new ArrayList<>();
 
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinTable(
         name = "book_has_text_tag",
         joinColumns = @JoinColumn(name = "book_id"),

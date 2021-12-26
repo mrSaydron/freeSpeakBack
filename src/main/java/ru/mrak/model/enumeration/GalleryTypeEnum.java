@@ -3,7 +3,7 @@ package ru.mrak.model.enumeration;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import static ru.mrak.web.rest.GalleryController.*;
+import static ru.mrak.controller.GalleryController.*;
 
 @Getter
 @AllArgsConstructor

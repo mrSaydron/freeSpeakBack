@@ -15,9 +15,9 @@ import ru.mrak.model.entity.User;
 import ru.mrak.model.entity.bookUserKnow.BookUserKnow_;
 import ru.mrak.repository.BookRepository;
 import ru.mrak.service.UserService;
-import ru.mrak.service.dto.BookCriteria;
-import ru.mrak.service.dto.BookDto;
-import ru.mrak.service.mapper.BookMapper;
+import ru.mrak.dto.BookCriteria;
+import ru.mrak.dto.BookDto;
+import ru.mrak.mapper.BookMapper;
 
 import javax.persistence.criteria.*;
 import java.util.List;

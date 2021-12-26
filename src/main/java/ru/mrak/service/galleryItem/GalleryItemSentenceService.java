@@ -5,10 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.mrak.model.entity.BookSentence;
-import ru.mrak.model.enumeration.GalleryItemTypeEnum;
 import ru.mrak.service.book.BookSentenceService;
-import ru.mrak.service.dto.gallery.item.GalleryItemDto;
-import ru.mrak.service.dto.gallery.item.GalleryItemSentenceDto;
+import ru.mrak.dto.gallery.item.GalleryItemSentenceDto;
 
 import java.util.List;
 import java.util.Optional;

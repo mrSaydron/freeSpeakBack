@@ -44,7 +44,6 @@
               </v-list-item>
             </v-list>
           </v-menu>
-
           <v-text-field
             v-model="book.title"
             label="Название книги"
@@ -55,6 +54,9 @@
             v-model="book.author"
             label="Автор"
           ></v-text-field>
+          <text-tag-combobox
+            v-model="book.textTags"
+          ></text-tag-combobox>
         </v-col>
       </v-row>
       <v-row class="mt-3">
@@ -84,14 +86,19 @@ import { Inject, Vue } from 'vue-property-decorator'
 import BookService from '@/services/bookService'
 import { BookCreateDto } from '@/model/bookCreateDto'
 import FileService from '@/services/fileService'
+import TextTagService from '@/services/textTagService'
+import { TextTag, TextTagDto } from '@/model/textTagDto'
+import TextTagCombobox from '@/common/textTagCombobox.vue'
 
 @Component({
   components: {
+    TextTagCombobox
   }
 })
 export default class BookCreate extends Vue {
   @Inject() readonly bookService!: BookService
   @Inject() readonly fileService!: FileService
+  @Inject() readonly textTagService!: TextTagService
 
   public book: BookCreateDto = new BookCreateDto()
   public valid = false

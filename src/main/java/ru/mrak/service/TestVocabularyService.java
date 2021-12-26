@@ -15,12 +15,12 @@ import ru.mrak.model.enumeration.UserWordLogTypeEnum;
 import ru.mrak.repository.TestVocabularyAnswerRepository;
 import ru.mrak.repository.TestVocabularyRepository;
 import ru.mrak.repository.WordRepository;
-import ru.mrak.service.dto.testVocabulary.TestVocabularyDto;
-import ru.mrak.service.dto.testVocabulary.TestVocabularyResultDto;
-import ru.mrak.service.dto.testVocabulary.TestVocabularyWordDto;
-import ru.mrak.service.dto.testVocabulary.TestWordResultDto;
-import ru.mrak.service.mapper.WordMapper;
-import ru.mrak.web.rest.TestVocabularyController;
+import ru.mrak.dto.testVocabulary.TestVocabularyDto;
+import ru.mrak.dto.testVocabulary.TestVocabularyResultDto;
+import ru.mrak.dto.testVocabulary.TestVocabularyWordDto;
+import ru.mrak.dto.testVocabulary.TestWordResultDto;
+import ru.mrak.mapper.WordMapper;
+import ru.mrak.controller.TestVocabularyController;
 
 import java.time.Instant;
 import java.util.List;

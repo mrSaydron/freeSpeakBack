@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.mrak.model.entity.userWordProgress.UserWord;
 import ru.mrak.service.UserWordService;
-import ru.mrak.service.dto.gallery.item.GalleryItemCardLearnDto;
+import ru.mrak.dto.gallery.item.GalleryItemCardLearnDto;
 
 import java.util.List;
 import java.util.Optional;

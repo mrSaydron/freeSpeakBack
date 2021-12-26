@@ -4,9 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import ru.mrak.service.UserSettingsService;
-import ru.mrak.service.dto.gallery.item.GalleryItemSentenceDto;
-import ru.mrak.service.dto.gallery.item.GalleryItemTestVocabularyDto;
+import ru.mrak.dto.gallery.item.GalleryItemTestVocabularyDto;
 
 import java.util.Optional;
 

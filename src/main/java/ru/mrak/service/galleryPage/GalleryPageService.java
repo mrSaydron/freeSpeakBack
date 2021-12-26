@@ -3,14 +3,14 @@ package ru.mrak.service.galleryPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import ru.mrak.service.dto.gallery.GalleriesPageDto;
-import ru.mrak.service.dto.gallery.GalleryHeadDto;
+import ru.mrak.dto.gallery.GalleriesPageDto;
+import ru.mrak.dto.gallery.GalleryHeadDto;
 
 import java.util.Arrays;
 import java.util.Optional;
 
 import static ru.mrak.model.enumeration.GalleryTypeEnum.*;
-import static ru.mrak.web.rest.GalleryController.GALLERY_CONTROLLER_URL;
+import static ru.mrak.controller.GalleryController.GALLERY_CONTROLLER_URL;
 
 @Service
 public class GalleryPageService {

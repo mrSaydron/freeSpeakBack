@@ -4,7 +4,7 @@ import ru.mrak.LibFourApp;
 import ru.mrak.config.Constants;
 import ru.mrak.model.entity.User;
 import ru.mrak.repository.UserRepository;
-import ru.mrak.service.dto.UserDTO;
+import ru.mrak.dto.UserDTO;
 
 import io.github.jhipster.security.RandomUtil;
 

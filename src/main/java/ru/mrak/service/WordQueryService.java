@@ -11,9 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.mrak.model.entity.Word;
 import ru.mrak.model.entity.Word_;
 import ru.mrak.repository.WordRepository;
-import ru.mrak.service.dto.WordCriteria;
-import ru.mrak.service.dto.WordDto;
-import ru.mrak.service.mapper.WordMapper;
+import ru.mrak.dto.WordCriteria;
+import ru.mrak.dto.WordDto;
+import ru.mrak.mapper.WordMapper;
 
 import java.util.List;
 

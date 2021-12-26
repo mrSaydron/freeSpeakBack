@@ -9,10 +9,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.mrak.model.enumeration.GalleryTypeEnum;
 import ru.mrak.service.book.BookQueryService;
-import ru.mrak.service.dto.BookCriteria;
-import ru.mrak.service.dto.gallery.GalleryDto;
-import ru.mrak.service.dto.gallery.item.GalleryItemDto;
-import ru.mrak.service.mapper.BookToGalleryItemMapper;
+import ru.mrak.dto.BookCriteria;
+import ru.mrak.dto.gallery.GalleryDto;
+import ru.mrak.dto.gallery.item.GalleryItemDto;
+import ru.mrak.mapper.BookToGalleryItemMapper;
 
 import java.util.List;
 import java.util.Optional;

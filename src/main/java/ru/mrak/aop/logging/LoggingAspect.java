@@ -44,7 +44,7 @@ public class LoggingAspect {
      */
     @Pointcut("within(ru.mrak.repository..*)"+
         " || within(ru.mrak.service..*)"+
-        " || within(ru.mrak.web.rest..*)")
+        " || within(ru.mrak.web.controller..*)")
     public void applicationPackagePointcut() {
         // Method is empty as this is just a Pointcut, the implementations are in the advices.
     }

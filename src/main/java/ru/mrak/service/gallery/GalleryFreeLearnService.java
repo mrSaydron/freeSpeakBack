@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.mrak.model.enumeration.GalleryTypeEnum;
-import ru.mrak.service.dto.gallery.GalleryDto;
+import ru.mrak.dto.gallery.GalleryDto;
 import ru.mrak.service.galleryItem.GalleryItemMarkBookService;
 import ru.mrak.service.galleryItem.GalleryItemTestVocabularyService;
 import ru.mrak.service.galleryItem.GalleryItemUserDictionaryService;

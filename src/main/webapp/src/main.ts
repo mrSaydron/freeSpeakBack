@@ -15,6 +15,7 @@ import BookSentenceService from '@/services/bookSentenceService'
 import GalleriesPageService from '@/services/galleriesPageService'
 import GalleryService from '@/services/galleryService'
 import TestVocabularyService from '@/services/testVocabularyService'
+import TextTagService from '@/services/textTagService'
 
 Vue.config.productionTip = false
 
@@ -30,6 +31,7 @@ const bookSentenceService = new BookSentenceService()
 const galleriesPageService = new GalleriesPageService()
 const galleryService = new GalleryService()
 const testVocabularyService = new TestVocabularyService()
+const textTagService = new TextTagService()
 
 router.beforeEach(async (to, from, next) => {
   // if (!accountService.authenticated) {
@@ -70,6 +72,7 @@ new Vue({
     bookSentenceService,
     galleriesPageService,
     galleryService,
-    testVocabularyService
+    testVocabularyService,
+    textTagService
   }
 }).$mount('#app')

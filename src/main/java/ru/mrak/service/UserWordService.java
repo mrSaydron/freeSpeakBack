@@ -18,7 +18,7 @@ import ru.mrak.model.enumeration.UserWordLogTypeEnum;
 import ru.mrak.model.enumeration.UserWordProgressTypeEnum;
 import ru.mrak.repository.UserWordRepository;
 import ru.mrak.repository.WordRepository;
-import ru.mrak.service.dto.userWord.UserWordCriteria;
+import ru.mrak.dto.userWord.UserWordCriteria;
 
 import java.time.*;
 import java.util.ArrayList;

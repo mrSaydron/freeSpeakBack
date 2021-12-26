@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import ru.mrak.model.entity.Book;
-import ru.mrak.web.rest.TestUtil;
+import ru.mrak.controller.TestUtil;
 
 public class BookTest {
 

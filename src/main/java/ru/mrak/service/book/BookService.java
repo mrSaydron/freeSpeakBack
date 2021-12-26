@@ -7,8 +7,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.mrak.mapper.BookCreateMapper;
 import ru.mrak.model.entity.Book;
 import ru.mrak.model.entity.BookSentence;
+import ru.mrak.model.entity.TextTag;
 import ru.mrak.model.entity.User;
 import ru.mrak.repository.BookRepository;
 import ru.mrak.repository.BookSentenceRepository;
@@ -16,9 +18,9 @@ import ru.mrak.service.TextService;
 import ru.mrak.service.UserService;
 import ru.mrak.service.UserWordService;
 import ru.mrak.service.WordService;
-import ru.mrak.service.dto.BookCreateDTO;
-import ru.mrak.service.dto.BookDto;
-import ru.mrak.service.mapper.BookMapper;
+import ru.mrak.dto.BookCreateDTO;
+import ru.mrak.dto.BookDto;
+import ru.mrak.mapper.BookMapper;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -35,6 +37,7 @@ public class BookService {
     private final Logger log = LoggerFactory.getLogger(BookService.class);
 
     private final BookMapper bookMapper;
+    private final BookCreateMapper bookCreateMapper;
 
     private final UserService userService;
     private final WordService wordService;
@@ -53,11 +56,8 @@ public class BookService {
     public void save(BookCreateDTO bookDTO) {
         log.debug("Request to save Book : {}", bookDTO);
 
-        Book book = new Book();
-        book.setTitle(bookDTO.getTitle());
-        book.setAuthor(bookDTO.getAuthor());
-        book.setPictureId(bookDTO.getPictureId());
-        book = bookRepository.save(book);
+        Book book = bookCreateMapper.toEntity(bookDTO);
+        bookRepository.save(book);
 
         List<BookSentence> bookSentences = textService.createByText(bookDTO.getText());
         for (BookSentence bookSentence : bookSentences) {

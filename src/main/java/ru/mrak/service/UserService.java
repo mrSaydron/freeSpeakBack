@@ -7,7 +7,7 @@ import ru.mrak.repository.AuthorityRepository;
 import ru.mrak.repository.UserRepository;
 import ru.mrak.security.AuthoritiesConstants;
 import ru.mrak.security.SecurityUtils;
-import ru.mrak.service.dto.UserDTO;
+import ru.mrak.dto.UserDTO;
 
 import io.github.jhipster.security.RandomUtil;
 

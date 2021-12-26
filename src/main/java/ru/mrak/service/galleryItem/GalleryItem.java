@@ -1,6 +1,6 @@
 package ru.mrak.service.galleryItem;
 
-import ru.mrak.service.dto.gallery.item.GalleryItemDto;
+import ru.mrak.dto.gallery.item.GalleryItemDto;
 
 import java.util.Optional;
 

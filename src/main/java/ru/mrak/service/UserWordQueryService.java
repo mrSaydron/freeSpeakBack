@@ -1,7 +1,6 @@
 package ru.mrak.service;
 
 import io.github.jhipster.service.QueryService;
-import io.github.jhipster.service.filter.RangeFilter;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,17 +10,14 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.mrak.model.entity.User;
 import ru.mrak.model.entity.Word_;
 import ru.mrak.model.entity.userWordProgress.UserWord;
-import ru.mrak.model.entity.userWordProgress.UserWordHasProgress;
 import ru.mrak.model.entity.userWordProgress.UserWordHasProgress_;
 import ru.mrak.model.entity.userWordProgress.UserWord_;
-import ru.mrak.service.dto.userWord.UserWordCriteria;
-import ru.mrak.web.rest.filter.StringRangeFilter;
+import ru.mrak.dto.userWord.UserWordCriteria;
+import ru.mrak.controller.filter.StringRangeFilter;
 
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
-import javax.persistence.criteria.SetJoin;
-import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import java.util.function.Function;
 

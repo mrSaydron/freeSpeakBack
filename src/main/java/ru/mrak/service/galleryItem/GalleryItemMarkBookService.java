@@ -10,8 +10,8 @@ import ru.mrak.model.entity.bookUser.BookUser;
 import ru.mrak.repository.BookRepository;
 import ru.mrak.repository.BookUserRepository;
 import ru.mrak.service.UserService;
-import ru.mrak.service.dto.gallery.item.GalleryItemBookDto;
-import ru.mrak.service.mapper.BookToGalleryItemMapper;
+import ru.mrak.dto.gallery.item.GalleryItemBookDto;
+import ru.mrak.mapper.BookToGalleryItemMapper;
 
 import java.util.List;
 import java.util.Optional;

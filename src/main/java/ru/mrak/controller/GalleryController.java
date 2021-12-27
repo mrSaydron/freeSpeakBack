@@ -3,9 +3,7 @@ package ru.mrak.controller;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.mrak.service.gallery.GalleryFreeLearnService;
 import ru.mrak.service.gallery.GalleryBookService;
 import ru.mrak.service.gallery.GalleryDailyService;
@@ -30,21 +28,20 @@ public class GalleryController {
     @GetMapping(DAILY_URL)
     public GalleryDto getDailyGallery() {
         log.debug("GET daily gallery");
-
         return galleryDailyService.get().orElseThrow(RuntimeException::new);
     }
 
     @GetMapping(BOOK_URL)
-    public GalleryDto getBooksGallery() {
-        log.debug("GET book gallery");
-
-        return galleryBookService.get().orElseThrow(RuntimeException::new);
+    public GalleryDto getBooksGallery(
+        @RequestParam(required = false, name = "filter-name") String filterName
+    ) {
+        log.debug("GET book gallery, filterName: {}", filterName);
+        return galleryBookService.get(filterName).orElseThrow(RuntimeException::new);
     }
 
     @GetMapping(FREE_LEARN_URL)
     public GalleryDto getFreeLearnGallery() {
         log.debug("GET free learn gallery");
-
         return galleryFreeLearnService.get().orElseThrow(RuntimeException::new);
     }
 }

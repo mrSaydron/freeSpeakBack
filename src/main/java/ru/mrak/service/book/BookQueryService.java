@@ -1,6 +1,7 @@
 package ru.mrak.service.book;
 
 import io.github.jhipster.service.QueryService;
+import io.github.jhipster.service.filter.Filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -8,10 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.mrak.model.entity.Book;
-import ru.mrak.model.entity.Book_;
+import ru.mrak.model.entity.*;
 import ru.mrak.model.entity.bookUserKnow.BookUserKnow;
-import ru.mrak.model.entity.User;
 import ru.mrak.model.entity.bookUserKnow.BookUserKnow_;
 import ru.mrak.repository.BookRepository;
 import ru.mrak.service.UserService;
@@ -20,6 +19,7 @@ import ru.mrak.dto.BookDto;
 import ru.mrak.mapper.BookMapper;
 
 import javax.persistence.criteria.*;
+import javax.persistence.metamodel.SetAttribute;
 import java.util.List;
 
 /**
@@ -131,6 +131,22 @@ public class BookQueryService extends QueryService<Book> {
                 };
 
                 specification = specification.and(knowSpecification);
+            }
+            if (criteria.getTextTag() != null) {
+                Specification<Book> textTagSpecification = (root, query, builder)
+                    -> {
+                    SetJoin<Book, TextTag> textTagJoin = root.join(Book_.textTags, JoinType.LEFT);
+
+                    Predicate in;
+                    if (criteria.getTextTag().getIn() != null) {
+                        in = builder.in(textTagJoin.get(TextTag_.id)).getExpression().in(criteria.getTextTag().getIn());
+                    } else {
+                        throw new RuntimeException();
+                    }
+                    return builder.and(in);
+                };
+
+                specification = specification.and(textTagSpecification);
             }
         }
 

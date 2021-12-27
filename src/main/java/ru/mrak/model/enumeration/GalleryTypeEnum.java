@@ -11,6 +11,7 @@ public enum GalleryTypeEnum {
     DAILY(DAILY_URL, "Задания на день"),
     BOOK(BOOK_URL, "Книги"),
     FREE_LEARN(FREE_LEARN_URL, "Свободное изучение")
+
     ;
 
     private final String url;

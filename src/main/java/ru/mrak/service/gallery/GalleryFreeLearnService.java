@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import ru.mrak.galleryFilter.GalleryFilter;
 import ru.mrak.model.enumeration.GalleryTypeEnum;
 import ru.mrak.dto.gallery.GalleryDto;
 import ru.mrak.service.galleryItem.GalleryItemMarkBookService;
@@ -35,5 +36,10 @@ public class GalleryFreeLearnService implements Gallery {
         galleryItemTestVocabularyService.get().ifPresent(item -> galleryDto.getGalleryItems().add(item));
 
         return Optional.of(galleryDto);
+    }
+
+    @Override
+    public Optional<GalleryDto> get(String filterName) {
+        return Optional.empty();
     }
 }

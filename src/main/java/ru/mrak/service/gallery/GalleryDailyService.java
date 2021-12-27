@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import ru.mrak.galleryFilter.GalleryFilter;
 import ru.mrak.model.entity.UserSettings;
+import ru.mrak.model.enumeration.GalleryFilterEnum;
 import ru.mrak.model.enumeration.GalleryTypeEnum;
 import ru.mrak.service.UserSettingsService;
 import ru.mrak.dto.gallery.GalleryDto;
@@ -48,4 +50,8 @@ public class GalleryDailyService implements Gallery {
         return Optional.of(galleryDto);
     }
 
+    @Override
+    public Optional<GalleryDto> get(String filterName) {
+        return Optional.empty();
+    }
 }

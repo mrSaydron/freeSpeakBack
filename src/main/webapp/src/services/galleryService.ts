@@ -5,11 +5,9 @@ const baseApiUrl = '/api/gallery'
 
 export default class GalleryService {
   public async get (url: string): Promise<GalleryDto> {
-    const params = new URLSearchParams()
-
     return new Promise<GalleryDto>((resolve, reject) => {
       axios
-        .get(`${url}?${params.toString()}`)
+        .get(`${url}`)
         .then(res => {
           resolve(res.data)
         })

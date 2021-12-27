@@ -22,24 +22,38 @@ public class GalleryPageService {
      */
     public Optional<GalleriesPageDto> get() {
         log.debug("get pages for user: todo");
+        GalleriesPageDto galleriesPageDto = new GalleriesPageDto();
 
         GalleryHeadDto dailyHead = new GalleryHeadDto()
             .setTitle(DAILY.getTitle())
             .setType(DAILY)
             .setUrl(GALLERY_CONTROLLER_URL + DAILY.getUrl());
+        galleriesPageDto.getGalleryHeads().add(dailyHead);
 
         GalleryHeadDto freeLearnHead = new GalleryHeadDto()
             .setTitle(FREE_LEARN.getTitle())
             .setType(FREE_LEARN)
             .setUrl(GALLERY_CONTROLLER_URL + FREE_LEARN.getUrl());
+        galleriesPageDto.getGalleryHeads().add(freeLearnHead);
 
-        GalleryHeadDto booksHead = new GalleryHeadDto()
+        GalleryHeadDto booksDefaultHead = new GalleryHeadDto()
             .setTitle(BOOK.getTitle())
             .setType(BOOK)
             .setUrl(GALLERY_CONTROLLER_URL + BOOK.getUrl());
+        galleriesPageDto.getGalleryHeads().add(booksDefaultHead);
 
-        GalleriesPageDto galleriesPageDto = new GalleriesPageDto()
-            .setGalleryHeads(Arrays.asList(dailyHead, freeLearnHead, booksHead));
+        GalleryHeadDto booksFantasyHead = new GalleryHeadDto()
+            .setTitle(BOOK.getTitle())
+            .setType(BOOK)
+            .setUrl(GALLERY_CONTROLLER_URL + BOOK.getUrl() + "?filter-name=fantasy");
+        galleriesPageDto.getGalleryHeads().add(booksFantasyHead);
+
+        GalleryHeadDto booksChildrenBookHead = new GalleryHeadDto()
+            .setTitle(BOOK.getTitle())
+            .setType(BOOK)
+            .setUrl(GALLERY_CONTROLLER_URL + BOOK.getUrl() + "?filter-name=children-book");
+        galleriesPageDto.getGalleryHeads().add(booksChildrenBookHead);
+
         return Optional.of(galleriesPageDto);
     }
 }

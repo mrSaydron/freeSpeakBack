@@ -52,9 +52,9 @@ spring:
     show-sql: true
     properties:
       hibernate:
-#        show_sql: true
-#        use_sql_comments: true
-#        format_sql: true
+        show_sql: true
+        use_sql_comments: true
+        format_sql: true
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev, faker

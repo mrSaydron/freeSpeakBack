@@ -7,7 +7,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import ru.mrak.galleryFilter.GalleryFilter;
+import ru.mrak.model.enumeration.GalleryFilterEnum;
 import ru.mrak.model.enumeration.GalleryTypeEnum;
+import ru.mrak.service.GalleryFilterService;
 import ru.mrak.service.book.BookQueryService;
 import ru.mrak.dto.BookCriteria;
 import ru.mrak.dto.gallery.GalleryDto;
@@ -27,21 +30,30 @@ public class GalleryBookService implements Gallery {
     private final BookToGalleryItemMapper bookToGalleryItemMapper;
 
     private final BookQueryService bookQueryService;
+    private final GalleryFilterService galleryFilterService;
 
     @Override
     public Optional<GalleryDto> get() {
-        log.debug("get book gallery");
+        return get(null);
+    }
 
-        BookCriteria criteria = new BookCriteria();
-        Pageable pageable = PageRequest.of(0, 10, Sort.by(Sort.Order.asc("title"))).first();
-        List<GalleryItemDto> galleryItems = bookQueryService.findByCriteria(criteria, pageable).get()
+    @Override
+    public Optional<GalleryDto> get(String filterName) {
+        log.debug("get book gallery, filterName: {}", filterName);
+
+        GalleryFilter galleryFilter = galleryFilterService.getFilter(GalleryTypeEnum.BOOK, filterName);
+        BookCriteria bookCriteria = (BookCriteria) galleryFilter.getFilter(GalleryFilterEnum.BOOK_CRITERIA);
+        Pageable pageable = (Pageable) galleryFilter.getFilter(GalleryFilterEnum.BOOK_PAGINATION);
+        String title = (String) galleryFilter.getFilter(GalleryFilterEnum.TITLE);
+
+        List<GalleryItemDto> galleryItems = bookQueryService.findByCriteria(bookCriteria, pageable).get()
             .map(bookToGalleryItemMapper::toDto)
             .collect(Collectors.toList());
         return Optional.of(
             new GalleryDto()
-            .setTitle(GalleryTypeEnum.BOOK.getTitle())
-            .setType(GalleryTypeEnum.BOOK)
-            .setGalleryItems(galleryItems)
+                .setTitle(title)
+                .setType(GalleryTypeEnum.BOOK)
+                .setGalleryItems(galleryItems)
         );
     }
 }

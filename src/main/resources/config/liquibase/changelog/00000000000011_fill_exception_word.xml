@@ -7,7 +7,7 @@
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <changeSet id="00000000000011_fill_exception_word" author="karmanov" runOnChange="true">
-        <delete tableName="knowledge_progress">
+        <delete tableName="exception_word">
             <where>1=1</where>
         </delete>
         <loadData

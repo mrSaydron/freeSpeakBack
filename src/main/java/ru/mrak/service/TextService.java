@@ -121,6 +121,7 @@ public class TextService {
      * Проверяет слово на исключение, без зависимости от части речи
      */
     private void exceptionWordAnyPOS(TokenLight tokenLight) {
+        log.debug("exception word any POS, tokenLight: {}", tokenLight);
         if (tokenLight.isDone()) return;
         exceptionWordRepository.findByWordAndPartOfSpeech(
             tokenLight.getToken().word().toLowerCase(),

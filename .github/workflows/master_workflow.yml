@@ -30,5 +30,6 @@ jobs:
       with:
         name: build_result
     - uses: actions/checkout@v2
+    - run: ls -l
     - run: docker build -t mrsaydron/free-speak:master -f Dockerfile .
     - run: ls -l

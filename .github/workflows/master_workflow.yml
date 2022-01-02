@@ -32,5 +32,6 @@ jobs:
         name: build_result
     - run: ls -l
     - run: docker build -t cr.yandex/crpg1rhtqejenaohq3ja/free-speak:master -f Dockerfile .
+    - run: docker login --username json_key --password I6QDYIe4A1QlDmkxDDTMfaxbYHq-1o6e3vqbtwTs cr.yandex
     - run: docker push cr.yandex/crpg1rhtqejenaohq3ja/free-speak:master
     - run: ls -l

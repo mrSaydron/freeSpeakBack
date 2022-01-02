@@ -31,5 +31,6 @@ jobs:
       with:
         name: build_result
     - run: ls -l
-    - run: docker build -t mrsaydron/free-speak:master -f Dockerfile .
+    - run: docker build -t cr.yandex/crpg1rhtqejenaohq3ja/free-speak:master -f Dockerfile .
+    - run: docker push cr.yandex/crpg1rhtqejenaohq3ja/free-speak:master
     - run: ls -l

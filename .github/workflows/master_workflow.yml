@@ -31,7 +31,7 @@ jobs:
 #      with:
 #        name: build_result
 #    - run: docker build -t cr.yandex/crpg1rhtqejenaohq3ja/free-speak:master -f Dockerfile .
-    - run: echo ${{ yandexCloud.PASSWORD }}
+    - run: echo ${{ secrets.PASSWORD }}
 #    - name: login
 #      env:
 #        PASSWORD: ${{ secrets.PASSWORD }}

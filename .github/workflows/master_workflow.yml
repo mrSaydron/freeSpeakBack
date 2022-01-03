@@ -36,5 +36,5 @@ jobs:
 #    - name: login
 #      env:
 #        PASSWORD: ${{ secrets.PASSWORD }}
-    - run: echo docker login --username oauth --password ${{ secrets.YC_TOKEN }} cr.yandex
+    - run: echo docker login --username oauth --passrd ${{ secrets.YC_TOKEN }} cr.yandex
 #    - run: docker push cr.yandex/crpg1rhtqejenaohq3ja/free-speak:master

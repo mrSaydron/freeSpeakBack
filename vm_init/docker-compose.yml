@@ -1,0 +1,15 @@
+version: '3.4'
+services:
+    api:
+        image: cr.yandex/crpg1rhtqejenaohq3ja/free-speak:master
+        network_mode: "host"
+
+    rproxy:
+        image: cr.yandex/crpg1rhtqejenaohq3ja/free-speak-nginx:master
+        links:
+            - api:api
+        ports:
+            - 80:80
+            - 443:443
+        volumes:
+            - ~/nginx:/etc/nginx

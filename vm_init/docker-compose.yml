@@ -2,10 +2,12 @@ version: '3.4'
 services:
     api:
         image: cr.yandex/crpg1rhtqejenaohq3ja/free-speak:master
+        container_name: "api"
         network_mode: "host"
 
-    rproxy:
+    proxy:
         image: cr.yandex/crpg1rhtqejenaohq3ja/free-speak-nginx:master
+        container_name: "proxy"
         links:
             - api:api
         ports:

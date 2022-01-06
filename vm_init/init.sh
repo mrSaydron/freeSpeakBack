@@ -3,6 +3,19 @@
 echo "----- start init system -----"
 echo ""
 
+echo "----- config -----"
+sudo apt update
+sudo apt -y upgrade
+uname -r
+uname -a
+sudo sed -i "s/#   PasswordAuthentication yes/PasswordAuthentication no/" /etc/ssh/ssh_config
+sudo sh -c "echo 'AllowUsers aleksey' >> /etc/ssh/ssh_config"
+sudo sh -c "echo 'PermitRootLogin no' >> /etc/ssh/ssh_config"
+sudo systemctl reload sshd.service
+sudo apt -y install htop
+echo "----- config complete -----"
+echo ""
+
 echo "----- docker install -----"
 sudo apt update
 sudo apt -y install ca-certificates curl gnupg lsb-release
@@ -26,6 +39,8 @@ echo "----- postgreSql install -----"
 sudo apt update
 sudo apt -y install postgresql postgresql-contrib
 sudo -u postgres psql -c "ALTER USER postgres PASSWORD '16729438';"
+sudo sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/" /etc/postgresql/12/main/postgresql.conf
+sudo sh -c "echo 'host all all md5' >> /etc/postgresql/12/main/pg_hba.conf"
 echo "----- postgresSql complete -----"
 echo ""
 

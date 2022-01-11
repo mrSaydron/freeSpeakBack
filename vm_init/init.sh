@@ -44,6 +44,7 @@ sudo sh -c "echo 'host all all md5' >> /etc/postgresql/12/main/pg_hba.conf"
 echo "----- postgresSql complete -----"
 echo ""
 
-echo "----- copy scripts -----"
-echo "----- copy complete -----"
+echo "----- unzip install -----"
+sudo apt -y install unzip
+echo "----- unzip install complete -----"
 eche ""

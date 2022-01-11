@@ -3,11 +3,13 @@ services:
     api:
         image: cr.yandex/crpg1rhtqejenaohq3ja/free-speak:master
         container_name: "api"
+        restart: always
         network_mode: "host"
 
     proxy:
         image: cr.yandex/crpg1rhtqejenaohq3ja/free-speak-nginx:master
         container_name: "proxy"
+        restart: always
         links:
             - api:api
         ports:

@@ -64,32 +64,6 @@ public class LibFourApp {
         ConfigurableApplicationContext applicationContext = app.run(args);
         Environment env = applicationContext.getEnvironment();
         logApplicationStartup(env);
-
-//        applicationContext.getBean(TranslateService.class).updateAllWords();
-
-//        applicationContext.getBean(TranslateService.class).updateNoTranslateWords();
-
-//        boolean ret = true;
-//        while (ret) {
-//            ret = ((YandexTranslateService) applicationContext.getBean(TranslateService.class)).updateNoTranslateWords(50);
-//        }
-//
-//        Word word = new Word();
-//        word.setWord("canvas");
-//        word.setPartOfSpeech(TagEnum.NN.getTag());
-//        applicationContext.getBean(TranslateService.class).updateWord(word);
-
-//        List<ArticleModel> word = applicationContext.getBean(AbbyTranslateService.class).translation("word");
-//        System.out.println(word);
-
-//        WooordhuntService wooordhuntService = applicationContext.getBean(WooordhuntService.class);
-//        while(true) {
-//            String word = "doorrr";
-//            Optional<GetSoundServiceInterface.SoundResult> result = wooordhuntService.getSound(word);
-//            System.out.println(result);
-//        }
-
-//        applicationContext.getBean(TranslateServiceInterface.class).updateNoRequestAudio();
     }
 
     private static void logApplicationStartup(Environment env) {

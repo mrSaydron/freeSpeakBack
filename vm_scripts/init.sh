@@ -38,6 +38,7 @@ sudo apt -y install postgresql postgresql-contrib
 sudo -u postgres psql -c "ALTER USER postgres PASSWORD '16729438';"
 sudo sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/" /etc/postgresql/12/main/postgresql.conf
 sudo sh -c "echo 'host all all all md5' >> /etc/postgresql/12/main/pg_hba.conf"
+sudo service postgresql restart
 echo "----- postgresSql complete -----"
 echo ""
 

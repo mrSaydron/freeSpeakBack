@@ -17,14 +17,14 @@ public class S3YandexConfiguration {
         AWSCredentials credentials = new AWSCredentials() {
             @Override
             public String getAWSAccessKeyId() {
-                return "ajeqbb6srv9pfr8s1rmk";
+                return "rFmWem9R34IwcMxLFqS-";
 //                return "GW2JGERwscUPYxCs81Hl";
 //                return "DTGoBDoFRleHMxWfFTYx";
             }
 
             @Override
             public String getAWSSecretKey() {
-                return "AQVN2lrNzf05ftHA7tQ5E2zstGaj0i5O2T4Ndd6S";
+                return "t5HccyzYdpfSEGgTCPSuhuOOFtmMue9q9F0xaVTw";
 //                return "WklTVGh60uQkc_YVwuM-W4a-FPeGy0BzT6fLK5Cf";
 //                return "zBKI8AXmJ0lx1MqoBr8HV92F7yBr9v4qasINoZ4n";
             }

@@ -144,3 +144,7 @@ jhipster:
 
 yandex-key: dict.1.1.20171108T065808Z.b561c8f7a12e8f4f.c1269610cddcc53b8115cf68caf4ae70230d2867
 abby-key: YTI0NThjMWQtZjEyMC00NGJlLWI5Y2YtMGExZWY4YTVhNzA3OmIzY2E2OTA1YTQwMjQ4OGZiNjJhYjUzMDM5NDc4Njk1
+
+s3-endpoint: http://localhost:9100
+s3-access-key: minioadmin
+s3-secret-key: minioadmin

@@ -85,6 +85,7 @@
             <column name="created_date" type="timestamp"/>
         </loadData>
         <dropDefaultValue tableName="jhi_user" columnName="created_date" columnDataType="datetime"/>
+        <sql>ALTER SEQUENCE jhi_user_id_seq RESTART WITH 10;</sql>
         <loadData
                   file="config/liquibase/data/authority.csv"
                   separator=";"

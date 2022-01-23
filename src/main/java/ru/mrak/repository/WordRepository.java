@@ -43,7 +43,11 @@ public interface WordRepository extends JpaRepository<Word, Long>, JpaSpecificat
         "join book_sentence bs on bs.id = bshw.book_sentence_id " +
         "where bs.book_id = :bookId " +
         "and word.id = bshw.word_id) " +
-        "where 1=1", nativeQuery = true)
+        "where word.id in ( " +
+        "select bshw_in.id " +
+        "from book_sentence_has_word bshw_in " +
+        "join book_sentence bs_in on bs_in.id = bshw_in.book_sentence_id " +
+        "where bs_in.book_id = :bookId);", nativeQuery = true)
     void updateTotalAmountByBookId(@Param("bookId") Long bookId);
 
     @Query(value = "select count(*)\n" +

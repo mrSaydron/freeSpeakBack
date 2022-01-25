@@ -65,7 +65,7 @@ public class BookService {
         }
 
         entityManager.flush();
-//        wordService.updateTotalAmount(book.getId());
+        wordService.updateTotalAmount(book.getId());
     }
 
     /**

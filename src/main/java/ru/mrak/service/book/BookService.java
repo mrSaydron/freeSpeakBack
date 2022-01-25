@@ -7,10 +7,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.mrak.dto.BookCreateDTO;
+import ru.mrak.dto.BookDto;
 import ru.mrak.mapper.BookCreateMapper;
+import ru.mrak.mapper.BookMapper;
 import ru.mrak.model.entity.Book;
 import ru.mrak.model.entity.BookSentence;
-import ru.mrak.model.entity.TextTag;
 import ru.mrak.model.entity.User;
 import ru.mrak.repository.BookRepository;
 import ru.mrak.repository.BookSentenceRepository;
@@ -18,9 +20,6 @@ import ru.mrak.service.TextService;
 import ru.mrak.service.UserService;
 import ru.mrak.service.UserWordService;
 import ru.mrak.service.WordService;
-import ru.mrak.dto.BookCreateDTO;
-import ru.mrak.dto.BookDto;
-import ru.mrak.mapper.BookMapper;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -66,7 +65,7 @@ public class BookService {
         }
 
         entityManager.flush();
-        wordService.updateTotalAmount(book.getId());
+//        wordService.updateTotalAmount(book.getId());
     }
 
     /**

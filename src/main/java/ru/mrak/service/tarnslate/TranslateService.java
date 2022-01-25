@@ -84,6 +84,7 @@ public class TranslateService implements TranslateServiceInterface {
                 log.warn("Not find part of speech: {}, for word: {}", word.getPartOfSpeech(), word.getWord());
             }
         } catch (Exception e) {
+            log.warn("Catch exception on updateWord, word: {}", word.getWord());
             log.warn(e.getMessage());
         }
     }

@@ -43,5 +43,6 @@
     <include file="config/liquibase/changelog/2021.12.18_1_create_table_text_tag.sql" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/2021.12.18_2_create_table_book_has_text_tag.sql" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/2022.01.24_create_indexes.sql" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/2022.01.25_create_index_for_word.sql" relativeToChangelogFile="false"/>
 
 </databaseChangeLog>

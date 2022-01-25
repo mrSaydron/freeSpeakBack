@@ -25,6 +25,9 @@ public enum PosEnum {
 
     @JsonProperty("foreign word")
     foreignWord(), // иностранное слово
+
+    @JsonProperty("adverbial participle")
+    adverbialParticiple(), // наречное причастие
     ;
 
     private Set<PartOfSpeechEnum> tags = new HashSet<>();

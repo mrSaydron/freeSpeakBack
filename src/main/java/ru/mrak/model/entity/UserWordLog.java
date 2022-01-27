@@ -23,6 +23,7 @@ public class UserWordLog {
 
     @NotNull
     @Convert(converter = UserWordLogTypeEnumConverter.class)
+    @Column(name = "type_id")
     private UserWordLogTypeEnum type;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -33,7 +33,6 @@ public class GalleryFilterService {
                         case "children-book":  result = getBookChildrenBook(); break;
                         case "detective":  result = getBookDetectiveBook(); break;
                         case "adventure":  result = getBookAdventureBook(); break;
-                        case "another-tag":  result = getBookAnotherTagBook(); break;
                         default: throw new RuntimeException();
                     }
                 }
@@ -100,18 +99,6 @@ public class GalleryFilterService {
         galleryFilterBook.setBookCriteria(bookCriteria);
         galleryFilterBook.setPageable(PageRequest.of(0, 10, Sort.by(Sort.Order.asc("title"))).first());
         galleryFilterBook.setTitle("Приключения");
-        return galleryFilterBook;
-    }
-
-    private GalleryFilter getBookAnotherTagBook() {
-        GalleryFilterBook galleryFilterBook = new GalleryFilterBook();
-        BookCriteria bookCriteria = new BookCriteria();
-        Filter<Long> textTagFilter = new Filter<>();
-        textTagFilter.setNotIn(Arrays.asList(1L, 5L, 8L, 25L));
-        bookCriteria.setTextTag(textTagFilter);
-        galleryFilterBook.setBookCriteria(bookCriteria);
-        galleryFilterBook.setPageable(PageRequest.of(0, 10, Sort.by(Sort.Order.asc("title"))).first());
-        galleryFilterBook.setTitle("Другие");
         return galleryFilterBook;
     }
 }

@@ -59,12 +59,6 @@ public class GalleryPageService {
             .setUrl(GALLERY_CONTROLLER_URL + BOOK.getUrl() + "?filter-name=children-book");
         galleriesPageDto.getGalleryHeads().add(booksChildrenBookHead);
 
-        GalleryHeadDto booksAnotherTagBookHead = new GalleryHeadDto()
-            .setTitle(BOOK.getTitle())
-            .setType(BOOK)
-            .setUrl(GALLERY_CONTROLLER_URL + BOOK.getUrl() + "?filter-name=another-tag");
-        galleriesPageDto.getGalleryHeads().add(booksAnotherTagBookHead);
-
         return Optional.of(galleriesPageDto);
     }
 }

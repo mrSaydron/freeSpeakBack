@@ -29,7 +29,7 @@ public interface UserWordRepository extends JpaRepository<UserWord, Long>, JpaSp
      * Возвращает количество неудачных ответов за день
      */
     @Query(
-        "select count(uw.id) " +
+        "select sum(uwp.failAttempts) " +
         "from UserWord uw " +
         "join uw.wordProgresses uwp " +
         "where uw.user = :user " +
@@ -114,7 +114,7 @@ public interface UserWordRepository extends JpaRepository<UserWord, Long>, JpaSp
             "join user_word_has_progress p on p.user_word_id = uw.id " +
             "where uw.user_id = :userId " +
             "and (p.box_number = " + UserWordService.PRELIMINARY_BOX_NUMBER + " or uw.from_test = true) " +
-            "order by uw.priority " +
+            "order by uw.from_test, uw.priority " +
             "limit :limit",
         nativeQuery = true
     )

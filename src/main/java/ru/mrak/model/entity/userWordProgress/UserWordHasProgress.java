@@ -1,11 +1,15 @@
 package ru.mrak.model.entity.userWordProgress;
 
+import lombok.Getter;
+import lombok.Setter;
 import ru.mrak.model.enumeration.UserWordProgressTypeEnum;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
 
+@Getter
+@Setter
 @Embeddable
 @Table(name = "user_word_has_progress")
 public class UserWordHasProgress implements Serializable {
@@ -28,48 +32,8 @@ public class UserWordHasProgress implements Serializable {
     @Column(name = "successful_last_date")
     private Instant successfulLastDate;
 
-    public UserWordHasProgress() {
-    }
-
-    public UserWordProgressTypeEnum getType() {
-        return type;
-    }
-
-    public void setType(UserWordProgressTypeEnum type) {
-        this.type = type;
-    }
-
-    public int getSuccessfulAttempts() {
-        return successfulAttempts;
-    }
-
-    public void setSuccessfulAttempts(int successfulAttempts) {
-        this.successfulAttempts = successfulAttempts;
-    }
-
-    public int getBoxNumber() {
-        return boxNumber;
-    }
-
-    public void setBoxNumber(int boxNumber) {
-        this.boxNumber = boxNumber;
-    }
-
-    public Instant getFailLastDate() {
-        return failLastDate;
-    }
-
-    public void setFailLastDate(Instant failLastDate) {
-        this.failLastDate = failLastDate;
-    }
-
-    public Instant getSuccessfulLastDate() {
-        return successfulLastDate;
-    }
-
-    public void setSuccessfulLastDate(Instant successLastDate) {
-        this.successfulLastDate = successLastDate;
-    }
+    @Column(name = "fail_attempts")
+    private int failAttempts;
 
     @Override
     public String toString() {

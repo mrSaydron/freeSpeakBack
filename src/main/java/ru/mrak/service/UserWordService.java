@@ -259,7 +259,8 @@ public class UserWordService {
     /**
      * Пользователь ответил неверно
      * Прогресс сбрасывается, слово перемещается в первую коробку
-     * Записывается текущее вреся в поле с неправильным ответом
+     * Записывается текущее время в поле с неправильным ответом
+     * Увеличивается счетчик не правильных ответов
      */
     public void answerFail(Long userWordId, UserWordProgressTypeEnum type) {
         log.debug("user fail answer on word progress");
@@ -273,7 +274,20 @@ public class UserWordService {
                 .findFirst().orElseThrow(RuntimeException::new);
             // переноси слово в обучение
             userWordHasProgress.setBoxNumber(START_BOX_NUMBER);
+
+            // счетчик неверных ответов
+            Instant failLastDate = userWordHasProgress.getFailLastDate();
+            LocalDateTime currentDate = LocalDate.now().atStartOfDay();
+            Instant startDay = currentDate.toInstant(ZoneOffset.UTC);
+            if (failLastDate != null && startDay.compareTo(failLastDate) < 0) {
+                userWordHasProgress.setFailAttempts(userWordHasProgress.getFailAttempts() + 1);
+            } else {
+                userWordHasProgress.setFailAttempts(1);
+            }
             userWordHasProgress.setFailLastDate(Instant.now());
+
+            // сброс флага тестового изучения
+            if (userWord.isFromTest()) userWord.setFromTest(false);
 
             userWordLogService.create(userWord.getWord(), UserWordLogTypeEnum.FAIL);
         }
@@ -307,6 +321,8 @@ public class UserWordService {
                 userWordHasProgress.setBoxNumber(userWordHasProgress.getBoxNumber() + 1);
             }
             userWordHasProgress.setSuccessfulLastDate(Instant.now());
+
+            if (userWord.isFromTest()) userWord.setFromTest(false);
 
             userWordLogService.create(userWord.getWord(), UserWordLogTypeEnum.SUCCESS);
         }

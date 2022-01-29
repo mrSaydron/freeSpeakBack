@@ -382,6 +382,7 @@ public class UserWordService {
         log.debug("reset words priority");
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
         userWordRepository.resetPriority(user.getId());
+        userWordRepository.flush();
     }
 
     /**

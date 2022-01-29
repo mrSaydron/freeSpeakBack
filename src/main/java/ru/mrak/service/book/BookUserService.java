@@ -33,6 +33,7 @@ public class BookUserService {
         log.debug("reset book 'is read'");
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
         bookUserRepository.resetIsReadByUserId(user.getId());
+        bookUserRepository.flush();
     }
 
     /**
@@ -51,5 +52,6 @@ public class BookUserService {
             bookUser.setIsReading(true);
             bookUserRepository.save(bookUser);
         }
+        bookUserRepository.flush();
     }
 }

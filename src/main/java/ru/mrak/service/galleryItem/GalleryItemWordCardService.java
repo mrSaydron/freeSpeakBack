@@ -32,10 +32,16 @@ public class GalleryItemWordCardService implements GalleryItem<GalleryItemCardLe
         Optional<GalleryItemCardLearnDto> result = Optional.empty();
 
         List<UserWord> wordsOfDay = userWordService.getWordsOfDay();
-        int leftHearts = userWordService.getLeftHearts();
 
-        if (leftHearts > 0 || wordsOfDay.size() > 0) {
+        if (wordsOfDay.size() > 0) {
             result = Optional.of(WORD_CARD_GALLERY);
+        } else {
+            int leftHearts = userWordService.getLeftHearts();
+            List<UserWord> nextWords = userWordService.getNextWords();
+
+            if (leftHearts > 0 && nextWords.size() > 0) {
+                result = Optional.of(WORD_CARD_GALLERY);
+            }
         }
         return result;
     }

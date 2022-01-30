@@ -35,7 +35,7 @@ public interface UserWordRepository extends JpaRepository<UserWord, Long>, JpaSp
         "where uw.user = :user " +
         "and uwp.failLastDate >= :currentDay"
     )
-    Integer getCountFailAnswersByUserAndDate(User user, Instant currentDay);
+    Optional<Integer> getCountFailAnswersByUserAndDate(User user, Instant currentDay);
 
     /**
      * Возвращает слова для изучения на указанный день

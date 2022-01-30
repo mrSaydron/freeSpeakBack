@@ -224,7 +224,8 @@ public class UserWordService {
 
         LocalDateTime currentDate = LocalDate.now().atStartOfDay();
         Instant instant = currentDate.toInstant(ZoneOffset.UTC);
-        int lastHearts = maxUserHearts - userWordRepository.getCountFailAnswersByUserAndDate(user, instant);
+        Optional<Integer> failAnswers = userWordRepository.getCountFailAnswersByUserAndDate(user, instant);
+        int lastHearts = maxUserHearts - failAnswers.orElse(0);
         return Math.max(lastHearts, 0);
     }
 

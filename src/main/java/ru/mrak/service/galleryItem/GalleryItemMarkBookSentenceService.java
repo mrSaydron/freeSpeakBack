@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import ru.mrak.service.book.BookSentenceService;
 import ru.mrak.dto.gallery.item.GalleryItemMarkSentenceDto;
+import ru.mrak.service.UserMarkedBookService;
 
 import java.util.Optional;
 
@@ -14,11 +14,11 @@ import java.util.Optional;
  */
 @Service
 @RequiredArgsConstructor
-public class GalleryItemMarkSentenceService implements GalleryItem<GalleryItemMarkSentenceDto> {
+public class GalleryItemMarkBookSentenceService implements GalleryItem<GalleryItemMarkSentenceDto> {
 
-    private final Logger log = LoggerFactory.getLogger(GalleryItemMarkSentenceService.class);
+    private final Logger log = LoggerFactory.getLogger(GalleryItemMarkBookSentenceService.class);
 
-    private final BookSentenceService bookSentenceService;
+    private final UserMarkedBookService userMarkedBookService;
 
     private static final GalleryItemMarkSentenceDto MARK_SENTENCE_GALLERY;
 
@@ -32,7 +32,7 @@ public class GalleryItemMarkSentenceService implements GalleryItem<GalleryItemMa
         log.debug("get gallery item: mark sentence");
         Optional<GalleryItemMarkSentenceDto> result = Optional.empty();
 
-        boolean hasMarkSentence = bookSentenceService.hasMarkSentence();
+        boolean hasMarkSentence = userMarkedBookService.hasMarkSentence();
         if (hasMarkSentence) {
             result = Optional.of(MARK_SENTENCE_GALLERY);
         }

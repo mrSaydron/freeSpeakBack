@@ -40,6 +40,7 @@ public class UserWordService {
     private final UserService userService;
     private final UserWordQueryService userWordQueryService;
     private final UserWordLogService userWordLogService;
+    private final UserSentencesService userSentencesService;
 
     private final WordRepository wordRepository;
     private final UserWordRepository userWordRepository;
@@ -244,8 +245,8 @@ public class UserWordService {
         long days = between.toDays();
 
         List<Integer> boxes = new ArrayList<>();
-        boxes.add(1);
-        for (int box = 2; box <= boxCount; box++) {
+        boxes.add(START_BOX_NUMBER);
+        for (int box = START_BOX_NUMBER + 1; box <= boxCount; box++) {
             if ((days + Math.pow(2, box - 2)) % Math.pow(2, box - 1) == 0) {
                 boxes.add(box);
                 break;
@@ -264,8 +265,7 @@ public class UserWordService {
      * Увеличивается счетчик не правильных ответов
      */
     public void answerFail(Long userWordId, UserWordProgressTypeEnum type) {
-        log.debug("user fail answer on word progress");
-        User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
+        log.debug("user fail answer on word progress, userWordId: {}", userWordId);
 
         Optional<UserWord> userWordOptional = userWordRepository.findById(userWordId);
         if (userWordOptional.isPresent()) {
@@ -300,8 +300,7 @@ public class UserWordService {
      * Записывается текущее время в поле с правильным ответом
      */
     public void answerSuccess(Long userWordId, UserWordProgressTypeEnum type) {
-        log.debug("user success answer on word progress");
-        User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
+        log.debug("user success answer on word progress, userWordId: {}", userWordId);
 
         Optional<UserWord> userWordOptional = userWordRepository.findById(userWordId);
         if (userWordOptional.isPresent()) {
@@ -326,6 +325,7 @@ public class UserWordService {
             if (userWord.isFromTest()) userWord.setFromTest(false);
 
             userWordLogService.create(userWord.getWord(), UserWordLogTypeEnum.SUCCESS);
+            userSentencesService.findAndMarkSentenceByWord(userWord.getWord());
         }
     }
 

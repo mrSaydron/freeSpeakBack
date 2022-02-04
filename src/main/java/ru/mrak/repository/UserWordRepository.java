@@ -46,8 +46,7 @@ public interface UserWordRepository extends JpaRepository<UserWord, Long>, JpaSp
         "join uw.wordProgresses uwp " +
         "where uw.user = :user " +
         "and uwp.boxNumber in :boxes " +
-        "and (uwp.successfulLastDate < :currentDay or uwp.successfulLastDate is null) " +
-        "and (uwp.failLastDate < :currentDay or uwp.failLastDate is null)"
+        "and (uwp.successfulLastDate < :currentDay or uwp.successfulLastDate is null)"
     )
     List<UserWord> findByAllByUserAndBoxesAndLessFailDateAndLessSuccessDate(
         User user,

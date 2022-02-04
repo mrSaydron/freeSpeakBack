@@ -1,7 +1,10 @@
 package ru.mrak.model.entity.userHasSentences;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -11,6 +14,9 @@ import java.time.Instant;
 @IdClass(UserHasSentencesId.class)
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
+@Accessors(chain = true)
 public class UserHasSentences {
 
     @Id
@@ -27,35 +33,6 @@ public class UserHasSentences {
     @Column(name = "fail_last_date")
     private Instant failLastDate;
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public Long getBookSentenceId() {
-        return bookSentenceId;
-    }
-
-    public void setBookSentenceId(Long bookSentenceId) {
-        this.bookSentenceId = bookSentenceId;
-    }
-
-    public Instant getSuccessfulLastDate() {
-        return successfulLastDate;
-    }
-
-    public void setSuccessfulLastDate(Instant successfulLastDate) {
-        this.successfulLastDate = successfulLastDate;
-    }
-
-    public Instant getFailLastDate() {
-        return failLastDate;
-    }
-
-    public void setFailLastDate(Instant failLastDate) {
-        this.failLastDate = failLastDate;
-    }
+    @Column(name = "mark_date")
+    private Instant markDate;
 }

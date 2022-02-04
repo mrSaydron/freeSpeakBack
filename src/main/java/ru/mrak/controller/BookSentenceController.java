@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import ru.mrak.model.entity.BookSentence;
+import ru.mrak.service.UserMarkedBookService;
+import ru.mrak.service.UserSentencesService;
 import ru.mrak.service.book.BookSentenceService;
 import ru.mrak.dto.BookSentenceDTO;
 import ru.mrak.dto.BookSentenceReadDto;
@@ -25,25 +27,27 @@ public class BookSentenceController {
     private final BookSentenceMapper bookSentenceMapper;
 
     private final BookSentenceService bookSentenceService;
+    private final UserSentencesService userSentencesService;
+    private final UserMarkedBookService userMarkedBookService;
 
     @GetMapping("/read")
     @Transactional
     public List<BookSentenceReadDto> getSentenceForUser() {
         log.debug("Get sentence for user");
-        List<BookSentence> sentenceForUser = bookSentenceService.getSentenceForUser();
+        List<BookSentence> sentenceForUser = userSentencesService.getMarkedSentences();
         return bookSentenceReadMapper.toDto(sentenceForUser);
     }
 
     @PutMapping("/read/successful/{bookSentenceId}")
     public void successTranslate(@PathVariable long bookSentenceId) {
         log.debug("User success translate sentence: id {}", bookSentenceId);
-        bookSentenceService.successTranslate(bookSentenceId);
+        userSentencesService.successTranslate(bookSentenceId);
     }
 
     @PutMapping("/read/fail/{bookSentenceId}")
     public void failTranslate(@PathVariable long bookSentenceId) {
         log.debug("User fail translate sentence: id {}", bookSentenceId);
-        bookSentenceService.failTranslate(bookSentenceId);
+        userSentencesService.failTranslate(bookSentenceId);
     }
 
     @GetMapping
@@ -58,13 +62,13 @@ public class BookSentenceController {
     @Transactional(readOnly = true)
     public List<BookSentenceReadDto> getSentencesFromMarkedBook() {
         log.debug("GET sentences from book to read");
-        List<BookSentence> sentenceToLearn = bookSentenceService.getSentencesFromMarkedBook();
+        List<BookSentence> sentenceToLearn = userMarkedBookService.getSentencesFromMarkedBook();
         return bookSentenceReadMapper.toDto(sentenceToLearn);
     }
 
     @PutMapping("/read-marked-book/successful/{bookSentenceId}")
     public void successTranslateMarkedBook(@PathVariable long bookSentenceId) {
         log.debug("PUT User success translate sentence from marked book: id {}", bookSentenceId);
-        bookSentenceService.successTranslateFromMarkedBook(bookSentenceId);
+        userMarkedBookService.successTranslateFromMarkedBook(bookSentenceId);
     }
 }

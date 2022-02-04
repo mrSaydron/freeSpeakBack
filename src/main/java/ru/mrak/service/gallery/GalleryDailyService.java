@@ -4,13 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import ru.mrak.galleryFilter.GalleryFilter;
 import ru.mrak.model.entity.UserSettings;
-import ru.mrak.model.enumeration.GalleryFilterEnum;
 import ru.mrak.model.enumeration.GalleryTypeEnum;
 import ru.mrak.service.UserSettingsService;
 import ru.mrak.dto.gallery.GalleryDto;
-import ru.mrak.service.galleryItem.GalleryItemMarkSentenceService;
+import ru.mrak.service.galleryItem.GalleryItemMarkBookSentenceService;
 import ru.mrak.service.galleryItem.GalleryItemSentenceService;
 import ru.mrak.service.galleryItem.GalleryItemTestVocabularyService;
 import ru.mrak.service.galleryItem.GalleryItemWordCardService;
@@ -27,7 +25,7 @@ public class GalleryDailyService implements Gallery {
 
     private final GalleryItemWordCardService galleryItemWordCardService;
     private final GalleryItemSentenceService galleryItemSentenceService;
-    private final GalleryItemMarkSentenceService galleryItemMarkSentenceService;
+    private final GalleryItemMarkBookSentenceService galleryItemMarkBookSentenceService;
     private final GalleryItemTestVocabularyService galleryItemTestVocabularyService;
 
     @Override
@@ -45,7 +43,7 @@ public class GalleryDailyService implements Gallery {
 
         galleryItemWordCardService.get().ifPresent(item -> galleryDto.getGalleryItems().add(item));
         galleryItemSentenceService.get().ifPresent(item -> galleryDto.getGalleryItems().add(item));
-        galleryItemMarkSentenceService.get().ifPresent(item -> galleryDto.getGalleryItems().add(item));
+        galleryItemMarkBookSentenceService.get().ifPresent(item -> galleryDto.getGalleryItems().add(item));
 
         return Optional.of(galleryDto);
     }

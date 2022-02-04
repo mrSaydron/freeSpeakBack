@@ -5,8 +5,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ru.mrak.model.entity.Book;
 import ru.mrak.model.entity.BookSentence;
-import ru.mrak.model.entity.User;
-import ru.mrak.model.entity.Word;
 
 import java.time.Instant;
 import java.util.List;
@@ -104,5 +102,21 @@ public interface BookSentenceRepository extends JpaRepository<BookSentence, Long
         @Param("userId") long userId,
         @Param("sentenceId") long sentenceId,
         @Param("boxNumber") int boxNumber
+    );
+
+    @Query(
+        value =
+            "select bs.* " +
+            "from book_sentence bs " +
+            "join user_has_sentences uhs on bs.id = uhs.book_sentence_id " +
+            "where uhs.user_id = :userId " +
+            "and uhs.mark_date > :startDay " +
+            "and uhs.successful_last_date is null " +
+            "and uhs.fail_last_date is null",
+        nativeQuery = true
+    )
+    List<BookSentence> findAllMarkedByUser(
+        @Param("userId") Long userId,
+        @Param("startDay") Instant startDay
     );
 }

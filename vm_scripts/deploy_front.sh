@@ -17,7 +17,7 @@ curl \
 -L \
 -o build_result.zip \
 -H "Accept: application/vnd.github.v3+json" \
--H "Authorization: token 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" \
+-H "Authorization: token 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" \
 $url
 
 sudo mkdir /web-app

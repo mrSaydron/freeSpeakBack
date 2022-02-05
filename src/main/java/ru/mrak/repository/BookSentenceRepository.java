@@ -71,7 +71,8 @@ public interface BookSentenceRepository extends JpaRepository<BookSentence, Long
             "    and w_in.translate is not null" +
             "    ) " +
             "and bs.book_id = :bookId " +
-            "and bs.id > :sentenceId",
+            "and bs.id > :sentenceId " +
+            "order by bs.id",
         nativeQuery = true
     )
     List<BookSentence> findAllWhereAllLearnedUserWords(

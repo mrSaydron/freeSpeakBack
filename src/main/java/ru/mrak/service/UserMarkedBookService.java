@@ -33,7 +33,10 @@ public class UserMarkedBookService {
 
     /**
      * Возвращает предложения для тренировки из книги помеченной "для чтения"
+     * Выбирает подходязие предложения из всей книги. Но возвращает только те которые идут по порядку начиная с
+     * предложения с иденификатором кранащимся в bookUser.getLastReadSentenceId()
      */
+    // todo оптимизация
     @Transactional(readOnly = true)
     public List<BookSentence> getSentencesFromMarkedBook() {
         log.debug("get sentence for train");

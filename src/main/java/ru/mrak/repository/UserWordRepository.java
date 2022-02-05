@@ -112,10 +112,15 @@ public interface UserWordRepository extends JpaRepository<UserWord, Long>, JpaSp
             "from user_word uw " +
             "join user_word_has_progress p on p.user_word_id = uw.id " +
             "where uw.user_id = :userId " +
-            "and (p.box_number = " + UserWordService.PRELIMINARY_BOX_NUMBER + " or uw.from_test = true) " +
+            "and (p.box_number = " + UserWordService.PRELIMINARY_BOX_NUMBER + ") " +
+            "and uw.word_id not in (:excludeWordIds)" +
             "order by uw.from_test, uw.priority " +
             "limit :limit",
         nativeQuery = true
     )
-    List<UserWord> getNextWords(@Param("userId") long userId, @Param("limit") int limit);
+    List<UserWord> getNextWords(
+        @Param("userId") long userId,
+        @Param("limit") int limit,
+        @Param("excludeWordIds") List<Long> excludeWordIds
+    );
 }

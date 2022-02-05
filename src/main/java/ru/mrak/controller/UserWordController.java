@@ -167,12 +167,13 @@ public class UserWordController {
 
     /**
      * Возвращает допольнительные слова для изучения из словаря пользователя
+     * @param excludeWordIds исключает слова из выдачи
      */
     @GetMapping("/next-words")
     @Transactional(readOnly = true)
-    public List<UserWordDto> getNextWords() {
+    public List<UserWordDto> getNextWords(@RequestParam(required = false, name = "exclude-word-ids") List<Long> excludeWordIds) {
         log.debug("GET next words");
-        List<UserWord> userWords = userWordService.getNextWords();
+        List<UserWord> userWords = userWordService.getNextWords(excludeWordIds);
         return userWordMapper.toDto(userWords);
     }
 

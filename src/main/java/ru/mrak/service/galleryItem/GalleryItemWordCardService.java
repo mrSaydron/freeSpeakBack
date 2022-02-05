@@ -8,6 +8,7 @@ import ru.mrak.model.entity.userWordProgress.UserWord;
 import ru.mrak.service.UserWordService;
 import ru.mrak.dto.gallery.item.GalleryItemCardLearnDto;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,7 +38,7 @@ public class GalleryItemWordCardService implements GalleryItem<GalleryItemCardLe
             result = Optional.of(WORD_CARD_GALLERY);
         } else {
             int leftHearts = userWordService.getLeftHearts();
-            List<UserWord> nextWords = userWordService.getNextWords();
+            List<UserWord> nextWords = userWordService.getNextWords(Collections.singletonList(0L));
 
             if (leftHearts > 0 && nextWords.size() > 0) {
                 result = Optional.of(WORD_CARD_GALLERY);

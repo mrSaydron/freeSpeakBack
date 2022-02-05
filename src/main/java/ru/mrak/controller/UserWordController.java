@@ -167,6 +167,7 @@ public class UserWordController {
 
     /**
      * Возвращает допольнительные слова для изучения из словаря пользователя
+     * @param excludeWordIds исключает слова из выдачи
      */
     @GetMapping("/next-words")
     @Transactional(readOnly = true)

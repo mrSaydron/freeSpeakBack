@@ -21,10 +21,7 @@ import ru.mrak.repository.WordRepository;
 import ru.mrak.dto.userWord.UserWordCriteria;
 
 import java.time.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -414,9 +411,12 @@ public class UserWordService {
     /**
      * Возвращает допольнительные слова для изучения из словаря пользователя
      */
-    public List<UserWord> getNextWords() {
-        log.debug("get next words");
+    public List<UserWord> getNextWords(List<Long> excludeWordIds) {
+        log.debug("get next words, exclude: {}", excludeWordIds);
+        excludeWordIds = excludeWordIds != null
+            ? excludeWordIds.size() != 0 ? excludeWordIds : Collections.singletonList(0L)
+            : Collections.singletonList(0L);
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
-        return userWordRepository.getNextWords(user.getId(), NEXT_WORD_LIMIT);
+        return userWordRepository.getNextWords(user.getId(), NEXT_WORD_LIMIT, excludeWordIds);
     }
 }

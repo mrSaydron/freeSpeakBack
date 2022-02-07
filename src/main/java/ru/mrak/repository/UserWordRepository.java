@@ -114,7 +114,7 @@ public interface UserWordRepository extends JpaRepository<UserWord, Long>, JpaSp
             "where uw.user_id = :userId " +
             "and (p.box_number = " + UserWordService.PRELIMINARY_BOX_NUMBER + ") " +
             "and uw.word_id not in (:excludeWordIds)" +
-            "order by uw.from_test, uw.priority " +
+            "order by uw.priority " +
             "limit :limit",
         nativeQuery = true
     )

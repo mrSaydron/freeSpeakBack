@@ -7,7 +7,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "user_has_sentences")
@@ -28,11 +28,11 @@ public class UserHasSentences {
     private Long bookSentenceId;
 
     @Column(name = "successful_last_date")
-    private Instant successfulLastDate;
+    private LocalDateTime successfulLastDate;
 
     @Column(name = "fail_last_date")
-    private Instant failLastDate;
+    private LocalDateTime failLastDate;
 
     @Column(name = "mark_date")
-    private Instant markDate;
+    private LocalDateTime markDate;
 }

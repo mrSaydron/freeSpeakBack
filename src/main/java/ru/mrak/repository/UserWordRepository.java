@@ -11,7 +11,7 @@ import ru.mrak.model.entity.Word;
 import ru.mrak.model.entity.userWordProgress.UserWord;
 import ru.mrak.service.UserWordService;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,7 +35,7 @@ public interface UserWordRepository extends JpaRepository<UserWord, Long>, JpaSp
         "where uw.user = :user " +
         "and uwp.failLastDate >= :currentDay"
     )
-    Optional<Integer> getCountFailAnswersByUserAndDate(User user, Instant currentDay);
+    Optional<Integer> getCountFailAnswersByUserAndDate(User user, LocalDateTime currentDay);
 
     /**
      * Возвращает слова для изучения на указанный день
@@ -51,7 +51,7 @@ public interface UserWordRepository extends JpaRepository<UserWord, Long>, JpaSp
     List<UserWord> findByAllByUserAndBoxesAndLessFailDateAndLessSuccessDate(
         User user,
         List<Integer> boxes,
-        Instant currentDay
+        LocalDateTime currentDay
     );
 
     /**
@@ -66,7 +66,7 @@ public interface UserWordRepository extends JpaRepository<UserWord, Long>, JpaSp
     )
     List<UserWord> findAllByUserAndGreaterThanSuccessDate(
         User user,
-        Instant greaterDay
+        LocalDateTime greaterDay
     );
 
 

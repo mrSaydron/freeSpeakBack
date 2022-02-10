@@ -15,9 +15,7 @@ import ru.mrak.repository.BookSentenceRepository;
 import ru.mrak.repository.UserHasSentencesRepository;
 import ru.mrak.repository.UserWordRepository;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneOffset;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +32,7 @@ public class UserSentencesService {
     private final Logger log = LoggerFactory.getLogger(UserSentencesService.class);
 
     private final UserService userService;
+    private final UserTimeService userTimeService;
 
     private final UserHasSentencesRepository userHasSentencesRepository;
     private final UserWordRepository userWordRepository;
@@ -53,7 +52,7 @@ public class UserSentencesService {
         log.debug("Get sentence for user");
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
 
-        Instant startDay = LocalDate.now().atStartOfDay().toInstant(ZoneOffset.UTC);
+        LocalDateTime startDay = userTimeService.getStartDay();
         List<UserWord> words = userWordRepository.findAllByUserAndGreaterThanSuccessDate(user, startDay);
         if (words.isEmpty()) {
             return Collections.emptyList();
@@ -76,7 +75,7 @@ public class UserSentencesService {
         log.debug("Get marked sentences");
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
 
-        Instant startDay = LocalDate.now().atStartOfDay().toInstant(ZoneOffset.UTC);
+        LocalDateTime startDay = userTimeService.getStartDay();
         return bookSentenceRepository.findAllMarkedByUser(user.getId(), startDay);
     }
 
@@ -97,7 +96,7 @@ public class UserSentencesService {
         log.debug("Get sentence by word: {}", word);
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
 
-        Instant startDay = LocalDate.now().atStartOfDay().toInstant(ZoneOffset.UTC);
+        LocalDateTime startDay = userTimeService.getStartDay();
         List<Long> wordIds = Collections.singletonList(word.getId());
         return bookSentenceRepository.findAllForLearnByUserId(
             user.getId(),
@@ -114,7 +113,7 @@ public class UserSentencesService {
         log.debug("Mark sentences to read: {}", sentences);
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
 
-        Instant now = Instant.now();
+        LocalDateTime now = userTimeService.getLocalTime();
         for (BookSentence sentence : sentences) {
             UserHasSentences userHasSentences = new UserHasSentences(user.getId(), sentence.getId(), null, null, now);
             userHasSentencesRepository.save(userHasSentences);
@@ -128,14 +127,15 @@ public class UserSentencesService {
         log.debug("User success translate sentence, id: {}", bookSentenceId);
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
 
-        UserHasSentences userHasSentences = null;
+        UserHasSentences userHasSentences;
         Optional<UserHasSentences> userHasSentencesOptional = userHasSentencesRepository
             .findById(new UserHasSentencesId(user.getId(), bookSentenceId));
+        LocalDateTime localDateTime = userTimeService.getLocalTime();
         if (userHasSentencesOptional.isPresent()) {
             userHasSentences = userHasSentencesOptional.get();
-            userHasSentences.setSuccessfulLastDate(Instant.now());
+            userHasSentences.setSuccessfulLastDate(localDateTime);
         } else {
-            userHasSentences = new UserHasSentences(user.getId(), bookSentenceId, Instant.now(), null, null);
+            userHasSentences = new UserHasSentences(user.getId(), bookSentenceId, localDateTime, null, null);
         }
         userHasSentencesRepository.save(userHasSentences);
     }
@@ -147,14 +147,15 @@ public class UserSentencesService {
         log.debug("User fail translate sentence, id: {}", bookSentenceId);
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
 
-        UserHasSentences userHasSentences = null;
+        UserHasSentences userHasSentences;
         Optional<UserHasSentences> userHasSentencesOptional = userHasSentencesRepository
             .findById(new UserHasSentencesId(user.getId(), bookSentenceId));
+        LocalDateTime localDateTime = userTimeService.getLocalTime();
         if (userHasSentencesOptional.isPresent()) {
             userHasSentences = userHasSentencesOptional.get();
-            userHasSentences.setFailLastDate(Instant.now());
+            userHasSentences.setFailLastDate(localDateTime);
         } else {
-            userHasSentences = new UserHasSentences(user.getId(), bookSentenceId, null, Instant.now(), null);
+            userHasSentences = new UserHasSentences(user.getId(), bookSentenceId, null, localDateTime, null);
         }
         userHasSentencesRepository.save(userHasSentences);
     }

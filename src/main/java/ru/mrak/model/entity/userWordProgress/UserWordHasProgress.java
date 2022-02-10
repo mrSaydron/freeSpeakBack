@@ -6,7 +6,7 @@ import ru.mrak.model.enumeration.UserWordProgressTypeEnum;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -27,10 +27,10 @@ public class UserWordHasProgress implements Serializable {
     private int boxNumber;
 
     @Column(name = "fail_last_date")
-    private Instant failLastDate;
+    private LocalDateTime failLastDate;
 
     @Column(name = "successful_last_date")
-    private Instant successfulLastDate;
+    private LocalDateTime successfulLastDate;
 
     @Column(name = "fail_attempts")
     private int failAttempts;

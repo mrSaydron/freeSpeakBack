@@ -6,7 +6,7 @@ import org.springframework.data.repository.query.Param;
 import ru.mrak.model.entity.Book;
 import ru.mrak.model.entity.BookSentence;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,7 +43,7 @@ public interface BookSentenceRepository extends JpaRepository<BookSentence, Long
         @Param("userId") long userId,
         @Param("boxNumber") long boxNumber,
         @Param("words") List<Long> wordIds,
-        @Param("day") Instant day,
+        @Param("day") LocalDateTime day,
         @Param("size") int size
     );
 
@@ -118,6 +118,6 @@ public interface BookSentenceRepository extends JpaRepository<BookSentence, Long
     )
     List<BookSentence> findAllMarkedByUser(
         @Param("userId") Long userId,
-        @Param("startDay") Instant startDay
+        @Param("startDay") LocalDateTime startDay
     );
 }

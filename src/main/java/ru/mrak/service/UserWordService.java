@@ -38,6 +38,7 @@ public class UserWordService {
     private final UserWordQueryService userWordQueryService;
     private final UserWordLogService userWordLogService;
     private final UserSentencesService userSentencesService;
+    private final UserTimeService userTimeService;
 
     private final WordRepository wordRepository;
     private final UserWordRepository userWordRepository;
@@ -220,9 +221,8 @@ public class UserWordService {
         log.debug("get user left hearts");
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
 
-        LocalDateTime currentDate = LocalDate.now().atStartOfDay();
-        Instant instant = currentDate.toInstant(ZoneOffset.UTC);
-        Optional<Integer> failAnswers = userWordRepository.getCountFailAnswersByUserAndDate(user, instant);
+        LocalDateTime startDay = userTimeService.getStartDay();
+        Optional<Integer> failAnswers = userWordRepository.getCountFailAnswersByUserAndDate(user, startDay);
         int lastHearts = maxUserHearts - failAnswers.orElse(0);
         return Math.max(lastHearts, 0);
     }
@@ -236,9 +236,9 @@ public class UserWordService {
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
 
         Instant createdDate = user.getCreatedDate();
-        LocalDateTime createDay = LocalDateTime.ofInstant(createdDate, ZoneId.systemDefault()).toLocalDate().atStartOfDay();
-        LocalDate currentDate = LocalDate.now();
-        Duration between = Duration.between(createDay, currentDate.atStartOfDay());
+        LocalDateTime createDay = LocalDateTime.ofInstant(createdDate, ZoneOffset.UTC).toLocalDate().atStartOfDay();
+        LocalDateTime startDay = userTimeService.getStartDay();
+        Duration between = Duration.between(createDay, startDay);
         long days = between.toDays();
 
         List<Integer> boxes = new ArrayList<>();
@@ -250,9 +250,7 @@ public class UserWordService {
             }
         }
 
-        Instant currentInstant = currentDate.atStartOfDay().toInstant(ZoneOffset.UTC);
-
-        return userWordRepository.findByAllByUserAndBoxesAndLessFailDateAndLessSuccessDate(user, boxes, currentInstant);
+        return userWordRepository.findByAllByUserAndBoxesAndLessFailDateAndLessSuccessDate(user, boxes, startDay);
     }
 
     /**
@@ -274,15 +272,14 @@ public class UserWordService {
             userWordHasProgress.setBoxNumber(START_BOX_NUMBER);
 
             // счетчик неверных ответов
-            Instant failLastDate = userWordHasProgress.getFailLastDate();
-            LocalDateTime currentDate = LocalDate.now().atStartOfDay();
-            Instant startDay = currentDate.toInstant(ZoneOffset.UTC);
+            LocalDateTime failLastDate = userWordHasProgress.getFailLastDate();
+            LocalDateTime startDay = userTimeService.getStartDay();
             if (failLastDate != null && startDay.compareTo(failLastDate) < 0) {
                 userWordHasProgress.setFailAttempts(userWordHasProgress.getFailAttempts() + 1);
             } else {
                 userWordHasProgress.setFailAttempts(1);
             }
-            userWordHasProgress.setFailLastDate(Instant.now());
+            userWordHasProgress.setFailLastDate(userTimeService.getLocalTime());
 
             // сброс флага тестового изучения
             if (userWord.isFromTest()) userWord.setFromTest(false);
@@ -306,9 +303,9 @@ public class UserWordService {
                 .filter(progress -> Objects.equals(type, progress.getType()))
                 .findFirst().orElseThrow(RuntimeException::new);
 
-            Instant currentInstant = LocalDate.now().atStartOfDay().toInstant(ZoneOffset.UTC);
+            LocalDateTime startDay = userTimeService.getStartDay();
 
-            if ((userWordHasProgress.getFailLastDate() == null || userWordHasProgress.getFailLastDate().compareTo(currentInstant) < 0)
+            if ((userWordHasProgress.getFailLastDate() == null || userWordHasProgress.getFailLastDate().compareTo(startDay) < 0)
                 && userWordHasProgress.getBoxNumber() <= boxCount
             ) {
                 if (userWordHasProgress.getBoxNumber() == PRELIMINARY_BOX_NUMBER) {
@@ -317,7 +314,7 @@ public class UserWordService {
                 }
                 userWordHasProgress.setBoxNumber(userWordHasProgress.getBoxNumber() + 1);
             }
-            userWordHasProgress.setSuccessfulLastDate(Instant.now());
+            userWordHasProgress.setSuccessfulLastDate(userTimeService.getLocalTime());
 
             if (userWord.isFromTest()) userWord.setFromTest(false);
 
@@ -377,7 +374,7 @@ public class UserWordService {
         log.debug("get user word by word id: {}", wordId);
         User user = userService.getUserWithAuthorities().orElseThrow(RuntimeException::new);
         Optional<UserWord> userWordOptional = userWordRepository.findByUserAndWord(user, wordRepository.getOne(wordId));
-        UserWord result = null;
+        UserWord result;
         if (userWordOptional.isPresent()) {
             result = userWordOptional.get();
         } else {

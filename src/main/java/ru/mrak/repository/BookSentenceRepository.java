@@ -37,13 +37,12 @@ public interface BookSentenceRepository extends JpaRepository<BookSentence, Long
         "      and bw_in.word_id is not null " +
         "    ) " +
         "and bw.word_id in :words " +
-        "and (us.user_id is null or (us.successful_last_date is null and (us.fail_last_date is null or us.fail_last_date < :day))) " +
+        "and (us.user_id is null or (us.successful_last_date is null)) " +
         "limit :size", nativeQuery = true)
     List<BookSentence> findAllForLearnByUserId(
         @Param("userId") long userId,
         @Param("boxNumber") long boxNumber,
         @Param("words") List<Long> wordIds,
-        @Param("day") LocalDateTime day,
         @Param("size") int size
     );
 
@@ -112,8 +111,7 @@ public interface BookSentenceRepository extends JpaRepository<BookSentence, Long
             "join user_has_sentences uhs on bs.id = uhs.book_sentence_id " +
             "where uhs.user_id = :userId " +
             "and uhs.mark_date > :startDay " +
-            "and uhs.successful_last_date is null " +
-            "and uhs.fail_last_date is null",
+            "and uhs.successful_last_date is null",
         nativeQuery = true
     )
     List<BookSentence> findAllMarkedByUser(

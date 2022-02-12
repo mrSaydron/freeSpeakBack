@@ -47,5 +47,6 @@
     <include file="config/liquibase/changelog/2022.01.28_alter_column_in_user_word.sql" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/2022.01.29_add_column_to_user_word_has_progress.sql" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/2022.02.03_add_column_to_user_has_sentences.sql" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/2022.02.13_remove_column_from_user_has_sentences.sql" relativeToChangelogFile="false"/>
 
 </databaseChangeLog>

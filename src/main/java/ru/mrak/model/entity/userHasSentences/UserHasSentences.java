@@ -30,9 +30,6 @@ public class UserHasSentences {
     @Column(name = "successful_last_date")
     private LocalDateTime successfulLastDate;
 
-    @Column(name = "fail_last_date")
-    private LocalDateTime failLastDate;
-
     @Column(name = "mark_date")
     private LocalDateTime markDate;
 }

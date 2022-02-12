@@ -44,12 +44,6 @@ public class BookSentenceController {
         userSentencesService.successTranslate(bookSentenceId);
     }
 
-    @PutMapping("/read/fail/{bookSentenceId}")
-    public void failTranslate(@PathVariable long bookSentenceId) {
-        log.debug("User fail translate sentence: id {}", bookSentenceId);
-        userSentencesService.failTranslate(bookSentenceId);
-    }
-
     @GetMapping
     @Transactional(readOnly = true)
     public List<BookSentenceDTO> getSentences(@RequestParam Long bookId) {

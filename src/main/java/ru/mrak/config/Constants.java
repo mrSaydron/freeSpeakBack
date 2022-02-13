@@ -14,6 +14,10 @@ public final class Constants {
 
     public static final String ID_GENERATOR = "ID_GENERATOR";
 
+    // Количество предложения до и после изучаемого предложения
+    public static final int SENTENCES_BEFORE = 2;
+    public static final int SENTENCES_AFTER = 2;
+
     private Constants() {
     }
 }

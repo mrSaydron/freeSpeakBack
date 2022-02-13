@@ -30,6 +30,9 @@ public class BookSentenceController {
     private final UserSentencesService userSentencesService;
     private final UserMarkedBookService userMarkedBookService;
 
+    /**
+     * Возвращает предложения для урока "тренировака предложений"
+     */
     @GetMapping("/read")
     @Transactional
     public List<BookSentenceReadDto> getSentenceForUser() {
@@ -38,12 +41,18 @@ public class BookSentenceController {
         return bookSentenceReadMapper.toDto(sentenceForUser);
     }
 
+    /**
+     * Помечает предложение прочитанным
+     */
     @PutMapping("/read/successful/{bookSentenceId}")
     public void successTranslate(@PathVariable long bookSentenceId) {
         log.debug("User success translate sentence: id {}", bookSentenceId);
         userSentencesService.successTranslate(bookSentenceId);
     }
 
+    /**
+     * Возвращает все предложения для книги
+     */
     @GetMapping
     @Transactional(readOnly = true)
     public List<BookSentenceDTO> getSentences(@RequestParam Long bookId) {
@@ -52,6 +61,9 @@ public class BookSentenceController {
         return bookSentenceMapper.toDto(bookServices);
     }
 
+    /**
+     * Возвращает предложения для урока "чтение отмеченной книги"
+     */
     @GetMapping("/read-marked-book")
     @Transactional(readOnly = true)
     public List<BookSentenceReadDto> getSentencesFromMarkedBook() {
@@ -60,6 +72,9 @@ public class BookSentenceController {
         return bookSentenceReadMapper.toDto(sentenceToLearn);
     }
 
+    /**
+     * Отмечает предложение прочитанным в уроку "чтение отмеченной книги"
+     */
     @PutMapping("/read-marked-book/successful/{bookSentenceId}")
     public void successTranslateMarkedBook(@PathVariable long bookSentenceId) {
         log.debug("PUT User success translate sentence from marked book: id {}", bookSentenceId);

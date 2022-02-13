@@ -1,37 +1,23 @@
 package ru.mrak.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
 import java.util.List;
 
 /**
  * Класс с предложением из книги для прочтения
  */
+@Getter
+@Setter
+@Accessors(chain = true)
 public class BookSentenceReadDto {
 
     private Long id;
     private List<BookSentenceHasWordDTO> words;
     private BookDto book;
+    private List<BookSentenceDTO> beforeSentences;
+    private List<BookSentenceDTO> afterSentences;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public List<BookSentenceHasWordDTO> getWords() {
-        return words;
-    }
-
-    public void setWords(List<BookSentenceHasWordDTO> words) {
-        this.words = words;
-    }
-
-    public BookDto getBook() {
-        return book;
-    }
-
-    public void setBook(BookDto book) {
-        this.book = book;
-    }
 }

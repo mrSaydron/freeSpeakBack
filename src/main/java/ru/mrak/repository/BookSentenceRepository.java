@@ -118,4 +118,42 @@ public interface BookSentenceRepository extends JpaRepository<BookSentence, Long
         @Param("userId") Long userId,
         @Param("startDay") LocalDateTime startDay
     );
+
+    /**
+     * Возвращает предложения до указанного, для указанной книги
+     */
+    @Query(
+        value =
+            "select bs.* " +
+            "from book_sentence bs " +
+            "where bs.id < :sentenceId " +
+            "and bs.book_id = :bookId " +
+            "order by bs.id desc " +
+            "limit :before",
+        nativeQuery = true
+    )
+    List<BookSentence> findBeforeSentences(
+        @Param("sentenceId") long sentenceId,
+        @Param("bookId") long bookId,
+        @Param("before") int before
+    );
+
+    /**
+     * Возвращает предложения после указанного, для указанной книги
+     */
+    @Query(
+        value =
+            "select bs.* " +
+                "from book_sentence bs " +
+                "where bs.id > :sentenceId " +
+                "and bs.book_id = :bookId " +
+                "order by bs.id " +
+                "limit :after",
+        nativeQuery = true
+    )
+    List<BookSentence> findAfterSentences(
+        @Param("sentenceId") long sentenceId,
+        @Param("bookId") long bookId,
+        @Param("after") int after
+    );
 }

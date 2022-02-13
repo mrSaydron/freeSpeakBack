@@ -9,6 +9,7 @@ import ru.mrak.model.entity.BookSentence;
 import ru.mrak.repository.BookSentenceRepository;
 import ru.mrak.config.Constants;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Mapper(
@@ -26,6 +27,7 @@ public abstract class BookSentenceReadMapper implements EntityMapper<BookSentenc
 
     protected List<BookSentenceDTO> setBeforeSentences(BookSentence entity) {
         List<BookSentence> beforeSentences = bookSentenceRepository.findBeforeSentences(entity.getId(), entity.getBook().getId(), Constants.SENTENCES_BEFORE);
+        beforeSentences.sort(Comparator.comparing(BookSentence::getId));
         return bookSentenceMapper.toDto(beforeSentences);
     }
 

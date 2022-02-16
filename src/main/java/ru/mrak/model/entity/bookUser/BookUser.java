@@ -6,11 +6,11 @@ import lombok.Setter;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import ru.mrak.model.entity.Book;
-import ru.mrak.model.entity.BookSentence;
 import ru.mrak.model.entity.User;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "book_user")
@@ -47,6 +47,9 @@ public class BookUser implements Serializable {
 
     @Column(name = "bookmark_sentence_id")
     private Long bookmarkSentenceId;
+
+    @Column(name = "finish_date")
+    private LocalDateTime finishDate;
 
     public BookUser(Long userId, Long bookId) {
         this.userId = userId;

@@ -1,31 +1,16 @@
 package ru.mrak.dto;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+import ru.mrak.model.enumeration.PartOfSpeechEnum;
+
+@Data
+@NoArgsConstructor
+@Accessors(chain = true)
 public class BookSentenceHasWordDTO {
     private String word;
     private String afterWord;
     private Long translateId;
-
-    public String getWord() {
-        return word;
-    }
-
-    public void setWord(String word) {
-        this.word = word;
-    }
-
-    public String getAfterWord() {
-        return afterWord;
-    }
-
-    public void setAfterWord(String afterWord) {
-        this.afterWord = afterWord;
-    }
-
-    public Long getTranslateId() {
-        return translateId;
-    }
-
-    public void setTranslateId(Long translateId) {
-        this.translateId = translateId;
-    }
+    private PartOfSpeechEnum partOfSpeech;
 }

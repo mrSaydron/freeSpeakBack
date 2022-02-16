@@ -25,6 +25,7 @@ public class UserMarkedBookService {
     private final Logger log = LoggerFactory.getLogger(UserMarkedBookService.class);
 
     private final UserService userService;
+    private final UserTimeService userTimeService;
 
     private final BookSentenceRepository bookSentenceRepository;
     private final BookUserRepository bookUserRepository;
@@ -46,21 +47,23 @@ public class UserMarkedBookService {
         List<BookUser> bookUserList = bookUserRepository.findAllByUserAndIsReading(user, true);
         if (bookUserList.size() > 0) {
             BookUser bookUser = bookUserList.get(0);
-            long startSentenceId = bookUser.getLastReadSentenceId() != null ? bookUser.getLastReadSentenceId() : 0;
-            List<BookSentence> sentences = bookSentenceRepository.findAllWhereAllLearnedUserWords(
-                user.getId(),
-                bookUser.getBookId(),
-                START_BOX_TO_LEARN,
-                startSentenceId
-            );
-            result = new ArrayList<>();
-            Long lastSentenceId = bookUser.getLastReadSentenceId();
-            for (BookSentence sentence : sentences) {
-                if (lastSentenceId == null || (lastSentenceId + 1) == sentence.getId()) {
-                    result.add(sentence);
-                    lastSentenceId = sentence.getId();
-                } else {
-                    break;
+            if (bookUser.getFinishDate() == null) {
+                long startSentenceId = bookUser.getLastReadSentenceId() != null ? bookUser.getLastReadSentenceId() : 0;
+                List<BookSentence> sentences = bookSentenceRepository.findAllWhereAllLearnedUserWords(
+                    user.getId(),
+                    bookUser.getBookId(),
+                    START_BOX_TO_LEARN,
+                    startSentenceId
+                );
+                result = new ArrayList<>();
+                Long lastSentenceId = bookUser.getLastReadSentenceId();
+                for (BookSentence sentence : sentences) {
+                    if (lastSentenceId == null || (lastSentenceId + 1) == sentence.getId()) {
+                        result.add(sentence);
+                        lastSentenceId = sentence.getId();
+                    } else {
+                        break;
+                    }
                 }
             }
         }
@@ -80,29 +83,31 @@ public class UserMarkedBookService {
         List<BookUser> bookUserList = bookUserRepository.findAllByUserAndIsReading(user, true);
         if (bookUserList.size() > 0) {
             BookUser bookUser = bookUserList.get(0);
-            Long lastReadSentenceId = bookUser.getLastReadSentenceId();
-            boolean hasSentence = false;
-            if (lastReadSentenceId == null) {
-                Optional<BookSentence> bookSentenceOptional = bookSentenceRepository.findFirstByBook(bookUser.getBook());
-                if (bookSentenceOptional.isPresent()) {
-                    lastReadSentenceId = bookSentenceOptional.get().getId();
-                    hasSentence = true;
+            if (bookUser.getFinishDate() == null) {
+                Long lastReadSentenceId = bookUser.getLastReadSentenceId();
+                boolean hasSentence = false;
+                if (lastReadSentenceId == null) {
+                    Optional<BookSentence> bookSentenceOptional = bookSentenceRepository.findFirstByBook(bookUser.getBook());
+                    if (bookSentenceOptional.isPresent()) {
+                        lastReadSentenceId = bookSentenceOptional.get().getId();
+                        hasSentence = true;
+                    }
+                } else {
+                    lastReadSentenceId = lastReadSentenceId + 1;
+                    Optional<BookSentence> nextSentenceOptional = bookSentenceRepository.findById(lastReadSentenceId);
+                    if (nextSentenceOptional.isPresent()) {
+                        lastReadSentenceId = nextSentenceOptional.get().getId();
+                        hasSentence = true;
+                    }
                 }
-            } else {
-                lastReadSentenceId = lastReadSentenceId + 1;
-                Optional<BookSentence> nextSentenceOptional = bookSentenceRepository.findById(lastReadSentenceId);
-                if (nextSentenceOptional.isPresent()) {
-                    lastReadSentenceId = nextSentenceOptional.get().getId();
-                    hasSentence = true;
-                }
-            }
 
-            if (hasSentence) {
-                result = bookSentenceRepository.hasAllUserWordInSentence(
-                    user.getId(),
-                    lastReadSentenceId,
-                    START_BOX_TO_LEARN
-                );
+                if (hasSentence) {
+                    result = bookSentenceRepository.hasAllUserWordInSentence(
+                        user.getId(),
+                        lastReadSentenceId,
+                        START_BOX_TO_LEARN
+                    );
+                }
             }
         }
         return result;
@@ -110,6 +115,7 @@ public class UserMarkedBookService {
 
     /**
      * Перемещает указатель следующего предложения на указанное предложение
+     * Если предложение последнее, то отмечаем книгу прочитанной
      */
     public void successTranslateFromMarkedBook(long bookSentenceId) {
         log.debug("success translate from marked book, bookSentenceId: {}", bookSentenceId);
@@ -119,7 +125,17 @@ public class UserMarkedBookService {
         if (sentenceOptional.isPresent()) {
             BookSentence bookSentence = sentenceOptional.get();
             Optional<BookUser> bookUserOptional = bookUserRepository.findById(new BookUserId(user.getId(), bookSentence.getBook().getId()));
-            bookUserOptional.ifPresent(bookUser -> bookUser.setLastReadSentenceId(bookSentenceId));
+            bookUserOptional.ifPresent(bookUser -> {
+                bookUser.setLastReadSentenceId(bookSentenceId);
+
+                Optional<BookSentence> nextSentenceOptional = bookSentenceRepository.findById(bookSentenceId + 1);
+                if (
+                    !nextSentenceOptional.isPresent() ||
+                    nextSentenceOptional.get().getBook().getId().equals(bookUser.getBookId())
+                ) {
+                    bookUser.setFinishDate(userTimeService.getLocalTime());
+                }
+            });
         }
     }
 }

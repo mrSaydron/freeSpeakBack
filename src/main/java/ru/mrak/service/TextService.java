@@ -71,7 +71,7 @@ public class TextService {
 
                         sentenceWord.setWord(tokenLight.getToken().word());
                         sentenceWord.setAfterWord(tokenLight.getToken().after());
-                        sentenceWord.setPartOfSpeech(PartOfSpeechEnum.getByTag(tokenLight.getTag().getTag()));
+                        sentenceWord.setPartOfSpeech(PartOfSpeechEnum.getByTag(tokenLight.getToken().tag()));
 
                         if (tokenLight.getTag() != PartOfSpeechEnum.REMOVE) {
                             Optional<Word> translateOptional = wordRepository.findByWordAndPartOfSpeech(tokenLight.getWord(), tokenLight.getTag());

@@ -15,7 +15,6 @@ public interface IS3Service {
 
     /**
      * Возвращает ссылку на файл
-     * @param fileName - имя бакета / имя файла
      */
     String getUrl(String bucketAndFileName);
 }

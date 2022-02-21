@@ -13,7 +13,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-@Profile("prod")
+@Profile({"prod", "localp"})
 @Service
 @RequiredArgsConstructor
 public class S3YandexService implements IS3Service {

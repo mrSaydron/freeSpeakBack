@@ -131,7 +131,7 @@ public class UserMarkedBookService {
                 Optional<BookSentence> nextSentenceOptional = bookSentenceRepository.findById(bookSentenceId + 1);
                 if (
                     !nextSentenceOptional.isPresent() ||
-                    nextSentenceOptional.get().getBook().getId().equals(bookUser.getBookId())
+                    !nextSentenceOptional.get().getBook().getId().equals(bookUser.getBookId())
                 ) {
                     bookUser.setFinishDate(userTimeService.getLocalTime());
                 }

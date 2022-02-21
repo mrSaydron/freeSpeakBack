@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 @Getter
 @AllArgsConstructor
 public enum PartOfSpeechEnum {
+    AFX("AFX", "", ""), // Какой то неизвестный тег
     CC("CC", "coordin. conjuction", "and, but, or"), // Соединитель
     CD("CD", "cardinal number", "one, two"), // Количественное числительное
     DT("DT", "determiner", "a, the"), // Определитьель
@@ -27,6 +28,7 @@ public enum PartOfSpeechEnum {
     NN("NN", "noun, sing. or mass", "llama"), // Существительное
     NNS("NNS", "noun, plural", "llamas"), // Существительное, множественное число
     NNP("NNP", "proper noun, sing", "IBM"), // Наименование
+    NFP("NFP", "", ""), // Какой то неизвестный тег
     NNPS("NNPS", "proper noun, plural", "Carolinas"), // Наименование, множественное число
     PDT("PDT", "predeterminer", "all, both"), // Предопределитель ???
     POS("POS", "possessive ending", "`s"), // Притяжательное окончание
